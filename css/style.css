@@ -362,6 +362,11 @@ header.scrolled .brand-name .bn-main{font-size:.86rem;}
 .service-list li:first-child{border-top:none;}
 .service-list li::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--flame);flex-shrink:0;}
 .service-card .btn{width:100%;justify-content:center;}
+.price-from{
+  font-family:var(--font-mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--paper-dim);margin-bottom:16px;
+}
+.price-from b{font-family:var(--font-display);font-size:1.05rem;text-transform:none;letter-spacing:0;color:var(--flame-light);}
 
 /* ============ PORTFOLIO ============ */
 .filters{display:flex;gap:14px;margin-bottom:50px;flex-wrap:wrap;}
@@ -423,6 +428,7 @@ header.scrolled .brand-name .bn-main{font-size:.86rem;}
 }
 .connect-card:hover{border-color:var(--flame);transform:translateY(-6px);}
 .connect-card .ci{width:44px;height:44px;color:var(--flame);}
+.connect-card .ci-logo{width:44px;height:44px;object-fit:contain;border-radius:6px;margin-bottom:0;}
 .connect-card h4{font-size:1.2rem;}
 .connect-card p{color:var(--paper-dim);font-size:.92rem;}
 
