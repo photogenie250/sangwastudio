@@ -219,7 +219,7 @@ if (messageForm){
       if (error){
         console.error(error);
         showMessageToast("Couldn't save your message — opening email instead.", false);
-        window.location.href = `mailto:hello@sangwastudio.rw?subject=${encodeURIComponent(data.subject || 'Website message')}&body=${encodeURIComponent(data.message + '\n\n— ' + data.fullName)}`;
+        window.location.href = `mailto:hello@gakoromedia.rw?subject=${encodeURIComponent(data.subject || 'Website message')}&body=${encodeURIComponent(data.message + '\n\n— ' + data.fullName)}`;
       } else {
         showMessageToast("Message sent. We'll get back to you soon.", true);
         messageForm.reset();
@@ -227,7 +227,7 @@ if (messageForm){
     } else {
       // Supabase not configured yet — fall back to opening the visitor's email client
       showMessageToast("Opening your email app to send this message...", true);
-      window.location.href = `mailto:hello@sangwastudio.rw?subject=${encodeURIComponent(data.subject || 'Website message')}&body=${encodeURIComponent(data.message + '\n\n— ' + data.fullName)}`;
+      window.location.href = `mailto:hello@gakoromedia.rw?subject=${encodeURIComponent(data.subject || 'Website message')}&body=${encodeURIComponent(data.message + '\n\n— ' + data.fullName)}`;
       messageForm.reset();
     }
   });
