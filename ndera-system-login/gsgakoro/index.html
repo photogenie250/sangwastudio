@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Staff Login — NDERA SYSTEM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="assets/img/ndera-logo.svg">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/polish.css">
+</head>
+<body>
+
+<div class="page">
+
+  <!-- Branding panel -->
+  <section class="panel-brand" aria-hidden="true">
+    <div class="ledger">
+      <p class="ledger__caption">Starting mark</p>
+      <div class="ledger__scale">
+        <div class="ledger__tick ledger__tick--peak">
+          <span class="ledger__value">40</span>
+        </div>
+        <div class="ledger__tick"><span class="ledger__value">36</span></div>
+        <div class="ledger__tick"><span class="ledger__value">32</span></div>
+        <div class="ledger__tick"><span class="ledger__value">28</span></div>
+        <div class="ledger__tick"><span class="ledger__value">24</span></div>
+        <div class="ledger__tick"><span class="ledger__value">20</span></div>
+        <div class="ledger__tick"><span class="ledger__value">16</span></div>
+        <div class="ledger__tick"><span class="ledger__value">12</span></div>
+        <div class="ledger__tick"><span class="ledger__value">8</span></div>
+        <div class="ledger__tick"><span class="ledger__value">4</span></div>
+        <div class="ledger__tick"><span class="ledger__value">0</span></div>
+      </div>
+    </div>
+
+    <div class="brand-copy">
+      <img src="assets/img/ndera-logo.svg" alt="NDERA SYSTEM" class="brand-copy__logo">
+      <h1 class="brand-copy__title">GS GAKORO</h1>
+      <p class="brand-copy__tagline">Every mark accounted for, from the first entry to the last.</p>
+    </div>
+  </section>
+
+  <!-- Staff login panel -->
+  <section class="panel-form">
+    <div class="form-card">
+
+      <div class="form-card__header">
+        <h2 class="form-card__title">Staff Login</h2>
+        <p class="form-card__subtitle">Sign in with the email and password given to you by your administrator.</p>
+      </div>
+
+      <form id="login-form" class="login-form" novalidate>
+
+        <div class="field">
+          <label class="field__label" for="email">Email</label>
+          <input
+            class="field__input"
+            type="email"
+            id="email"
+            name="email"
+            autocomplete="username"
+            required
+          >
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="password">Password</label>
+          <div class="field__input-wrap">
+            <input
+              class="field__input"
+              type="password"
+              id="password"
+              name="password"
+              autocomplete="current-password"
+              required
+            >
+            <button
+              class="field__toggle"
+              type="button"
+              id="toggle-password"
+              aria-pressed="false"
+              aria-label="Show password"
+            >Show</button>
+          </div>
+        </div>
+
+        <!-- Honeypot trap field — hidden from real users, bots tend to fill every input they find -->
+        <div class="field" style="position:absolute; left:-9999px; top:-9999px;" aria-hidden="true">
+          <label for="website">Website</label>
+          <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+        </div>
+
+        <div id="form-error" class="form-error" role="alert" hidden></div>
+
+        <button class="submit-btn" type="submit" id="submit-btn">
+          <span class="submit-btn__label">Sign in</span>
+        </button>
+
+      </form>
+
+      <a class="whatsapp-link" href="../">&larr; Back to login options</a>
+    </div>
+
+    <p class="footer-note">Access is limited to authorized staff of GS GAKORO.</p>
+
+<p class="footer-credit">
+    System developed by <strong>DOD MAKUZA</strong>.
+</p>
+  </section>
+
+</div>
+
+<script type="module" src="js/auth.js"></script>
+</body>
+</html>
