@@ -1,0 +1,211 @@
+/* ============================================================
+   Record Incident — page-specific styles
+   ============================================================ */
+
+.incident-layout {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .incident-layout { grid-template-columns: 1fr; }
+}
+
+.form-panel .field { margin-bottom: 20px; }
+.form-panel form { display: flex; flex-direction: column; }
+
+.field__input--textarea {
+  resize: vertical;
+  min-height: 80px;
+  font-family: var(--font-body);
+}
+
+/* ============================================================
+   Student combobox
+   ============================================================ */
+.combobox {
+  position: relative;
+}
+
+.combobox__list {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 6px;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(10, 31, 77, 0.12);
+  max-height: 260px;
+  overflow-y: auto;
+  z-index: 10;
+}
+
+.combobox__item {
+  padding: 10px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.combobox__item:hover,
+.combobox__item--active {
+  background: rgba(226, 113, 29, 0.1);
+}
+
+.combobox__item-name {
+  font-weight: 500;
+  color: var(--charcoal);
+}
+
+.combobox__item-meta {
+  font-size: 12px;
+  color: var(--charcoal-soft);
+  margin-top: 1px;
+}
+
+.combobox__empty {
+  padding: 12px;
+  font-size: 13px;
+  color: var(--charcoal-soft);
+  text-align: center;
+}
+
+/* ============================================================
+   Selected student chip
+   ============================================================ */
+.selected-student {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+}
+
+.selected-student__name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-navy);
+  margin: 0 0 2px;
+}
+
+.selected-student__meta {
+  font-size: 12px;
+  color: var(--charcoal-soft);
+  margin: 0;
+  font-family: var(--font-mono);
+}
+
+.selected-student__change {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--brass);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px 8px;
+}
+
+.selected-student__change:hover { text-decoration: underline; }
+
+/* ============================================================
+   Success banner
+   ============================================================ */
+.form-success {
+  font-size: 13px;
+  color: #1E7A46;
+  background: rgba(30, 122, 70, 0.08);
+  border: 1px solid rgba(30, 122, 70, 0.22);
+  border-radius: 8px;
+  padding: 11px 13px;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+/* ============================================================
+   Offense reference list
+   ============================================================ */
+.summary-panel__hint {
+  font-size: 13px;
+  color: var(--charcoal-soft);
+  line-height: 1.5;
+  margin: 0 0 18px;
+}
+
+.offense-reference {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 480px;
+  overflow-y: auto;
+}
+
+.offense-reference__group-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--charcoal-soft);
+  padding: 14px 4px 6px;
+}
+
+.offense-reference__group-label:first-child { padding-top: 0; }
+
+.offense-reference__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 4px;
+  border-bottom: 1px solid var(--line);
+}
+
+.offense-reference__title {
+  font-size: 13px;
+  color: var(--charcoal);
+}
+
+.offense-reference__deduction {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--clay);
+  white-space: nowrap;
+}
+
+.offense-reference__empty {
+  text-align: center;
+  color: var(--charcoal-soft);
+  font-size: 13px;
+  padding: 20px 4px;
+}
+
+/* ============================================================
+   Read-only notice (Head Teacher)
+   ============================================================ */
+.readonly-notice {
+  border-color: rgba(226, 113, 29, 0.35);
+  background: rgba(226, 113, 29, 0.06);
+}
+
+.readonly-notice__title {
+  font-weight: 600;
+  color: var(--ink-navy);
+  margin: 0 0 6px;
+}
+
+.readonly-notice__body {
+  font-size: 14px;
+  color: var(--charcoal-soft);
+  line-height: 1.5;
+  margin: 0;
+}

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Classes — NDERA SYSTEM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="../assets/img/ndera-logo.svg">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/dashboard.css">
+<link rel="stylesheet" href="../css/admin-forms.css">
+<link rel="stylesheet" href="../css/polish.css">
+</head>
+<body>
+
+<div class="shell">
+
+  <aside class="sidebar">
+    <div class="sidebar__brand">
+      <a href="../dashboard-admin/" class="sidebar__logo-link" aria-label="NDERA SYSTEM home">
+        <img src="../assets/img/ndera-logo.svg" alt="NDERA SYSTEM" class="sidebar__logo">
+      </a>
+      <p class="sidebar__title">GS GAKORO</p>
+    </div>
+
+    <nav class="sidebar__nav" aria-label="Main navigation">
+      <a class="sidebar__link" href="../dashboard-admin/">Dashboard</a>
+      <a class="sidebar__link" href="../students/">Students</a>
+      <a class="sidebar__link sidebar__link--active" href="../classes/">Classes</a>
+      <a class="sidebar__link" href="../offenses/">Offenses</a>
+      <a class="sidebar__link" href="../incidents/">Incidents</a>
+      <a class="sidebar__link" href="../evaluation/">Evaluation</a>
+      <a class="sidebar__link" href="../reports/">Reports</a>
+      <a class="sidebar__link" href="../users/">Users</a>
+      <a class="sidebar__link" href="../counseling/">Counseling</a>
+      <a class="sidebar__link" href="../letters/">Letters</a>
+    </nav>
+
+    <div class="sidebar__footer">
+      <p class="sidebar__user" id="user-name">Loading…</p>
+      <p class="sidebar__role" id="user-role">&nbsp;</p>
+      <button class="sidebar__logout" id="logout-btn" type="button">Sign out</button>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <header class="topbar">
+      <div>
+        <h1 class="topbar__title">Classes</h1>
+        <p class="topbar__subtitle">Administrators and teachers only.</p>
+      </div>
+    </header>
+
+    <div id="admin-only-notice" class="panel readonly-notice" hidden>
+      <p class="readonly-notice__title">Administrators and teachers only</p>
+      <p class="readonly-notice__body">This page is limited to administrator and teacher accounts.</p>
+    </div>
+
+    <div id="page-content" class="admin-layout" hidden>
+
+      <section class="panel">
+        <div class="panel__header">
+          <h2 class="panel__title">All classes</h2>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>Class</th><th>Level</th><th>Academic year</th><th>Teacher</th><th></th></tr></thead>
+          <tbody id="classes-body">
+            <tr><td colspan="5" class="data-table__empty">Loading…</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="panel">
+        <p class="form-panel__title" id="class-form-title">Add class</p>
+        <p class="form-panel__hint">Class names are unique per academic year — the same name can be reused in a new year.</p>
+        <div id="class-form-error" class="inline-banner inline-banner--error" hidden></div>
+        <form class="crud-form" id="class-form">
+          <input type="hidden" id="class-id">
+          <div class="field">
+            <label class="field__label" for="class-name">Class name</label>
+            <input class="field__input" type="text" id="class-name" required>
+          </div>
+          <div class="field">
+            <label class="field__label" for="class-level">Level</label>
+            <input class="field__input" type="text" id="class-level" placeholder="e.g. Primary 6" required>
+          </div>
+          <div class="field">
+            <label class="field__label" for="class-year">Academic year</label>
+            <input class="field__input" type="text" id="class-year" placeholder="e.g. 2026" required>
+          </div>
+          <div class="field">
+            <label class="field__label" for="class-teacher">Teacher (optional)</label>
+            <select class="field__input" id="class-teacher">
+              <option value="">Unassigned</option>
+            </select>
+          </div>
+          <div class="crud-form__actions">
+            <button class="submit-btn" type="submit" id="class-submit-btn">Add class</button>
+            <button class="crud-form__cancel" type="button" id="class-cancel-btn" hidden>Cancel</button>
+          </div>
+        </form>
+      </section>
+
+    </div>
+
+  </main>
+</div>
+
+<script src="../js/polish.js" defer></script>
+<script type="module" src="../js/classes.js"></script>
+</body>
+</html>
