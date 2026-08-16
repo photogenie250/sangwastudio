@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ndera System | Education — SANGWA STUDIO</title>
+<meta name="description" content="Ndera System — SANGWA STUDIO's education portal. Student and staff login.">
+<link rel="icon" type="image/png" href="../assets/logo-small.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&family=Baloo+2:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  :root{
+    --ndera-navy:#0b1846;
+    --ndera-navy-2:#101f5c;
+    --ndera-yellow:#ffc93c;
+    --ndera-pink:#ff6f91;
+    --ndera-green:#39d98a;
+    --ndera-sky:#38b6ff;
+    --ndera-purple:#8c6bff;
+    --kid-font:"Baloo 2", "Fraunces", sans-serif;
+  }
+
+  /* ===== Announcement marquee ===== */
+  .announce-bar{
+    position:fixed; top:0; left:0; right:0; z-index:1100;
+    height:42px;
+    background:var(--ndera-navy);
+    border-bottom:1px solid rgba(255,255,255,.08);
+    display:flex; align-items:center;
+    overflow:hidden;
+    white-space:nowrap;
+  }
+  .announce-track{
+    display:flex; align-items:center;
+    animation:announce-scroll 26s linear infinite;
+    will-change:transform;
+  }
+  .announce-track span{
+    color:#ffffff;
+    font-family:var(--kid-font);
+    font-weight:600;
+    font-size:.92rem;
+    letter-spacing:.01em;
+    padding:0 28px;
+    display:inline-flex; align-items:center; gap:10px;
+    white-space:nowrap;
+  }
+  .announce-track span::before{
+    content:"★";
+    color:var(--ndera-yellow);
+    font-size:.8rem;
+  }
+  @keyframes announce-scroll{
+    0%{transform:translateX(0);}
+    100%{transform:translateX(-50%);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .announce-track{animation:none;}
+  }
+
+  /* Push the fixed header down below the announcement bar */
+  header#siteHeader{ top:42px; }
+
+  /* ===== Kid-friendly hero ===== */
+  .edu-hero{
+    min-height:78vh;
+    padding:calc(42px + 132px) 24px 90px;
+    position:relative;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 12% 18%, rgba(255,201,60,.16), transparent 40%),
+      radial-gradient(circle at 88% 12%, rgba(140,107,255,.18), transparent 42%),
+      radial-gradient(circle at 50% 100%, rgba(56,182,255,.14), transparent 45%),
+      var(--ink-2, #141311);
+    text-align:center;
+  }
+  .edu-doodles{position:absolute; inset:0; pointer-events:none; z-index:0;}
+  .edu-doodles svg{position:absolute; opacity:.9;}
+  .doodle-star{top:14%; left:8%; width:34px; animation:float-bob 5s ease-in-out infinite;}
+  .doodle-pencil{top:20%; right:10%; width:46px; animation:float-bob 6s ease-in-out infinite .5s;}
+  .doodle-book{bottom:16%; left:12%; width:44px; animation:float-bob 5.5s ease-in-out infinite 1s;}
+  .doodle-balloon{bottom:10%; right:8%; width:38px; animation:float-bob 6.5s ease-in-out infinite .3s;}
+  .doodle-cloud{top:8%; left:42%; width:64px; animation:float-bob 7s ease-in-out infinite .8s;}
+  @keyframes float-bob{
+    0%,100%{transform:translateY(0) rotate(0deg);}
+    50%{transform:translateY(-14px) rotate(6deg);}
+  }
+
+  .edu-hero-inner{position:relative; z-index:1; max-width:720px; margin:0 auto;}
+  .edu-badge{
+    display:inline-flex; align-items:center; gap:8px;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.14);
+    color:var(--ndera-yellow);
+    font-family:"Space Mono", monospace;
+    font-size:.76rem; letter-spacing:.14em; text-transform:uppercase;
+    padding:8px 16px; border-radius:999px;
+    margin-bottom:22px;
+  }
+  .edu-hero h1{
+    font-family:var(--kid-font);
+    font-weight:800;
+    font-size:clamp(2.2rem,6vw,3.6rem);
+    color:#fff;
+    line-height:1.1;
+    margin-bottom:18px;
+  }
+  .edu-hero h1 .hl-pink{color:var(--ndera-pink);}
+  .edu-hero h1 .hl-sky{color:var(--ndera-sky);}
+  .edu-hero h1 .hl-yellow{color:var(--ndera-yellow);}
+  .edu-hero p{
+    color:var(--paper-dim,#a9a6a1);
+    font-size:1.08rem;
+    line-height:1.65;
+    max-width:520px;
+    margin:0 auto 44px;
+  }
+
+  /* ===== Login options ===== */
+  .login-options{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:22px;
+    max-width:640px;
+    margin:0 auto;
+  }
+  @media (max-width:640px){ .login-options{grid-template-columns:1fr;} }
+
+  .login-card{
+    position:relative;
+    background:var(--ink-3,#1d1a17);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:22px;
+    padding:32px 24px 26px;
+    text-align:center;
+    cursor:pointer;
+    transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+  }
+  .login-card:hover{
+    transform:translateY(-6px) rotate(-.5deg);
+    box-shadow:0 18px 36px rgba(0,0,0,.35);
+  }
+  .login-card.students{border-color:rgba(56,182,255,.35);}
+  .login-card.students:hover{border-color:var(--ndera-sky);}
+  .login-card.staff{border-color:rgba(255,111,145,.35);}
+  .login-card.staff:hover{border-color:var(--ndera-pink);}
+
+  .login-card .icon-wrap{
+    width:64px; height:64px; margin:0 auto 16px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .login-card.students .icon-wrap{background:rgba(56,182,255,.14);}
+  .login-card.staff .icon-wrap{background:rgba(255,111,145,.14);}
+  .login-card .icon-wrap svg{width:30px; height:30px;}
+  .login-card.students .icon-wrap svg{stroke:var(--ndera-sky);}
+  .login-card.staff .icon-wrap svg{stroke:var(--ndera-pink);}
+
+  .login-card h3{
+    font-family:var(--kid-font);
+    font-weight:700;
+    font-size:1.25rem;
+    color:#fff;
+    margin-bottom:8px;
+  }
+  .login-card p{
+    color:var(--paper-dim,#a9a6a1);
+    font-size:.92rem;
+    margin-bottom:18px;
+    line-height:1.5;
+  }
+  .login-card .btn-mini{
+    display:inline-block;
+    font-family:var(--kid-font);
+    font-weight:700;
+    font-size:.85rem;
+    padding:10px 22px;
+    border-radius:999px;
+    color:var(--ink);
+  }
+  .login-card.students .btn-mini{background:var(--ndera-sky);}
+  .login-card.staff .btn-mini{background:var(--ndera-pink);}
+
+  /* ===== Login card link styling ===== */
+  .login-card{ text-decoration:none; display:block; }
+  .nav-links a.active{color:var(--flame, #ff6a3d);}
+</style>
+</head>
+<body>
+
+<!-- ============ ANNOUNCEMENT MARQUEE ============ -->
+<div class="announce-bar" role="banner" aria-label="Announcements">
+  <div class="announce-track" id="announceTrack">
+    <span>Ndera System registration opens soon — stay tuned!</span>
+    <span>New term starts September — get your account ready</span>
+    <span>Student and Staff portals launching soon</span>
+    <span>Questions? Reach out via our Discipline Office</span>
+    <!-- duplicated for seamless loop -->
+    <span>Ndera System registration opens soon — stay tuned!</span>
+    <span>New term starts September — get your account ready</span>
+    <span>Student and Staff portals launching soon</span>
+    <span>Questions? Reach out via Our Discipline Office</span>
+  </div>
+</div>
+
+<!-- ============ NAV ============ -->
+<header id="siteHeader">
+  <div class="wrap">
+    <nav>
+      <a href="../#home" class="brand">
+        <img src="../assets/logo-small.png" alt="SANGWA STUDIO logo">
+        <span class="brand-name"><span class="bn-main">SANGWA</span><span class="bn-sub"><i></i>STUDIO<i></i></span></span>
+      </a>
+      <div class="nav-links">
+        <a href="../#about">About</a>
+        <a href="../#services">Services</a>
+        <a href="../#portfolio">Work</a>
+        <a href="../#testimonials">Reviews</a>
+        <a href="./" class="active">Education</a>
+        <a href="../#contact">Contact</a>
+      </div>
+      <div class="nav-cta">
+        <a href="../#contact" class="btn btn-outline btn-small">Book Now</a>
+        <button class="burger" id="burgerBtn" aria-label="Open menu"><span></span><span></span><span></span></button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<div class="mobile-drawer" id="mobileDrawer">
+  <a href="../#about">About</a>
+  <a href="../#services">Services</a>
+  <a href="../#portfolio">Work</a>
+  <a href="../#testimonials">Reviews</a>
+  <a href="./">Education</a>
+  <a href="../#contact">Contact</a>
+  <a href="../#contact" class="btn btn-solid">Book Now</a>
+</div>
+
+<!-- ============ EDUCATION HERO ============ -->
+<main class="edu-hero">
+  <div class="edu-doodles" aria-hidden="true">
+    <svg class="doodle-star" viewBox="0 0 24 24" fill="none" stroke="#ffc93c" stroke-width="1.6" stroke-linejoin="round"><path d="M12 2l2.6 6.9L22 10l-5.6 4.8L18 22l-6-3.8L6 22l1.6-7.2L2 10l7.4-1.1z"/></svg>
+    <svg class="doodle-pencil" viewBox="0 0 24 24" fill="none" stroke="#39d98a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+    <svg class="doodle-book" viewBox="0 0 24 24" fill="none" stroke="#ff6f91" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4.5A2.5 2.5 0 0 1 4.5 2H12v18H4.5A2.5 2.5 0 0 0 2 22.5z"/><path d="M22 4.5A2.5 2.5 0 0 0 19.5 2H12v18h7.5a2.5 2.5 0 0 1 2.5 2.5z"/></svg>
+    <svg class="doodle-balloon" viewBox="0 0 24 24" fill="none" stroke="#8c6bff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a6 6 0 0 1 2 11.65C13.6 15 12 16 12 18"/><path d="M12 18a1.5 1.5 0 0 0 0 3"/><circle cx="12" cy="8" r="6"/></svg>
+    <svg class="doodle-cloud" viewBox="0 0 24 24" fill="none" stroke="#38b6ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a4.5 4.5 0 0 0 0-9 6 6 0 0 0-11.3-2A5 5 0 0 0 6 19z"/></svg>
+  </div>
+
+  <div class="edu-hero-inner reveal">
+    <span class="edu-badge">Ndera System</span>
+    <h1>Welcome to the <span class="hl-sky">Ndera</span> <span class="hl-yellow">Learning</span> <span class="hl-pink">System</span></h1>
+    <p>Reba uko uhagaze muri Discipline </p>
+
+    <div class="login-options">
+      <a class="login-card students" href="https://photogenie250.github.io/student/" id="studentsCard">
+        <div class="icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg>
+        </div>
+        <h3>Students</h3>
+        <p>Access your Discipline Standing Marks out of 40 </p>
+        <span class="btn-mini">Student Login</span>
+      </a>
+
+      <a class="login-card staff" href="https://makwuza-stack.github.io/gsgakoro/" id="staffCard">
+        <div class="icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18"/><path d="M8 4v5"/></svg>
+        </div>
+        <h3>Staff</h3>
+        <p>Manage classes, students and Discipline Reports.</p>
+        <span class="btn-mini">Staff Login</span>
+      </a>
+    </div>
+    <!--
+      PLACEHOLDER LINK — update the Students href above (on #studentsCard)
+      once the real student portal repo exists, e.g.:
+        href="https://makwuza-stack.github.io/your-student-repo-name/"
+      (Staff is already live: https://makwuza-stack.github.io/gsgakoro/)
+    -->
+  </div>
+</main>
+
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="../#home" class="brand">
+          <img src="../assets/logo-small.png" alt="SANGWA STUDIO logo">
+          <span class="brand-name"><span class="bn-main">SANGWA</span><span class="bn-sub"><i></i>STUDIO<i></i></span></span>
+        </a>
+        <p>Photography, film and music production from one creative house in Musanze, Rwanda.</p>
+        <div class="social-row">
+          <a href="https://instagram.com/sangwa_studio" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+          <a href="https://youtube.com/@sangwastudio" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="4"/><path d="M10 9.5l5 2.5-5 2.5z" fill="currentColor" stroke="none"/></svg></a>
+          <a href="#" id="waFooterLink" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 3.5a11 11 0 0 0-16.6 13.8L2 21l3.9-1.3A11 11 0 1 0 20 3.5z"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="../#home">Home</a></li>
+          <li><a href="../#about">About</a></li>
+          <li><a href="../#portfolio">Work</a></li>
+          <li><a href="../#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Divisions</h5>
+        <ul>
+          <li><a href="../#services">Sangwa Photo</a></li>
+          <li><a href="../#services">Sangwa Video</a></li>
+          <li><a href="../#services">Sangwa Music</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Contact</h5>
+        <ul>
+          <li><a href="tel:+250787692411">+250 787 692 411</a></li>
+          <li><a href="mailto:hello@sangwastudio.rw">hello@sangwastudio.rw</a></li>
+          <li>Musanze, Rwanda</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="yearNow"></span> SANGWA STUDIO. All rights reserved.</span>
+      <span>Photo · Video · Music</span>
+    </div>
+  </div>
+</footer>
+
+<a class="wa-float" id="waFloat" href="#" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 3.5a11 11 0 0 0-16.6 13.8L2 21l3.9-1.3A11 11 0 1 0 20 3.5z"/></svg>
+</a>
+
+<script src="../js/config.js"></script>
+<script src="../js/main.js"></script>
+</body>
+</html>
