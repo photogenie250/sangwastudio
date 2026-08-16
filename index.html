@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gakoro Media TV — Video Desk</title>
+<meta name="description" content="GAKORO MEDIA TV — live channel and latest uploads from SANGWA STUDIO's in-house YouTube channel. Watch continuously, right here.">
+<link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+<link rel="manifest" href="/assets/favicon/site.webmanifest">
+<meta name="theme-color" content="#0E1C2B">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
@@ -177,8 +184,10 @@
   .ticker-track{
     display:flex;
     padding: 8px 0;
-    animation: scroll 26s linear infinite;
+    width:max-content;
+    animation: scroll 46s linear infinite;
   }
+  .ticker:hover .ticker-track{ animation-play-state: paused; }
   .ticker-track span{
     padding: 0 30px;
     font-size:12.5px;
@@ -199,18 +208,34 @@
     grid-template-columns: 1.5fr 1fr;
     gap:36px;
   }
-  .hero-thumb{
+  /* ---------- LIVE TV PLAYER ---------- */
+  .tv-player{
     position:relative;
     aspect-ratio:16/9;
-    background: linear-gradient(135deg, #1B3A5C 0%, #0E1C2B 60%, var(--crimson-dark) 130%);
+    background:#000;
     overflow:hidden;
-    cursor:pointer;
+    border:1px solid var(--line);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.35);
   }
-  .hero-thumb::after{
-    content:"";
+  .tv-player iframe{
     position:absolute; inset:0;
-    background: repeating-linear-gradient(115deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 26px);
+    width:100%; height:100%;
+    border:0;
   }
+  .tv-badge{
+    position:absolute; top:12px; left:12px; z-index:2;
+    display:flex; align-items:center; gap:6px;
+    background: var(--crimson-dark);
+    border:1px solid var(--crimson);
+    color:#fff;
+    padding:5px 10px 5px 8px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:0.08em;
+    pointer-events:none;
+  }
+  .tv-badge .live-dot{ background:#FF3B3B; }
   .duration-badge{
     position:absolute; bottom:12px; right:12px;
     background: rgba(0,0,0,0.75);
@@ -228,7 +253,8 @@
     display:flex; align-items:center; justify-content:center;
     transition: transform 0.15s ease;
   }
-  .hero-thumb:hover .play-btn{ transform:translate(-50%,-50%) scale(1.08); }
+  .card-thumb:hover .play-btn,
+  .side-card:hover .play-btn{ transform:translate(-50%,-50%) scale(1.08); }
   .play-btn::after{
     content:"";
     border-style:solid;
@@ -256,9 +282,7 @@
     line-height:1.12;
     letter-spacing:-0.01em;
     margin-bottom:14px;
-    cursor:pointer;
   }
-  .hero-headline:hover{ color: var(--crimson-dark); }
   .hero-dek{
     font-size:15px;
     line-height:1.6;
@@ -274,6 +298,7 @@
   }
   .byline .sep{ opacity:0.5; }
 
+  .player-col{ display:flex; flex-direction:column; }
   .hero-side{ display:flex; flex-direction:column; gap:22px; }
   .side-card{
     display:grid;
@@ -283,6 +308,23 @@
     padding-bottom:20px;
     border-bottom:1px solid var(--line);
   }
+  .side-card:focus-visible,
+  .card:focus-visible{ outline:2px solid var(--crimson); outline-offset:3px; }
+  .watch-ext{
+    position:absolute; top:8px; right:8px; z-index:2;
+    display:flex; align-items:center; gap:4px;
+    background:rgba(11,21,36,0.82);
+    color:#fff;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:9.5px;
+    letter-spacing:0.04em;
+    padding:3px 6px;
+    text-decoration:none;
+    opacity:0;
+    transition:opacity .15s ease;
+  }
+  .card-thumb:hover .watch-ext,
+  .side-card:hover .watch-ext{ opacity:1; }
   .side-card:last-child{ border-bottom:none; }
   .side-thumb{
     position:relative;
@@ -299,7 +341,7 @@
     line-height:1.28;
     margin-bottom:6px;
   }
-  .side-title:hover{ color: var(--crimson-dark); }
+  .side-card:hover .side-title{ color: var(--crimson-dark); }
   .side-meta{
     font-family:'IBM Plex Mono', monospace;
     font-size:10.5px;
@@ -408,15 +450,33 @@
   footer .brand-name{ font-size:16px; color:#fff; }
 
   @media (max-width: 880px){
-    .hero{ grid-template-columns: 1fr; }
+    .hero{ grid-template-columns: 1fr; gap:28px; padding-top:32px; }
     .grid{ grid-template-columns: repeat(2,1fr); }
-    .masthead-meta{ display:none; }
+    .meta-date{ display:none; }
     .masthead-top{ position:relative; }
+  }
+  @media (max-width: 640px){
+    .masthead{ padding:12px 5vw 0; }
+    .brand-name{ font-size:20px; }
+    .brand-tagline{ font-size:9px; letter-spacing:0.1em; }
+    .brand-mark{ width:30px; height:30px; font-size:16px; }
+    .sangwa-link{ padding-left:12px; gap:8px; }
+    .sangwa-link img{ height:28px; width:28px; }
+    .sangwa-wordmark .sw-main{ font-size:.82rem; }
+    .sangwa-wordmark .sw-sub{ font-size:.44rem; }
+    .brand-group{ gap:10px; }
+    .live-pill{ font-size:10px; padding:4px 8px; }
+    .section-head{ margin-top:36px; }
   }
   @media (max-width: 560px){
     .grid{ grid-template-columns: 1fr; }
     .nav-row{ display:none; }
-    .hero-headline{ font-size:26px; }
+    .hero-headline{ font-size:24px; }
+    .hero{ padding:26px 5vw 8px; }
+    .grid{ padding:0 5vw 48px; }
+    .section-head{ padding:0 5vw; }
+    .ticker-label{ padding:8px 10px; font-size:10px; }
+    footer{ flex-direction:column; gap:10px; text-align:center; padding:24px 5vw; }
   }
 </style>
 </head>
@@ -438,7 +498,7 @@
       </a>
     </div>
     <div class="masthead-meta">
-      <span>WED, AUG 12 2026</span>
+      <span class="meta-date">WED, AUG 12 2026</span>
       <span class="live-pill"><span class="live-dot"></span> LIVE NOW</span>
     </div>
   </div>
@@ -458,19 +518,36 @@
     <span>SPORT:FERWAFA Boss under arrest for allegedly counterfeit cheque</span>
     <span>TECH: chip shortage eases as new fabs come online</span>
     <span>UGANDA: Launch for drankard championship</span>
+    <!-- duplicated so the -50% scroll loop is seamless — hidden from
+         screen readers so headlines aren't announced twice -->
+    <span aria-hidden="true">GAKORO: Aime Axel held a live performance in GS GAKORO remedial learning program</span>
+    <span aria-hidden="true">GAKORO: Desability is not inability official song out by Aime Axel</span>
+    <span aria-hidden="true">NESA: National examination S3,P6 to be out soon</span>
+    <span aria-hidden="true">POLITICS: RIB arrested Rwanda FDA officials. source IGIHE.COM</span>
+    <span aria-hidden="true">USA: President Trump brokers Historic Peace deal with Iran. source The Whitehouse</span>
+    <span aria-hidden="true">SPORT:FERWAFA Boss under arrest for allegedly counterfeit cheque</span>
+    <span aria-hidden="true">TECH: chip shortage eases as new fabs come online</span>
+    <span aria-hidden="true">UGANDA: Launch for drankard championship</span>
   </div>
 </div>
 
 <section class="hero" id="heroSection">
-  <div>
-    <div class="hero-thumb">
-      <span class="duration-badge">18:42</span>
-      <div class="play-btn"></div>
+  <div class="player-col">
+    <div class="tv-player" id="tvPlayer">
+      <div class="tv-badge"><span class="live-dot"></span> LIVE</div>
+      <iframe
+        id="tvIframe"
+        src="https://www.youtube-nocookie.com/embed/videoseries?list=UUuQCsYE_gp4h-8GtECfcdbw&autoplay=1&mute=1&loop=1&rel=0&modestbranding=1&playsinline=1"
+        title="GAKORO MEDIA TV — live player"
+        allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+        allowfullscreen
+        loading="eager"
+        frameborder="0"></iframe>
     </div>
-    <div class="eyebrow"><span class="live-dot" style="background:var(--crimson)"></span> FEATURED SEGMENT</div>
-    <div class="hero-headline">Inside the supply chain rerouting reshaping global shipping lanes</div>
-    <p class="hero-dek">A field report from three ports on how carriers are adapting routes, and what it means for delivery times through the end of the year.</p>
-    <div class="byline">GAKORO MEDIA TV <span class="sep">&bull;</span> 214K views <span class="sep">&bull;</span> 2 days ago</div>
+    <div class="eyebrow"><span class="live-dot" style="background:var(--crimson)"></span> NOW PLAYING</div>
+    <div class="hero-headline" id="nowPlayingTitle">GAKORO MEDIA TV — playing continuously</div>
+    <p class="hero-dek" id="nowPlayingDek">The player runs through our latest uploads back to back, like a live broadcast. Tap any video below to jump straight to it — everything plays right here, never on youtube.com.</p>
+    <div class="byline" id="nowPlayingByline">GAKORO MEDIA TV <span class="sep">&bull;</span> Streaming now</div>
   </div>
 
   <div class="hero-side">
@@ -559,6 +636,7 @@
 </footer>
 
 <script src="js/config.js"></script>
+<script src="js/live-player.js"></script>
 <script src="js/youtube.js"></script>
 </body>
 </html>
