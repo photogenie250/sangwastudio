@@ -1,7 +1,16 @@
 /* =====================================================
    GAKORO MEDIA TV — pulls the real "Latest uploads" feed
    from the YouTube channel and replaces the placeholder
-   hero + grid cards on index.html.
+   hero copy + grid/side cards on index.html with real
+   titles, thumbnails and stats.
+
+   The live player itself (js/live-player.js) already plays
+   the channel's uploads playlist on its own, without needing
+   this data. This script only makes the cards clickable so
+   tapping one swaps the player to that exact video — playback
+   always stays on this page, never youtube.com. A small
+   "YouTube ↗" icon on each card is the only way to leave the
+   site, for anyone who explicitly wants to.
 
    Data comes from a Supabase Edge Function (get-youtube-videos)
    instead of calling the YouTube API directly — that keeps the
@@ -11,7 +20,7 @@
 
    If Supabase isn't configured, or the fetch fails, this script
    quietly leaves the existing static placeholder content in
-   place — the page never breaks.
+   place — the live player keeps playing regardless.
 ===================================================== */
 (function () {
   const SUPABASE_URL = window.SUPABASE_URL;
@@ -84,33 +93,42 @@
     }));
   }
 
+  function addWatchExternalIcon(container, v) {
+    const a = document.createElement("a");
+    a.className = "watch-ext";
+    a.href = v.url;
+    a.target = "_blank";
+    a.rel = "noopener";
+    a.setAttribute("aria-label", `Open "${v.title}" on YouTube in a new tab`);
+    a.textContent = "YouTube ↗";
+    // Don't let the external link also trigger the in-page player.
+    a.addEventListener("click", (e) => e.stopPropagation());
+    container.appendChild(a);
+  }
+
+  function makePlayable(el, v) {
+    el.setAttribute("data-video-id", v.id);
+    el.setAttribute("data-video-title", v.title);
+    el.setAttribute("data-video-views", v.views);
+    el.setAttribute("data-video-ago", v.ago);
+    if (window.gakoroWireUpPlayable) window.gakoroWireUpPlayable(el);
+  }
+
   function renderHero(v) {
+    // The live player already autoplays the channel's uploads
+    // playlist on load — this just refreshes the "now playing"
+    // copy underneath it to match the latest real upload. It
+    // deliberately never touches the iframe src so the stream
+    // that's already rolling doesn't get interrupted.
     const hero = document.getElementById("heroSection");
     if (!hero || !v) return;
-    const inner = hero.querySelector(":scope > div");
-    const main = hero.querySelector(".hero-thumb");
-    if (main) {
-      main.style.backgroundImage = `url('${v.thumb}')`;
-      main.style.backgroundSize = "cover";
-      main.style.backgroundPosition = "center";
-      main.querySelector(".duration-badge").textContent = v.duration;
-    }
-    const headline = hero.querySelector(".hero-headline");
+    const headline = document.getElementById("nowPlayingTitle");
     if (headline) headline.textContent = v.title;
-    const dek = hero.querySelector(".hero-dek");
+    const dek = document.getElementById("nowPlayingDek");
     if (dek) dek.style.display = "none";
-    const byline = hero.querySelector(".byline");
+    const byline = document.getElementById("nowPlayingByline");
     if (byline) {
       byline.innerHTML = `GAKORO MEDIA TV <span class="sep">&bull;</span> ${v.views} <span class="sep">&bull;</span> ${v.ago}`;
-    }
-    if (inner) {
-      const wrap = document.createElement("a");
-      wrap.href = v.url;
-      wrap.target = "_blank";
-      wrap.rel = "noopener";
-      wrap.style.display = "contents";
-      inner.parentNode.insertBefore(wrap, inner);
-      wrap.appendChild(inner);
     }
   }
 
@@ -119,20 +137,17 @@
     cards.forEach((card, idx) => {
       const v = videos[idx];
       if (!v) return;
-      const a = document.createElement("a");
-      a.href = v.url;
-      a.target = "_blank";
-      a.rel = "noopener";
-      a.style.display = "contents";
       const thumb = card.querySelector(".side-thumb");
+      thumb.className = "side-thumb"; // drop the placeholder gradient class
       thumb.style.backgroundImage = `url('${v.thumb}')`;
       thumb.style.backgroundSize = "cover";
       thumb.style.backgroundPosition = "center";
       thumb.querySelector(".duration-badge").textContent = v.duration;
+      addWatchExternalIcon(thumb, v);
       card.querySelector(".side-title").textContent = v.title;
-      card.querySelector(".side-meta").innerHTML = `${v.ago}`;
-      card.parentNode.insertBefore(a, card);
-      a.appendChild(card);
+      card.querySelector(".side-meta").innerHTML = `${v.views} <span class="sep">&bull;</span> ${v.ago}`;
+      card.setAttribute("aria-label", `Play "${v.title}"`);
+      makePlayable(card, v);
     });
   }
 
@@ -149,18 +164,13 @@
       thumb.style.backgroundSize = "cover";
       thumb.style.backgroundPosition = "center";
       thumb.querySelector(".duration-badge").textContent = v.duration;
+      addWatchExternalIcon(thumb, v);
       card.querySelector(".card-title").textContent = v.title;
       const dek = card.querySelector(".card-dek");
       if (dek) dek.style.display = "none";
       card.querySelector(".card-meta").innerHTML = `<span>${v.views}</span><span>${v.ago}</span>`;
-
-      const a = document.createElement("a");
-      a.href = v.url;
-      a.target = "_blank";
-      a.rel = "noopener";
-      a.style.display = "contents";
-      card.parentNode.insertBefore(a, card);
-      a.appendChild(card);
+      card.setAttribute("aria-label", `Play "${v.title}"`);
+      makePlayable(card, v);
     });
   }
 
