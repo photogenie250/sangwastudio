@@ -188,12 +188,15 @@
     animation: scroll 46s linear infinite;
   }
   .ticker:hover .ticker-track{ animation-play-state: paused; }
-  .ticker-track span{
+  .ticker-track span,
+  .ticker-track a{
+    display:inline-block;
     padding: 0 30px;
     font-size:12.5px;
     font-weight:500;
     border-right: 1px solid rgba(255,255,255,0.35);
   }
+  .ticker-track a:hover{ text-decoration: underline; }
   @keyframes scroll{
     0%{ transform: translateX(0); }
     100%{ transform: translateX(-50%); }
@@ -662,8 +665,10 @@
   <div class="brand-name">GAKORO MEDIA TV</div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="js/config.js"></script>
 <script src="js/live-player.js"></script>
 <script src="js/youtube.js"></script>
+<script src="js/news.js"></script>
 </body>
 </html>
