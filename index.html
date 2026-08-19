@@ -169,7 +169,6 @@
     color:#fff;
     display:flex;
     align-items:center;
-    overflow:hidden;
     white-space:nowrap;
   }
   .ticker-label{
@@ -180,6 +179,13 @@
     font-weight:600;
     letter-spacing:0.1em;
     flex-shrink:0;
+    position:relative;
+    z-index:2;
+  }
+  .ticker-viewport{
+    flex:1 1 auto;
+    min-width:0;
+    overflow:hidden;
   }
   .ticker-track{
     display:flex;
@@ -534,6 +540,7 @@
 
 <div class="ticker">
   <div class="ticker-label">BREAKING</div>
+  <div class="ticker-viewport">
   <div class="ticker-track">
     <span>GAKORO: Aime Axel held a live performance in GS GAKORO remedial learning program</span>
     <span>GAKORO: Desability is not inability official song out by Aime Axel</span>
@@ -553,6 +560,7 @@
     <span aria-hidden="true">SPORT:FERWAFA Boss under arrest for allegedly counterfeit cheque</span>
     <span aria-hidden="true">TECH: chip shortage eases as new fabs come online</span>
     <span aria-hidden="true">UGANDA: Launch for drankard championship</span>
+  </div>
   </div>
 </div>
 
