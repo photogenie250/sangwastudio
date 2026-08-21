@@ -179,7 +179,13 @@
     const shareBtnLabel = document.getElementById("shareBtnLabel");
     if (!shareBtn) return;
 
-    const shareUrl = window.location.href;
+    // Share a link that returns real og:title/og:description/og:image
+    // tags (article/index.html itself is a JS-rendered shell that
+    // crawlers can't see into) — see supabase/functions/article-og.
+    // Falls back to the plain page URL if SUPABASE_URL isn't set.
+    const shareUrl = window.SUPABASE_URL
+      ? `${window.SUPABASE_URL}/functions/v1/article-og?slug=${encodeURIComponent(a.slug)}`
+      : window.location.href;
 
     async function copyFallback() {
       try {
