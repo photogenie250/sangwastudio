@@ -11,6 +11,16 @@
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
 <link rel="manifest" href="/assets/favicon/site.webmanifest">
 <meta name="theme-color" content="#0E1C2B">
+<!--
+  GOOGLE ADSENSE — once your site is approved, Google will give you
+  a verification/auto-ads snippet that looks like:
+    <meta name="google-adsense-account" content="ca-pub-XXXXXXXXXXXXXXXX">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  Don't hard-code the ad script here. Instead, paste your publisher
+  ID into js/consent.js's window.loadAds() function — that way ads
+  (and their cookies) only load AFTER a visitor accepts the cookie
+  banner. See README.md "Monetization" for the full checklist.
+-->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
@@ -331,6 +341,15 @@
 
   .player-col{ display:flex; flex-direction:column; }
   .hero-side{ display:flex; flex-direction:column; gap:22px; }
+  .side-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color: var(--crimson);
+    margin-bottom:2px;
+  }
   .side-card{
     display:grid;
     grid-template-columns: 108px 1fr;
@@ -479,6 +498,8 @@
     letter-spacing:0.04em;
   }
   footer .brand-name{ font-size:16px; color:#fff; }
+  .footer-legal{ display:flex; align-items:center; gap:18px; }
+  .footer-legal a:hover{ color:#fff; }
 
   @media (max-width: 880px){
     .hero{ grid-template-columns: 1fr; gap:28px; padding-top:32px; }
@@ -588,28 +609,29 @@
     <div class="byline" id="nowPlayingByline">GAKORO MEDIA TV <span class="sep">&bull;</span> Streaming now</div>
   </div>
 
-  <div class="hero-side">
-    <div class="side-card">
-      <div class="side-thumb"><span class="duration-badge">6:15</span></div>
+  <div class="hero-side" id="latestArticlesSide">
+    <div class="side-label">Latest articles</div>
+    <a class="side-card" href="article/index.html">
+      <div class="side-thumb"></div>
       <div>
         <div class="side-title">Community leaders weigh in on the new season ahead</div>
         <div class="side-meta">Interviews &bull; 5 hours ago</div>
       </div>
-    </div>
-    <div class="side-card">
-      <div class="side-thumb b"><span class="duration-badge">11:03</span></div>
+    </a>
+    <a class="side-card" href="article/index.html">
+      <div class="side-thumb b"></div>
       <div>
         <div class="side-title">On the road: a week following the campaign trail</div>
         <div class="side-meta">Latest &bull; 1 day ago</div>
       </div>
-    </div>
-    <div class="side-card">
-      <div class="side-thumb c"><span class="duration-badge">9:48</span></div>
+    </a>
+    <a class="side-card" href="article/index.html">
+      <div class="side-thumb c"></div>
       <div>
         <div class="side-title">On the ground: rebuilding after the harvest floods</div>
         <div class="side-meta">World &bull; 1 day ago</div>
       </div>
-    </div>
+    </a>
   </div>
 </section>
 
@@ -671,12 +693,20 @@
 
 <footer>
   <div class="brand-name">GAKORO MEDIA TV</div>
+  <div class="footer-legal">
+    <a href="/privacy/">Privacy Policy</a>
+    <a href="/terms/">Terms of Use</a>
+    <span>&copy; <span id="yearNow2"></span> GAKORO MEDIA TV</span>
+  </div>
 </footer>
 
+<script>document.getElementById('yearNow2').textContent = new Date().getFullYear();</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="js/config.js"></script>
 <script src="js/live-player.js"></script>
 <script src="js/youtube.js"></script>
+<script src="js/latest-articles.js"></script>
 <script src="js/news.js"></script>
+<script src="js/consent.js"></script>
 </body>
 </html>
