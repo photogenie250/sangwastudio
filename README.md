@@ -22,7 +22,13 @@ assets/logo-mark.png  ← larger logo used in hero & about section
 assets/logo-full.png  ← your original uploaded logo, full size, kept for reference
 assets/hero/          ← crossfading background photos behind the hero headline
 sql/schema.sql        ← run once in Supabase to create the booking database
+sql/add_article_engagement.sql ← run once to add article likes
+sql/add_article_comments.sql   ← run once to add article comments
 supabase/functions/notify-order/index.ts  ← Edge Function that pings your WhatsApp on every new booking
+privacy/index.html     ← Privacy Policy (data, cookies, ads)
+terms/index.html       ← Terms of Use
+js/consent.js           ← cookie consent banner; gates ad loading on consent
+ads.txt, robots.txt, sitemap.xml ← ad-network & search-crawler requirements (see section 7)
 ```
 
 Keep the folder structure intact when uploading — `index.html` expects `css/`, `js/`, and `assets/` to sit right next to it.
@@ -144,7 +150,58 @@ If Supabase isn't configured yet, the quick-message form falls back to opening t
 - **Signature motif**: the ribbon shape from your "S" logo reappears as a hand-drawn divider line between sections, animating in as you scroll.
 - Fully responsive down to mobile, with a slide-in mobile menu, animated stat counters, a filterable portfolio grid (All / Photo / Video / Music), a rotating testimonial carousel, and a floating WhatsApp button.
 
-## 5. Previewing locally
+---
+
+## 6. Article comments
+
+Every article page now has a comment section (name + comment, no sign-in required), matching the site's "no accounts needed" approach.
+
+1. In Supabase, open **SQL Editor → New query**, paste the contents of `sql/add_article_comments.sql`, and run it. This creates the `article_comments` table with row-level security: the public can post a comment and read only approved comments — nothing else.
+2. By default, comments go live immediately (`status = 'approved'` on insert) so the conversation feels real-time. If you'd rather approve comments before they're public, change the table's default `status` to `'pending'` in Supabase — no code changes needed, since the site only ever displays rows where `status = 'approved'`.
+3. To remove an inappropriate comment, open **Table Editor → article_comments** in Supabase and either delete the row or set its `status` to `hidden`.
+4. Built-in abuse protection: a hidden honeypot field (catches simple bots), a 20-second cooldown between posts per browser, and a 2000-character limit enforced both client-side and in the database.
+
+---
+
+## 7. Monetization (Google AdSense & general ad readiness)
+
+This site is now set up to meet the standard requirements for running ads (Google AdSense or similar). Everything below is scaffolded and ready — the only thing you need to add is your own AdSense publisher ID once you're approved.
+
+### What's already in place
+| Requirement | Where |
+|---|---|
+| Privacy Policy | `/privacy/` — covers data collection, cookies, and ad-cookie disclosures |
+| Terms of Use | `/terms/` — covers content ownership, comments, bookings, ad disclaimer |
+| Cookie consent banner | `js/consent.js` — shows once per visitor; ads only load after "Accept" |
+| `ads.txt` | Root of the site — required by AdSense to authorize sellers on your domain |
+| `robots.txt` | Root — allows crawling of public pages, blocks `/admin/` and `/ndera-system-login/` |
+| `sitemap.xml` | Root — lists static pages; see the note inside it about adding articles |
+| Ad slot placeholder | `.ad-slot` container in `article/index.html`, currently empty/invisible |
+
+### Steps to actually turn ads on
+1. **Apply for AdSense** at [google.com/adsense](https://www.google.com/adsense) once you have a reasonable amount of original content live (Google generally wants a genuine, navigable site with real content — a good rule of thumb is 20–30+ published articles, though there's no official minimum).
+2. Google will verify your site. You can add the verification `<meta>` tag it gives you into the `<head>` of `index.html` (see the comment already there marking where it goes).
+3. Once approved, Google gives you a **publisher ID** like `ca-pub-1234567890123456`.
+   - Paste it into `ads.txt` on the line that starts with `google.com, pub-...` (uncomment it and use your real ID).
+   - Paste your ad script into `window.loadAds()` inside `js/consent.js` — this makes sure ads (and their cookies) only load *after* a visitor accepts the cookie banner, which keeps you compliant in the EU/UK and matches what the Privacy Policy already promises.
+4. Add actual ad units (`<ins class="adsbygoogle">` blocks, or Auto Ads) wherever you like — the `.ad-slot` container in `article/index.html` is a ready-made spot between the article body and the comments.
+5. Re-upload the site.
+
+### Other requirements Google (and readers) will check for
+- **Original content** — Gakoro Media TV's articles already fit this; keep publishing your own reporting rather than syndicated/copied content.
+- **Easy navigation & working links** — already in place (masthead, footer, no dead links).
+- **Mobile-friendly & fast-loading** — the site is already responsive; keep hero images reasonably sized.
+- **HTTPS** — make sure your host (Netlify, Vercel, GitHub Pages, etc.) has SSL enabled; all of the above assume `https://`.
+- **No prohibited content** — no adult, violent, or policy-violating content (not an issue for a local news/studio site, just worth knowing).
+- **Real contact info** — already present in the footer/Contact section.
+- **No ads on the school portal** — `/ndera-system-login/` is deliberately excluded from `robots.txt` and never loads `consent.js`/ads, to protect student privacy.
+
+### Alternative / additional monetization
+Since Gakoro Media TV already runs its own YouTube channel, don't overlook **YouTube Partner Program** monetization (separate application, via YouTube Studio) as a second revenue stream alongside on-site display ads. Sponsorships or a "Sponsored by" banner slot in the news ticker or homepage are also easy to add later using the same `.ad-slot` pattern.
+
+---
+
+## 8. Previewing locally
 Because the page loads separate CSS/JS files, some browsers block that when you just double-click `index.html` (a `file://` restriction). If styles or scripts don't seem to load, run a tiny local server from inside the folder instead:
 
 ```bash
