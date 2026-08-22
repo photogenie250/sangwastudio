@@ -18,4 +18,4 @@
 #    the same way — AdSense's guide explains the format:
 #    https://support.google.com/adsense/answer/7532444
 
-# google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0
+google.com, pub-2056887490896774, DIRECT, f08c47fec0942fa0
