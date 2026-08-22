@@ -11,15 +11,13 @@
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
 <link rel="manifest" href="/assets/favicon/site.webmanifest">
 <meta name="theme-color" content="#0E1C2B">
+<meta name="google-adsense-account" content="ca-pub-2056887490896774">
 <!--
-  GOOGLE ADSENSE — once your site is approved, Google will give you
-  a verification/auto-ads snippet that looks like:
-    <meta name="google-adsense-account" content="ca-pub-XXXXXXXXXXXXXXXX">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
-  Don't hard-code the ad script here. Instead, paste your publisher
-  ID into js/consent.js's window.loadAds() function — that way ads
-  (and their cookies) only load AFTER a visitor accepts the cookie
-  banner. See README.md "Monetization" for the full checklist.
+  GOOGLE ADSENSE — verification meta tag is above. The actual ad
+  script is intentionally NOT hard-coded here; it's injected by
+  js/consent.js's window.loadAds() only AFTER a visitor accepts the
+  cookie banner, so ad cookies never get set before consent. See
+  README.md "Monetization" for the full checklist.
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -294,7 +292,6 @@
     display:flex; align-items:center; justify-content:center;
     transition: transform 0.15s ease;
   }
-  .card-thumb:hover .play-btn,
   .side-card:hover .play-btn{ transform:translate(-50%,-50%) scale(1.08); }
   .play-btn::after{
     content:"";
@@ -373,7 +370,6 @@
     opacity:0;
     transition:opacity .15s ease;
   }
-  .card-thumb:hover .watch-ext,
   .side-card:hover .watch-ext{ opacity:1; }
   .side-card:last-child{ border-bottom:none; }
   .side-thumb{
@@ -456,8 +452,8 @@
   .g4{ background: linear-gradient(150deg,#4A6B4E,#0E1C2B); }
   .g5{ background: linear-gradient(150deg,#5C3E7A,#0E1C2B); }
   .g6{ background: linear-gradient(150deg,#2E6B78,#0E1C2B); }
-  .card-thumb .play-btn{ width:46px; height:46px; }
-  .card-thumb .play-btn::after{ border-width:8px 0 8px 13px; }
+  .g7{ background: linear-gradient(150deg,#7A3E5C,#0E1C2B); }
+  .g8{ background: linear-gradient(150deg,#6B5A2E,#0E1C2B); }
   .card-body{ padding: 16px 18px 18px; display:flex; flex-direction:column; gap:8px; flex:1; }
   .card-title{
     font-family:'Fraunces', serif;
@@ -484,6 +480,39 @@
     padding-top:8px;
     border-top:1px solid var(--line);
   }
+  .card-stats{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    color: var(--slate-light);
+    letter-spacing:0.04em;
+  }
+  .card-stats .stat{
+    display:flex;
+    align-items:center;
+    gap:4px;
+  }
+  .card-stats svg{ width:13px; height:13px; fill:none; stroke:currentColor; stroke-width:2; flex-shrink:0; }
+  .stat-share{
+    display:flex;
+    align-items:center;
+    gap:4px;
+    margin-left:auto;
+    background:transparent;
+    border:none;
+    padding:0;
+    color: var(--slate-light);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition: color .15s ease;
+  }
+  .stat-share:hover{ color: var(--gold); }
+  .stat-share.copied{ color: var(--gold); }
 
   /* ---------- FOOTER ---------- */
   footer{
@@ -559,28 +588,10 @@
   </nav>
 </header>
 
-<div class="ticker">
+<div class="ticker" id="tickerBar" style="display:none;">
   <div class="ticker-label">BREAKING</div>
   <div class="ticker-viewport">
   <div class="ticker-track">
-    <span>GAKORO: Aime Axel held a live performance in GS GAKORO remedial learning program</span>
-    <span>GAKORO: Desability is not inability official song out by Aime Axel</span>
-    <span>NESA: National examination S3,P6 to be out soon</span>
-    <span>POLITICS: RIB arrested Rwanda FDA officials. source IGIHE.COM</span>
-    <span>USA: President Trump brokers Historic Peace deal with Iran. source The Whitehouse</span>
-    <span>SPORT:FERWAFA Boss under arrest for allegedly counterfeit cheque</span>
-    <span>TECH: chip shortage eases as new fabs come online</span>
-    <span>UGANDA: Launch for drankard championship</span>
-    <!-- duplicated so the -50% scroll loop is seamless — hidden from
-         screen readers so headlines aren't announced twice -->
-    <span aria-hidden="true">GAKORO: Aime Axel held a live performance in GS GAKORO remedial learning program</span>
-    <span aria-hidden="true">GAKORO: Desability is not inability official song out by Aime Axel</span>
-    <span aria-hidden="true">NESA: National examination S3,P6 to be out soon</span>
-    <span aria-hidden="true">POLITICS: RIB arrested Rwanda FDA officials. source IGIHE.COM</span>
-    <span aria-hidden="true">USA: President Trump brokers Historic Peace deal with Iran. source The Whitehouse</span>
-    <span aria-hidden="true">SPORT:FERWAFA Boss under arrest for allegedly counterfeit cheque</span>
-    <span aria-hidden="true">TECH: chip shortage eases as new fabs come online</span>
-    <span aria-hidden="true">UGANDA: Launch for drankard championship</span>
   </div>
   </div>
 </div>
@@ -609,86 +620,214 @@
     <div class="byline" id="nowPlayingByline">GAKORO MEDIA TV <span class="sep">&bull;</span> Streaming now</div>
   </div>
 
-  <div class="hero-side" id="latestArticlesSide">
-    <div class="side-label">Latest articles</div>
-    <a class="side-card" href="article/index.html">
-      <div class="side-thumb"></div>
+  <div class="hero-side" id="heroSideVideos" style="display:none;">
+    <div class="side-label">Latest uploads</div>
+    <div class="side-card">
+      <div class="side-thumb"><span class="duration-badge"></span><div class="play-btn"></div></div>
       <div>
-        <div class="side-title">Community leaders weigh in on the new season ahead</div>
-        <div class="side-meta">Interviews &bull; 5 hours ago</div>
+        <div class="side-title"></div>
+        <div class="side-meta"></div>
       </div>
-    </a>
-    <a class="side-card" href="article/index.html">
-      <div class="side-thumb b"></div>
+    </div>
+    <div class="side-card">
+      <div class="side-thumb b"><span class="duration-badge"></span><div class="play-btn"></div></div>
       <div>
-        <div class="side-title">On the road: a week following the campaign trail</div>
-        <div class="side-meta">Latest &bull; 1 day ago</div>
+        <div class="side-title"></div>
+        <div class="side-meta"></div>
       </div>
-    </a>
-    <a class="side-card" href="article/index.html">
-      <div class="side-thumb c"></div>
+    </div>
+    <div class="side-card">
+      <div class="side-thumb c"><span class="duration-badge"></span><div class="play-btn"></div></div>
       <div>
-        <div class="side-title">On the ground: rebuilding after the harvest floods</div>
-        <div class="side-meta">World &bull; 1 day ago</div>
+        <div class="side-title"></div>
+        <div class="side-meta"></div>
       </div>
-    </a>
+    </div>
   </div>
 </section>
 
 <div class="section-head">
-  <div class="section-title">Latest uploads</div>
-  <div class="section-sub">Updated hourly</div>
+  <div class="section-title">Latest articles</div>
+  <div class="section-sub">Fresh from the newsroom</div>
 </div>
 
-<section class="grid" id="videoGrid">
-  <div class="card">
-    <div class="card-thumb g1"><span class="duration-badge">14:20</span><div class="play-btn"></div></div>
+<section class="grid" id="articleGrid" style="display:none;">
+  <a class="card" href="article/index.html" style="display:none;">
+    <div class="card-thumb g1"></div>
     <div class="card-body">
-      <div class="card-title">Interview: the community leader behind the new youth initiative</div>
-      <div class="card-dek">A conversation on what's driving the program and what comes next for the neighborhoods it serves.</div>
-      <div class="card-meta"><span>Interviews</span><span>3 hours ago</span></div>
+      <div class="card-title"></div>
+      <div class="card-dek"></div>
+      <div class="card-stats">
+        <span class="stat stat-views">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span class="stat-views-num"></span>
+        </span>
+        <span class="stat stat-likes">
+          <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10.2-9.3C.2 8.8 1.6 5 5.3 4.2c2-.4 3.9.4 5.1 2.1l1.6 2.2 1.6-2.2c1.2-1.7 3.1-2.5 5.1-2.1 3.7.8 5.1 4.6 3.5 7.5C19.5 16.4 12 21 12 21z"/></svg>
+          <span class="stat-likes-num"></span>
+        </span>
+        <button type="button" class="stat-share" aria-label="Share this article">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>
+          <span class="stat-share-label">Share</span>
+        </button>
+      </div>
+      <div class="card-meta"></div>
     </div>
-  </div>
-  <div class="card">
-    <div class="card-thumb g2"><span class="duration-badge">8:07</span><div class="play-btn"></div></div>
+  </a>
+  <a class="card" href="article/index.html" style="display:none;">
+    <div class="card-thumb g2"></div>
     <div class="card-body">
-      <div class="card-title">Explainer: how the new transit line was funded</div>
-      <div class="card-dek">Breaking down the financing structure behind the city's largest infrastructure project in a decade.</div>
-      <div class="card-meta"><span>Latest</span><span>6 hours ago</span></div>
+      <div class="card-title"></div>
+      <div class="card-dek"></div>
+      <div class="card-stats">
+        <span class="stat stat-views">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span class="stat-views-num"></span>
+        </span>
+        <span class="stat stat-likes">
+          <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10.2-9.3C.2 8.8 1.6 5 5.3 4.2c2-.4 3.9.4 5.1 2.1l1.6 2.2 1.6-2.2c1.2-1.7 3.1-2.5 5.1-2.1 3.7.8 5.1 4.6 3.5 7.5C19.5 16.4 12 21 12 21z"/></svg>
+          <span class="stat-likes-num"></span>
+        </span>
+        <button type="button" class="stat-share" aria-label="Share this article">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>
+          <span class="stat-share-label">Share</span>
+        </button>
+      </div>
+      <div class="card-meta"></div>
     </div>
-  </div>
-  <div class="card">
-    <div class="card-thumb g3"><span class="duration-badge">21:56</span><div class="play-btn"></div></div>
+  </a>
+  <a class="card" href="article/index.html" style="display:none;">
+    <div class="card-thumb g3"></div>
     <div class="card-body">
-      <div class="card-title">Documentary short: life along the new border crossing</div>
-      <div class="card-dek">A ground-level look at daily routines shaped by a checkpoint that reopened after years of closure.</div>
-      <div class="card-meta"><span>World</span><span>9 hours ago</span></div>
+      <div class="card-title"></div>
+      <div class="card-dek"></div>
+      <div class="card-stats">
+        <span class="stat stat-views">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span class="stat-views-num"></span>
+        </span>
+        <span class="stat stat-likes">
+          <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10.2-9.3C.2 8.8 1.6 5 5.3 4.2c2-.4 3.9.4 5.1 2.1l1.6 2.2 1.6-2.2c1.2-1.7 3.1-2.5 5.1-2.1 3.7.8 5.1 4.6 3.5 7.5C19.5 16.4 12 21 12 21z"/></svg>
+          <span class="stat-likes-num"></span>
+        </span>
+        <button type="button" class="stat-share" aria-label="Share this article">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>
+          <span class="stat-share-label">Share</span>
+        </button>
+      </div>
+      <div class="card-meta"></div>
     </div>
-  </div>
-  <div class="card">
-    <div class="card-thumb g4"><span class="duration-badge">5:41</span><div class="play-btn"></div></div>
+  </a>
+  <a class="card" href="article/index.html" style="display:none;">
+    <div class="card-thumb g4"></div>
     <div class="card-body">
-      <div class="card-title">Weekly recap: five stories you may have missed</div>
-      <div class="card-dek">A quick roundup of the week's most consequential stories, condensed into five minutes.</div>
-      <div class="card-meta"><span>Latest</span><span>12 hours ago</span></div>
+      <div class="card-title"></div>
+      <div class="card-dek"></div>
+      <div class="card-stats">
+        <span class="stat stat-views">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span class="stat-views-num"></span>
+        </span>
+        <span class="stat stat-likes">
+          <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10.2-9.3C.2 8.8 1.6 5 5.3 4.2c2-.4 3.9.4 5.1 2.1l1.6 2.2 1.6-2.2c1.2-1.7 3.1-2.5 5.1-2.1 3.7.8 5.1 4.6 3.5 7.5C19.5 16.4 12 21 12 21z"/></svg>
+          <span class="stat-likes-num"></span>
+        </span>
+        <button type="button" class="stat-share" aria-label="Share this article">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>
+          <span class="stat-share-label">Share</span>
+        </button>
+      </div>
+      <div class="card-meta"></div>
     </div>
-  </div>
-  <div class="card">
-    <div class="card-thumb g5"><span class="duration-badge">13:12</span><div class="play-btn"></div></div>
+  </a>
+  <a class="card" href="article/index.html" style="display:none;">
+    <div class="card-thumb g5"></div>
     <div class="card-body">
-      <div class="card-title">Panel: what the new policy means for small business owners</div>
-      <div class="card-dek">Three community voices weigh in on what changes, what stays the same, and what to expect next.</div>
-      <div class="card-meta"><span>Interviews</span><span>1 day ago</span></div>
+      <div class="card-title"></div>
+      <div class="card-dek"></div>
+      <div class="card-stats">
+        <span class="stat stat-views">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span class="stat-views-num"></span>
+        </span>
+        <span class="stat stat-likes">
+          <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10.2-9.3C.2 8.8 1.6 5 5.3 4.2c2-.4 3.9.4 5.1 2.1l1.6 2.2 1.6-2.2c1.2-1.7 3.1-2.5 5.1-2.1 3.7.8 5.1 4.6 3.5 7.5C19.5 16.4 12 21 12 21z"/></svg>
+          <span class="stat-likes-num"></span>
+        </span>
+        <button type="button" class="stat-share" aria-label="Share this article">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>
+          <span class="stat-share-label">Share</span>
+        </button>
+      </div>
+      <div class="card-meta"></div>
     </div>
-  </div>
-  <div class="card">
-    <div class="card-thumb g6"><span class="duration-badge">17:33</span><div class="play-btn"></div></div>
+  </a>
+  <a class="card" href="article/index.html" style="display:none;">
+    <div class="card-thumb g6"></div>
     <div class="card-body">
-      <div class="card-title">Field notes: the fishing communities adapting to warmer waters</div>
-      <div class="card-dek">A two-part series following crews as they shift routes and gear to keep pace with changing conditions.</div>
-      <div class="card-meta"><span>World</span><span>1 day ago</span></div>
+      <div class="card-title"></div>
+      <div class="card-dek"></div>
+      <div class="card-stats">
+        <span class="stat stat-views">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span class="stat-views-num"></span>
+        </span>
+        <span class="stat stat-likes">
+          <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10.2-9.3C.2 8.8 1.6 5 5.3 4.2c2-.4 3.9.4 5.1 2.1l1.6 2.2 1.6-2.2c1.2-1.7 3.1-2.5 5.1-2.1 3.7.8 5.1 4.6 3.5 7.5C19.5 16.4 12 21 12 21z"/></svg>
+          <span class="stat-likes-num"></span>
+        </span>
+        <button type="button" class="stat-share" aria-label="Share this article">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>
+          <span class="stat-share-label">Share</span>
+        </button>
+      </div>
+      <div class="card-meta"></div>
     </div>
-  </div>
+  </a>
+  <a class="card" href="article/index.html" style="display:none;">
+    <div class="card-thumb g7"></div>
+    <div class="card-body">
+      <div class="card-title"></div>
+      <div class="card-dek"></div>
+      <div class="card-stats">
+        <span class="stat stat-views">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span class="stat-views-num"></span>
+        </span>
+        <span class="stat stat-likes">
+          <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10.2-9.3C.2 8.8 1.6 5 5.3 4.2c2-.4 3.9.4 5.1 2.1l1.6 2.2 1.6-2.2c1.2-1.7 3.1-2.5 5.1-2.1 3.7.8 5.1 4.6 3.5 7.5C19.5 16.4 12 21 12 21z"/></svg>
+          <span class="stat-likes-num"></span>
+        </span>
+        <button type="button" class="stat-share" aria-label="Share this article">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>
+          <span class="stat-share-label">Share</span>
+        </button>
+      </div>
+      <div class="card-meta"></div>
+    </div>
+  </a>
+  <a class="card" href="article/index.html" style="display:none;">
+    <div class="card-thumb g8"></div>
+    <div class="card-body">
+      <div class="card-title"></div>
+      <div class="card-dek"></div>
+      <div class="card-stats">
+        <span class="stat stat-views">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span class="stat-views-num"></span>
+        </span>
+        <span class="stat stat-likes">
+          <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10.2-9.3C.2 8.8 1.6 5 5.3 4.2c2-.4 3.9.4 5.1 2.1l1.6 2.2 1.6-2.2c1.2-1.7 3.1-2.5 5.1-2.1 3.7.8 5.1 4.6 3.5 7.5C19.5 16.4 12 21 12 21z"/></svg>
+          <span class="stat-likes-num"></span>
+        </span>
+        <button type="button" class="stat-share" aria-label="Share this article">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>
+          <span class="stat-share-label">Share</span>
+        </button>
+      </div>
+      <div class="card-meta"></div>
+    </div>
+  </a>
 </section>
 
 <footer>
