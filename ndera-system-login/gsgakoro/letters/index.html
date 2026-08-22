@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Letters — NDERA SYSTEM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="../assets/img/ndera-logo.svg">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/dashboard.css">
+<link rel="stylesheet" href="../css/admin-forms.css">
+<link rel="stylesheet" href="../css/students.css">
+<link rel="stylesheet" href="../css/letters.css">
+<link rel="stylesheet" href="../css/polish.css">
+</head>
+<body>
+
+<div class="shell">
+
+  <aside class="sidebar no-print">
+    <div class="sidebar__brand">
+      <a href="../dashboard-admin/" class="sidebar__logo-link" aria-label="NDERA SYSTEM home">
+        <img src="../assets/img/ndera-logo.svg" alt="NDERA SYSTEM" class="sidebar__logo">
+      </a>
+      <p class="sidebar__title">GS GAKORO</p>
+    </div>
+
+    <nav class="sidebar__nav" aria-label="Main navigation">
+      <a class="sidebar__link" href="../dashboard-admin/">Dashboard</a>
+      <a class="sidebar__link" href="../students/">Students</a>
+      <a class="sidebar__link" href="../classes/">Classes</a>
+      <a class="sidebar__link" href="../offenses/">Offenses</a>
+      <a class="sidebar__link" href="../incidents/">Incidents</a>
+      <a class="sidebar__link" href="../evaluation/">Evaluation</a>
+      <a class="sidebar__link" href="../reports/">Reports</a>
+      <a class="sidebar__link" href="../users/">Users</a>
+      <a class="sidebar__link" href="../counseling/">Counseling</a>
+      <a class="sidebar__link sidebar__link--active" href="../letters/">Letters</a>
+    </nav>
+
+    <div class="sidebar__footer">
+      <p class="sidebar__user" id="user-name">Loading…</p>
+      <p class="sidebar__role" id="user-role">&nbsp;</p>
+      <button class="sidebar__logout" id="logout-btn" type="button">Sign out</button>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <header class="topbar no-print">
+      <div>
+        <h1 class="topbar__title">Letters</h1>
+        <p class="topbar__subtitle">Parents of students who have lost marks in <span id="incident-threshold-label">3</span>+ separate incidents this term.</p>
+      </div>
+      <div class="letter-actions">
+        <button class="quick-action" type="button" id="print-all-btn">Print all letters</button>
+        <button class="quick-action" type="button" id="email-all-btn">Email all letters</button>
+      </div>
+    </header>
+
+    <section class="panel no-print" id="list-panel">
+      <div class="panel__header">
+        <h2 class="panel__title">Eligible for a parent letter</h2>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Class</th>
+            <th>Incidents this term</th>
+            <th>Term marks</th>
+            <th>Last incident</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="eligible-body">
+          <tr><td colspan="6" class="data-table__empty">Loading…</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="panel" id="single-letter-panel" hidden>
+      <div class="panel__header no-print">
+        <h2 class="panel__title">Letter preview</h2>
+        <div class="letter-actions">
+          <button class="submit-btn" type="button" id="print-single-btn">Print this letter</button>
+          <button class="crud-form__cancel" type="button" id="close-preview-btn">Close</button>
+        </div>
+      </div>
+      <div id="single-letter-content"></div>
+    </section>
+
+    <div id="letter-print-area"></div>
+
+  </main>
+</div>
+
+<script src="../js/polish.js" defer></script>
+<script src="../js/vendor/supabase-js-2.112.3.min.js" defer></script>
+<script src="../js/vendor/emailjs-browser-4.4.1.min.js" defer></script>
+<script type="module" src="../js/letters.js"></script>
+</body>
+</html>

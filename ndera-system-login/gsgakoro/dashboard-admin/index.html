@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — NDERA SYSTEM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="../assets/img/ndera-logo.svg">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/dashboard.css">
+<link rel="stylesheet" href="../css/polish.css">
+</head>
+<body>
+
+<div class="shell">
+
+  <aside class="sidebar">
+    <div class="sidebar__brand">
+      <a href="../dashboard-admin/" class="sidebar__logo-link" aria-label="NDERA SYSTEM home">
+        <img src="../assets/img/ndera-logo.svg" alt="NDERA SYSTEM" class="sidebar__logo">
+      </a>
+      <p class="sidebar__title">GS GAKORO</p>
+    </div>
+
+    <nav class="sidebar__nav" aria-label="Main navigation">
+      <a class="sidebar__link sidebar__link--active" href="../dashboard-admin/">Dashboard</a>
+      <a class="sidebar__link" href="../students/">Students</a>
+      <a class="sidebar__link" href="../classes/">Classes</a>
+      <a class="sidebar__link" href="../offenses/">Offenses</a>
+      <a class="sidebar__link" href="../incidents/">Incidents</a>
+      <a class="sidebar__link" href="../evaluation/">Evaluation</a>
+      <a class="sidebar__link" href="../reports/">Reports</a>
+      <a class="sidebar__link" href="../users/">Users</a>
+      <a class="sidebar__link" href="../counseling/">Counseling</a>
+      <a class="sidebar__link" href="../letters/">Letters</a>
+    </nav>
+
+    <div class="sidebar__footer">
+      <p class="sidebar__user" id="user-name">Loading…</p>
+      <p class="sidebar__role" id="user-role">&nbsp;</p>
+      <button class="sidebar__logout" id="logout-btn" type="button">Sign out</button>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <header class="topbar">
+      <div>
+        <h1 class="topbar__title">Dashboard</h1>
+        <p class="topbar__subtitle">School-wide standing, at a glance.</p>
+      </div>
+      <a class="quick-action" href="../incidents/">+ Record incident</a>
+    </header>
+
+    <section class="stat-ledger" aria-label="School-wide statistics">
+      <div class="stat-ledger__entry">
+        <p class="stat-ledger__value" id="stat-active-students">—</p>
+        <p class="stat-ledger__label">Active students</p>
+      </div>
+      <div class="stat-ledger__divider" aria-hidden="true"></div>
+      <div class="stat-ledger__entry">
+        <p class="stat-ledger__value" id="stat-classes">—</p>
+        <p class="stat-ledger__label">Classes</p>
+      </div>
+      <div class="stat-ledger__divider" aria-hidden="true"></div>
+      <div class="stat-ledger__entry">
+        <p class="stat-ledger__value" id="stat-incidents-month">—</p>
+        <p class="stat-ledger__label">Incidents this month</p>
+      </div>
+      <div class="stat-ledger__divider" aria-hidden="true"></div>
+      <div class="stat-ledger__entry">
+        <p class="stat-ledger__value" id="stat-incidents-total">—</p>
+        <p class="stat-ledger__label">Incidents all-time</p>
+      </div>
+      <div class="stat-ledger__divider" aria-hidden="true"></div>
+      <div class="stat-ledger__entry stat-ledger__entry--warn">
+        <p class="stat-ledger__value" id="stat-below-28">—</p>
+        <p class="stat-ledger__label">Below 28 marks</p>
+      </div>
+      <div class="stat-ledger__divider" aria-hidden="true"></div>
+      <div class="stat-ledger__entry">
+        <p class="stat-ledger__value" id="stat-average-marks">—</p>
+        <p class="stat-ledger__label">Average marks</p>
+      </div>
+    </section>
+
+    <div class="content-grid">
+
+      <section class="panel">
+        <div class="panel__header">
+          <h2 class="panel__title">Recent incidents</h2>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr><th>Student</th><th>Offense</th><th>Deduction</th><th>Date</th></tr>
+          </thead>
+          <tbody id="recent-incidents-body">
+            <tr><td colspan="4" class="data-table__empty">Loading…</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="panel">
+        <div class="panel__header">
+          <h2 class="panel__title">Watchlist — below 28 marks</h2>
+        </div>
+        <ul class="watch-list" id="watchlist">
+          <li class="watch-list__empty">Loading…</li>
+        </ul>
+      </section>
+
+    </div>
+
+    <section class="panel">
+      <div class="panel__header">
+        <h2 class="panel__title">Most disciplined classes</h2>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr><th>Class</th><th>Incidents</th><th>Avg. marks</th></tr>
+        </thead>
+        <tbody id="top-classes-body">
+          <tr><td colspan="3" class="data-table__empty">Loading…</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+  </main>
+</div>
+
+<script src="../js/polish.js" defer></script>
+<script src="../js/vendor/supabase-js-2.112.3.min.js" defer></script>
+<script type="module" src="../js/dashboard-admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Offenses — NDERA SYSTEM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="../assets/img/ndera-logo.svg">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/dashboard.css">
+<link rel="stylesheet" href="../css/admin-forms.css">
+<link rel="stylesheet" href="../css/polish.css">
+</head>
+<body>
+
+<div class="shell">
+
+  <aside class="sidebar">
+    <div class="sidebar__brand">
+      <a href="../dashboard-admin/" class="sidebar__logo-link" aria-label="NDERA SYSTEM home">
+        <img src="../assets/img/ndera-logo.svg" alt="NDERA SYSTEM" class="sidebar__logo">
+      </a>
+      <p class="sidebar__title">GS GAKORO</p>
+    </div>
+
+    <nav class="sidebar__nav" aria-label="Main navigation">
+      <a class="sidebar__link" href="../dashboard-admin/">Dashboard</a>
+      <a class="sidebar__link" href="../students/">Students</a>
+      <a class="sidebar__link" href="../classes/">Classes</a>
+      <a class="sidebar__link sidebar__link--active" href="../offenses/">Offenses</a>
+      <a class="sidebar__link" href="../incidents/">Incidents</a>
+      <a class="sidebar__link" href="../evaluation/">Evaluation</a>
+      <a class="sidebar__link" href="../reports/">Reports</a>
+      <a class="sidebar__link" href="../users/">Users</a>
+      <a class="sidebar__link" href="../counseling/">Counseling</a>
+      <a class="sidebar__link" href="../letters/">Letters</a>
+    </nav>
+
+    <div class="sidebar__footer">
+      <p class="sidebar__user" id="user-name">Loading…</p>
+      <p class="sidebar__role" id="user-role">&nbsp;</p>
+      <button class="sidebar__logout" id="logout-btn" type="button">Sign out</button>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <header class="topbar">
+      <div>
+        <h1 class="topbar__title">Offenses &amp; categories</h1>
+        <p class="topbar__subtitle">Administrators and teachers only. Offenses are deactivated, never deleted, so past incidents stay intact.</p>
+      </div>
+    </header>
+
+    <div id="admin-only-notice" class="panel readonly-notice" hidden>
+      <p class="readonly-notice__title">Administrators and teachers only</p>
+      <p class="readonly-notice__body">This page is limited to administrator and teacher accounts.</p>
+    </div>
+
+    <div id="page-content" hidden>
+
+      <!-- Categories -->
+      <div class="admin-layout">
+        <section class="panel">
+          <div class="panel__header">
+            <h2 class="panel__title">Categories</h2>
+          </div>
+          <table class="data-table">
+            <thead><tr><th>Name</th><th>Description</th><th></th></tr></thead>
+            <tbody id="categories-body">
+              <tr><td colspan="3" class="data-table__empty">Loading…</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="panel">
+          <p class="form-panel__title" id="category-form-title">Add category</p>
+          <p class="form-panel__hint">Categories group related offenses (Attendance, Uniform, Respect…).</p>
+          <div id="category-form-error" class="inline-banner inline-banner--error" hidden></div>
+          <form class="crud-form" id="category-form">
+            <input type="hidden" id="category-id">
+            <div class="field">
+              <label class="field__label" for="category-name">Name</label>
+              <input class="field__input" type="text" id="category-name" required>
+            </div>
+            <div class="field">
+              <label class="field__label" for="category-description">Description</label>
+              <textarea class="field__input field__input--textarea" id="category-description" rows="2"></textarea>
+            </div>
+            <div class="crud-form__actions">
+              <button class="submit-btn" type="submit" id="category-submit-btn">Add category</button>
+              <button class="crud-form__cancel" type="button" id="category-cancel-btn" hidden>Cancel</button>
+            </div>
+          </form>
+        </section>
+      </div>
+
+      <!-- Offenses -->
+      <div class="admin-layout" style="margin-top: 24px;">
+        <section class="panel">
+          <div class="panel__header">
+            <h2 class="panel__title">Offenses</h2>
+          </div>
+          <table class="data-table">
+            <thead><tr><th>Title</th><th>Category</th><th>Deduction</th><th>Severity</th><th>Active</th><th></th></tr></thead>
+            <tbody id="offenses-body">
+              <tr><td colspan="6" class="data-table__empty">Loading…</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="panel">
+          <p class="form-panel__title" id="offense-form-title">Add offense</p>
+          <p class="form-panel__hint">The deduction applies to every future incident using this offense — past incidents are never affected.</p>
+          <div id="offense-form-error" class="inline-banner inline-banner--error" hidden></div>
+          <form class="crud-form" id="offense-form">
+            <input type="hidden" id="offense-id">
+            <div class="field">
+              <label class="field__label" for="offense-category">Category</label>
+              <select class="field__input" id="offense-category" required></select>
+            </div>
+            <div class="field">
+              <label class="field__label" for="offense-title">Title</label>
+              <input class="field__input" type="text" id="offense-title" required>
+            </div>
+            <div class="field">
+              <label class="field__label" for="offense-description">Description</label>
+              <textarea class="field__input field__input--textarea" id="offense-description" rows="2"></textarea>
+            </div>
+            <div class="field">
+              <label class="field__label" for="offense-deduction">Deduction (points)</label>
+              <input class="field__input" type="number" id="offense-deduction" min="1" max="40" required>
+            </div>
+            <div class="field">
+              <label class="field__label" for="offense-severity">Severity</label>
+              <select class="field__input" id="offense-severity" required>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+                <option value="critical">Critical</option>
+              </select>
+            </div>
+            <div class="crud-form__actions">
+              <button class="submit-btn" type="submit" id="offense-submit-btn">Add offense</button>
+              <button class="crud-form__cancel" type="button" id="offense-cancel-btn" hidden>Cancel</button>
+            </div>
+          </form>
+        </section>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<script src="../js/polish.js" defer></script>
+<script src="../js/vendor/supabase-js-2.112.3.min.js" defer></script>
+<script type="module" src="../js/offenses.js"></script>
+</body>
+</html>
