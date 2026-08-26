@@ -91,8 +91,8 @@ function renderNotifications() {
   } else if (likesState && likesState.eligible && likesState.count > 0) {
     items.push({
       warning: false,
-      title: 'Likes Nshya',
-      body: `Umunyeshuri yahawe likes ${likesState.count} kubera imyitwarire myiza.`,
+      title: 'Amashimwe mashya',
+      body: `Umunyeshuri yahawe amashimwe ${likesState.count} kubera imyitwarire myiza.`,
     });
   }
 
@@ -138,9 +138,9 @@ document.addEventListener('click', (e) => {
 });
 
 // ------------------------------------------------------------
-// Avatar button — scrolls to the identity card at the top (the
-// fullest view of the student's own profile info the portal
-// currently has).
+// Avatar button / bottom-nav "Umwirondoro" — scrolls to the
+// identity card at the top (the fullest view of the student's
+// own profile info the portal currently has).
 // ------------------------------------------------------------
 function goToProfile() {
   document.querySelector('.hero-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' });

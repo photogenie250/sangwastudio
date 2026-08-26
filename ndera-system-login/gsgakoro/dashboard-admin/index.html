@@ -10,6 +10,8 @@
 <link rel="icon" type="image/svg+xml" href="../assets/img/ndera-logo.svg">
 <link rel="stylesheet" href="../css/style.css">
 <link rel="stylesheet" href="../css/dashboard.css">
+<link rel="stylesheet" href="../css/mobile-nav.css">
+<link rel="stylesheet" href="../css/dashboard-header.css">
 <link rel="stylesheet" href="../css/polish.css">
 </head>
 <body>
@@ -54,6 +56,57 @@
       <a class="quick-action" href="../incidents/">+ Record incident</a>
     </header>
 
+    <div class="topbar-utility">
+      <div class="topbar-search">
+        <input
+          class="topbar-search__input"
+          type="text"
+          id="dash-search-input"
+          placeholder="Search students, classes, incidents…"
+          autocomplete="off"
+        >
+        <svg class="topbar-search__icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <div class="topbar-search__results" id="dash-search-results"></div>
+      </div>
+
+      <div class="topbar-utility__spacer"></div>
+
+      <div style="position: relative;">
+        <button class="topbar-icon-btn" id="dash-notif-btn" type="button" aria-label="Notifications">
+          <svg viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>
+          <span class="topbar-icon-btn__dot" id="dash-notif-dot" hidden></span>
+        </button>
+        <div class="topbar-dropdown" id="dash-notif-dropdown"></div>
+      </div>
+
+      <div style="position: relative;">
+        <button class="topbar-icon-btn" id="dash-calendar-btn" type="button" aria-label="Calendar">
+          <svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="1.6"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>
+        </button>
+        <div class="topbar-calendar-pop" id="dash-calendar-pop">
+          <p class="topbar-calendar-pop__date" id="dash-calendar-date">—</p>
+          <p class="topbar-calendar-pop__term">GS Gakoro</p>
+          <a class="topbar-calendar-pop__link" href="../reports/">Open reports</a>
+        </div>
+      </div>
+
+      <div style="position: relative;">
+        <button class="topbar-avatar" id="dash-avatar-btn" type="button">
+          <span class="topbar-avatar__circle" id="dash-avatar-initial">•</span>
+          <span class="topbar-avatar__label" id="dash-avatar-name">Loading…</span>
+          <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="topbar-dropdown" id="dash-avatar-dropdown">
+          <div class="topbar-dropdown__header">
+            <p class="topbar-dropdown__name" id="dash-dropdown-name">—</p>
+            <p class="topbar-dropdown__role" id="dash-dropdown-role">—</p>
+          </div>
+          <a class="topbar-dropdown__item" href="../users/">Manage users</a>
+          <button class="topbar-dropdown__item topbar-dropdown__item--danger" id="dash-dropdown-signout" type="button">Sign out</button>
+        </div>
+      </div>
+    </div>
+
     <section class="stat-ledger" aria-label="School-wide statistics">
       <div class="stat-ledger__entry">
         <p class="stat-ledger__value" id="stat-active-students">—</p>
@@ -86,7 +139,7 @@
       </div>
     </section>
 
-    <div class="content-grid">
+    <div class="content-grid--three">
 
       <section class="panel">
         <div class="panel__header">
@@ -111,6 +164,18 @@
         </ul>
       </section>
 
+      <section class="panel">
+        <div class="panel__header">
+          <h2 class="panel__title">Incidents overview</h2>
+          <p class="panel__subtitle">Last 5 weeks, this school.</p>
+        </div>
+        <div class="chart-legend">
+          <span class="chart-legend__item"><span class="chart-legend__swatch" style="background:#14336B"></span>Incidents</span>
+          <span class="chart-legend__item"><span class="chart-legend__swatch" style="background:#C1392B"></span>Deductions</span>
+        </div>
+        <div id="incidents-overview-chart"><p class="data-table__empty">Loading…</p></div>
+      </section>
+
     </div>
 
     <section class="panel">
@@ -128,18 +193,69 @@
       </table>
     </section>
 
+    <div class="content-grid">
+
+      <section class="panel">
+        <div class="panel__header">
+          <h2 class="panel__title">Most disciplined classes</h2>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr><th>Class</th><th>Incidents</th><th>Avg. marks</th></tr>
+          </thead>
+          <tbody id="top-classes-body">
+            <tr><td colspan="3" class="data-table__empty">Loading…</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="panel">
+        <div class="panel__header">
+          <h2 class="panel__title">Incident categories</h2>
+        </div>
+        <div class="donut-wrap" id="incident-categories-wrap">
+          <p class="data-table__empty">Loading…</p>
+        </div>
+      </section>
+
+    </div>
+
     <section class="panel">
       <div class="panel__header">
-        <h2 class="panel__title">Most disciplined classes</h2>
+        <h2 class="panel__title">Quick actions</h2>
       </div>
-      <table class="data-table">
-        <thead>
-          <tr><th>Class</th><th>Incidents</th><th>Avg. marks</th></tr>
-        </thead>
-        <tbody id="top-classes-body">
-          <tr><td colspan="3" class="data-table__empty">Loading…</td></tr>
-        </tbody>
-      </table>
+      <div class="quick-actions-grid">
+        <a class="quick-actions-grid__tile" href="../incidents/">
+          <span class="quick-actions-grid__icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>
+          <p class="quick-actions-grid__label">Record Incident</p>
+          <p class="quick-actions-grid__sub">Add a new student incident</p>
+        </a>
+        <a class="quick-actions-grid__tile" href="../students/">
+          <span class="quick-actions-grid__icon"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><path d="M18 8v6M15 11h6"/></svg></span>
+          <p class="quick-actions-grid__label">Add Student</p>
+          <p class="quick-actions-grid__sub">Register a new student</p>
+        </a>
+        <a class="quick-actions-grid__tile" href="../classes/">
+          <span class="quick-actions-grid__icon"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M9 8h6M9 12h6M9 16h3"/></svg></span>
+          <p class="quick-actions-grid__label">Add Class</p>
+          <p class="quick-actions-grid__sub">Create a new class</p>
+        </a>
+        <a class="quick-actions-grid__tile" href="../reports/">
+          <span class="quick-actions-grid__icon"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6Z"/><path d="M15 3v3h3M9 13h6M9 17h4"/></svg></span>
+          <p class="quick-actions-grid__label">Generate Report</p>
+          <p class="quick-actions-grid__sub">Create custom reports</p>
+        </a>
+        <a class="quick-actions-grid__tile" href="../letters/">
+          <span class="quick-actions-grid__icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="m4 6.5 8 6.5 8-6.5"/></svg></span>
+          <p class="quick-actions-grid__label">Send Letter</p>
+          <p class="quick-actions-grid__sub">Send letter to student</p>
+        </a>
+        <a class="quick-actions-grid__tile" href="../counseling/">
+          <span class="quick-actions-grid__icon"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4V5Z"/></svg></span>
+          <p class="quick-actions-grid__label">Counseling Session</p>
+          <p class="quick-actions-grid__sub">Record counseling session</p>
+        </a>
+      </div>
     </section>
 
   </main>
@@ -148,5 +264,6 @@
 <script src="../js/polish.js" defer></script>
 <script src="../js/vendor/supabase-js-2.112.3.min.js" defer></script>
 <script type="module" src="../js/dashboard-admin.js"></script>
+<script type="module" src="../js/mobile-nav.js"></script>
 </body>
 </html>

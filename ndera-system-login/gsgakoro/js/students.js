@@ -850,5 +850,11 @@ function escapeHtml(str) {
     classFilter.value = classParam;
   }
 
+  // Deep link from the Dashboard's quick search: students/?q=<term>
+  const qParam = params.get('q');
+  if (qParam) {
+    searchInput.value = qParam;
+  }
+
   await loadStudents();
 })();
