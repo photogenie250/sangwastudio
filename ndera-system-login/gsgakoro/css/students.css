@@ -1,0 +1,331 @@
+/* ============================================================
+   Students page — page-specific styles
+   ============================================================ */
+
+#students-layout {
+  display: block;
+}
+
+.topbar__actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.secondary-action {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-navy);
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  text-decoration: none;
+  padding: 12px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 140ms ease;
+  white-space: nowrap;
+}
+
+.secondary-action:hover { background: var(--line); }
+
+.import-status {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.import-status--valid {
+  background: rgba(30, 122, 70, 0.1);
+  color: #1E7A46;
+}
+
+.import-status--warning {
+  background: rgba(226, 113, 29, 0.12);
+  color: var(--brass);
+}
+
+.import-status--error {
+  background: rgba(193, 57, 43, 0.1);
+  color: var(--clay);
+}
+
+.import-preview-row--error {
+  opacity: 0.6;
+}
+
+#students-layout.form-open {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 1000px) {
+  #students-layout.form-open { grid-template-columns: 1fr; }
+}
+
+.filters-panel { margin-bottom: 24px; }
+
+.filters {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.field--grow { flex: 1; min-width: 200px; }
+
+.filters .field { margin: 0; min-width: 160px; }
+
+/* ============================================================
+   Table row interactions
+   ============================================================ */
+.data-table tbody tr {
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+
+.data-table tbody tr:hover { background: rgba(226, 113, 29, 0.05); }
+
+.data-table__marks {
+  font-family: var(--font-mono);
+  font-weight: 500;
+}
+
+.data-table__marks--low { color: var(--brass); }
+
+.view-link {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-navy);
+}
+
+/* ============================================================
+   Status badges
+   ============================================================ */
+.status-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(30, 122, 70, 0.1);
+  color: #1E7A46;
+}
+
+.status-badge--transferred,
+.status-badge--expelled,
+.status-badge--graduated {
+  background: rgba(91, 98, 114, 0.12);
+  color: var(--charcoal-soft);
+}
+
+/* ============================================================
+   Attention mark — shown when a student has an active
+   (scheduled) counseling session, so staff can spot them at a
+   glance in both the list and the profile view.
+   ============================================================ */
+.attention-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 3px 9px 3px 8px;
+  border-radius: 999px;
+  background: rgba(226, 113, 29, 0.12);
+  color: var(--brass);
+  white-space: nowrap;
+}
+
+.attention-badge::before {
+  content: "⚠";
+  font-size: 11px;
+  line-height: 1;
+}
+
+.voided-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(193, 57, 43, 0.1);
+  color: var(--clay);
+  margin-left: 6px;
+}
+
+.history-row--voided td {
+  color: var(--charcoal-soft);
+  text-decoration: line-through;
+  text-decoration-color: rgba(91, 98, 114, 0.4);
+}
+
+/* ============================================================
+   Pagination
+   ============================================================ */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding-top: 18px;
+}
+
+.pagination__btn {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-navy);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: background 140ms ease;
+}
+
+.pagination__btn:hover { background: var(--line); }
+.pagination__btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.pagination__label {
+  font-size: 13px;
+  color: var(--charcoal-soft);
+  font-family: var(--font-mono);
+}
+
+/* ============================================================
+   Back link
+   ============================================================ */
+.back-link {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-navy);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.back-link:hover { text-decoration: underline; }
+
+/* ============================================================
+   Profile summary card
+   ============================================================ */
+.profile-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.profile-summary__name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 24px;
+  color: var(--ink-navy);
+  margin: 0 0 4px;
+}
+
+.profile-summary__meta {
+  font-size: 13px;
+  color: var(--charcoal-soft);
+  margin: 0 0 10px;
+  font-family: var(--font-mono);
+}
+
+.profile-summary__marks {
+  text-align: right;
+}
+
+.profile-summary__marks-value {
+  font-family: var(--font-mono);
+  font-size: 40px;
+  font-weight: 500;
+  color: var(--ink-navy);
+  margin: 0;
+  line-height: 1;
+}
+
+.profile-summary__marks-value--low { color: var(--brass); }
+
+.profile-summary__marks-label {
+  font-size: 12px;
+  color: var(--charcoal-soft);
+  margin: 4px 0 0;
+}
+
+/* ============================================================
+   Good behavior — likes
+   ============================================================ */
+.good-behavior-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.like-count {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--charcoal);
+}
+
+.like-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(30, 122, 70, 0.35);
+  background: rgba(30, 122, 70, 0.08);
+  color: #1E7A46;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+
+.like-btn:hover:not(:disabled) {
+  background: rgba(30, 122, 70, 0.16);
+}
+
+.like-btn.is-liked {
+  background: #1E7A46;
+  border-color: #1E7A46;
+  color: #fff;
+}
+
+.like-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.like-ineligible-note {
+  font-size: 12px;
+  color: var(--brass);
+  margin: 10px 0 0;
+}
+
+.like-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #1E7A46;
+  margin-left: 6px;
+}
