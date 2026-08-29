@@ -1,0 +1,685 @@
+/* ============================================================
+   Student dashboard — visual redesign
+   Builds on top of base.css + parent.css (data/table/notice
+   styles and #letter-card, #counseling-card, contact card are
+   reused as-is from parent.css so those existing features keep
+   working unchanged). This file adds the new page shell: topbar,
+   hero identity card, stat cards, behavior score card, the
+   announcements feed, bottom nav and the security footer.
+   ============================================================ */
+
+/* Belt-and-braces: some existing components (e.g. .attention-badge,
+   .parent-card--letter) set `display` unconditionally, which — at
+   equal CSS specificity — can beat the UA stylesheet's `[hidden]`
+   rule depending on source order. Force it everywhere in this app. */
+[hidden] { display: none !important; }
+
+.dash-body {
+  background: #F3F6FD;
+  min-height: 100vh;
+}
+
+.dash-shell {
+  max-width: 760px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ------------------------------------------------------------
+   Top bar
+   ------------------------------------------------------------ */
+.dash-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.dash-topbar__right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dash-icon-btn {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  color: var(--ink-navy);
+  cursor: pointer;
+  transition: background 140ms ease;
+}
+
+.dash-icon-btn svg { width: 22px; height: 22px; }
+.dash-icon-btn:hover { background: rgba(58, 76, 242, 0.08); }
+.dash-icon-btn:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+
+.dash-dot {
+  position: absolute;
+  top: 8px;
+  right: 9px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--sky);
+  border: 2px solid #fff;
+}
+
+/* Red variant — reserved for an unread announcement specifically, so
+   it reads as more urgent than the default blue dot used for the
+   other (state-based, non-dismissable) notification types. */
+.dash-dot--announce { background: var(--clay); }
+
+.dash-avatar-btn {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  margin-left: 6px;
+  background: linear-gradient(135deg, #3357EE 0%, #1B3092 100%);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dash-avatar-btn__initials {
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.dash-avatar-btn__dot {
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--emerald);
+  border: 2px solid #fff;
+}
+
+/* ------------------------------------------------------------
+   Side drawer (hamburger menu)
+   ------------------------------------------------------------ */
+.dash-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 24, 50, 0.45);
+  z-index: 40;
+  animation: fade-in 160ms ease both;
+}
+
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+.dash-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 270px;
+  max-width: 82vw;
+  background: #fff;
+  z-index: 50;
+  padding: 18px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  box-shadow: var(--shadow-lg);
+  transform: translateX(-100%);
+  transition: transform 220ms ease;
+}
+
+.dash-drawer.is-open { transform: translateX(0); }
+
+.dash-drawer__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--ink-navy);
+  padding: 8px 10px 18px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 10px;
+}
+
+.dash-drawer__logo { width: 34px; height: 34px; border-radius: 8px; }
+
+.dash-drawer__link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--charcoal);
+  text-decoration: none;
+  padding: 12px 10px;
+  border-radius: 10px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+
+.dash-drawer__link svg { width: 19px; height: 19px; flex-shrink: 0; color: var(--ink-navy); }
+.dash-drawer__link:hover { background: rgba(58, 76, 242, 0.08); }
+
+.dash-drawer__link--logout {
+  margin-top: auto;
+  color: var(--clay);
+}
+.dash-drawer__link--logout svg { color: var(--clay); }
+.dash-drawer__link--logout:hover { background: rgba(239, 68, 68, 0.08); }
+
+/* ------------------------------------------------------------
+   Notifications popover
+   ------------------------------------------------------------ */
+.dash-popover {
+  position: fixed;
+  top: 62px;
+  right: max(12px, calc(50vw - 380px + 12px));
+  width: 300px;
+  max-width: 88vw;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+  padding: 14px;
+  z-index: 45;
+  animation: card-rise 160ms ease both;
+}
+
+.dash-popover__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--ink-navy);
+  margin: 0 0 10px;
+}
+
+.dash-popover__list { display: flex; flex-direction: column; gap: 10px; max-height: 260px; overflow-y: auto; }
+
+.dash-notif-item {
+  display: flex;
+  gap: 10px;
+  padding: 8px 8px;
+  border-radius: 8px;
+  background: rgba(58, 76, 242, 0.05);
+}
+
+.dash-notif-item--warning { background: rgba(255, 138, 30, 0.08); }
+
+.dash-notif-item p { margin: 0; font-size: 12.5px; line-height: 1.45; color: var(--charcoal); }
+.dash-notif-item strong { display: block; font-size: 12.5px; color: var(--ink-navy); margin-bottom: 2px; }
+
+.dash-empty-note { font-size: 13px; color: var(--charcoal-soft); margin: 0; }
+
+/* ------------------------------------------------------------
+   Main content
+   ------------------------------------------------------------ */
+.dash-main { flex: 1; padding: 16px 16px 24px; }
+
+/* ------------------------------------------------------------
+   Hero identity card
+   ------------------------------------------------------------ */
+.hero-card {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #3357EE 0%, #16358F 100%);
+  border-radius: var(--radius);
+  padding: 26px 24px 22px;
+  color: #fff;
+  box-shadow: 0 14px 30px -12px rgba(30, 55, 170, 0.55);
+}
+
+.hero-card__deco {
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  width: 46px;
+  height: 46px;
+  color: rgba(255, 255, 255, 0.16);
+}
+.hero-card__deco svg { width: 100%; height: 100%; }
+
+.hero-card__row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  position: relative;
+}
+
+.hero-avatar {
+  flex-shrink: 0;
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 24px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.hero-name {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 21px;
+  letter-spacing: 0.01em;
+  margin: 0 0 6px;
+  text-transform: uppercase;
+}
+
+.hero-meta {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.78);
+  margin: 0;
+}
+
+.hero-card__badges {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.hero-status-pill {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 999px;
+  background: var(--emerald);
+  color: #fff;
+}
+
+.hero-status-pill--inactive { background: rgba(255, 255, 255, 0.22); }
+
+.hero-card__divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.18);
+  margin: 18px 0 14px;
+}
+
+.hero-card__facts {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.hero-fact {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hero-fact svg { width: 16px; height: 16px; color: rgba(255, 255, 255, 0.85); }
+.hero-fact__sep { color: rgba(255, 255, 255, 0.35); }
+
+/* ------------------------------------------------------------
+   Stat cards
+   ------------------------------------------------------------ */
+.stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.stat-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px 18px;
+  box-shadow: var(--shadow-sm);
+}
+
+.stat-card__icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.stat-card__icon svg { width: 22px; height: 22px; }
+.stat-card__icon--blue { background: #E7EEFE; color: var(--ink-navy); }
+.stat-card__icon--green { background: #E4F8EC; color: var(--emerald); }
+
+.stat-card__label {
+  font-size: 13px;
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+.stat-card__label--blue { color: var(--ink-navy); }
+.stat-card__label--green { color: var(--emerald); }
+
+.stat-card__value {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--charcoal);
+  margin: 0 0 4px;
+  line-height: 1.1;
+}
+
+.stat-card__sub {
+  font-size: 12.5px;
+  color: var(--charcoal-soft);
+  margin: 0;
+}
+
+.stat-card__value--low { color: var(--brass); }
+
+.hero-status-pill--active { background: var(--emerald); }
+
+/* ------------------------------------------------------------
+   Behavior score card
+   ------------------------------------------------------------ */
+.behavior-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-top: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.behavior-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.behavior-card__head h2 {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--charcoal);
+  margin: 0;
+}
+
+.behavior-card__pct {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--emerald);
+}
+
+.behavior-card__pct--low { color: var(--brass); }
+
+.behavior-card__divider {
+  height: 1px;
+  background: var(--line);
+  margin: 16px 0 20px;
+}
+
+.behavior-card__bar-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.behavior-bar-track { flex: 1; height: 12px; margin: 0; }
+
+/* Default behavior-card fill is green (marks in good standing);
+   parent-dashboard.js swaps in --low (brass) only under 28/40. */
+.behavior-card .parent-marks__bar-fill { background: var(--grad-emerald); }
+.behavior-card .parent-marks__bar-fill--low { background: var(--grad-brass); }
+
+.behavior-card__fraction {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--charcoal);
+  white-space: nowrap;
+}
+
+.behavior-info-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: #EAF9F0;
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  margin-bottom: 22px;
+}
+
+.behavior-info-box svg { width: 18px; height: 18px; color: var(--emerald); flex-shrink: 0; margin-top: 2px; }
+.behavior-info-box p { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--charcoal); }
+
+.behavior-subheading {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--ink-navy);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 12px;
+}
+
+.behavior-empty {
+  text-align: center;
+  padding: 30px 10px 8px;
+}
+
+.behavior-empty__icon { width: 56px; height: 56px; margin-bottom: 14px; }
+
+.behavior-empty__title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--charcoal);
+  margin: 0 0 4px;
+}
+
+.behavior-empty__sub {
+  font-size: 13px;
+  color: var(--charcoal-soft);
+  margin: 0;
+}
+
+/* ------------------------------------------------------------
+   Announcements
+   ------------------------------------------------------------ */
+.announce-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px 24px 8px;
+  margin-top: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.announce-card__title {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--ink-navy);
+  margin: 0 0 12px;
+}
+
+.announce-list { display: flex; flex-direction: column; }
+
+.announce-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+}
+
+.announce-item:first-child { border-top: none; }
+
+.announce-item__icon {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.announce-item__icon svg { width: 19px; height: 19px; }
+.announce-item__icon--blue { background: #E7EEFE; color: var(--ink-navy); }
+.announce-item__icon--green { background: #E4F8EC; color: var(--emerald); }
+
+.announce-item__body { flex: 1; min-width: 0; }
+
+.announce-item__title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--ink-navy);
+  margin: 0 0 3px;
+}
+
+.announce-item__desc {
+  font-size: 13px;
+  color: var(--charcoal-soft);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.announce-item__date {
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--charcoal-soft);
+  text-align: right;
+  white-space: nowrap;
+  padding-top: 2px;
+}
+
+/* ------------------------------------------------------------
+   Bottom nav
+   ------------------------------------------------------------ */
+.bottom-nav {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px 8px;
+  margin-top: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.bottom-nav__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--charcoal);
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 2px;
+  font-family: var(--font-body);
+  text-align: center;
+}
+
+.bottom-nav__icon {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bottom-nav__icon svg { width: 24px; height: 24px; }
+.bottom-nav__icon--navy { color: var(--ink-navy); }
+.bottom-nav__icon--green { color: var(--emerald); }
+.bottom-nav__icon--violet { color: var(--violet); }
+.bottom-nav__icon--orange { color: var(--brass); }
+
+/* ------------------------------------------------------------
+   Security footer
+   ------------------------------------------------------------ */
+.security-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #E7EEFE;
+  color: var(--ink-navy);
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  padding: 13px 16px;
+  margin-top: 16px;
+}
+
+.security-banner svg { width: 17px; height: 17px; flex-shrink: 0; }
+
+/* ------------------------------------------------------------
+   Toast (coming-soon nav items)
+   ------------------------------------------------------------ */
+.dash-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  background: var(--charcoal);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 12px 20px;
+  border-radius: 999px;
+  box-shadow: var(--shadow-lg);
+  z-index: 60;
+  animation: toast-in 180ms ease both;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translate(-50%, 8px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+@media (min-width: 640px) {
+  .dash-shell { max-width: 820px; }
+  .dash-main { padding: 24px 24px 32px; }
+}
+
+@media (max-width: 420px) {
+  .hero-name { font-size: 18px; }
+  .stat-card__value { font-size: 26px; }
+  .bottom-nav { grid-template-columns: repeat(4, 1fr); }
+  .bottom-nav__item { font-size: 10.5px; }
+}
