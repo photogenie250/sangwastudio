@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">Category — Gakoro Media TV</title>
+<meta name="description" content="Browse Gakoro Media TV articles by category.">
+<link rel="icon" type="image/x-icon" href="../assets/favicon/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/favicon/apple-touch-icon.png">
+<link rel="manifest" href="../assets/favicon/site.webmanifest">
+<meta name="theme-color" content="#D3242C">
+<meta name="robots" content="noindex, follow">
+<script>
+  (function(){
+    try{
+      var t = localStorage.getItem('gm_theme');
+      if(t === 'dark'){ document.documentElement.setAttribute('data-theme','dark'); }
+    }catch(e){}
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy: #0E1C2B;
+    --crimson: #D3242C;
+    --crimson-dark: #9C1A20;
+    --paper: #ffffff;
+    --bg-alt: #F7F7F8;
+    --card: #ffffff;
+    --ink: #12202F;
+    --slate: #55606C;
+    --slate-light: #8A93A0;
+    --gold: #C69A4E;
+    --line: #E7E7E9;
+  }
+  html[data-theme="dark"]{
+    --navy: #060B12;
+    --paper: #0B1524;
+    --bg-alt: #0F1E30;
+    --card: #122238;
+    --ink: #F2F0E9;
+    --slate: #A9B4C4;
+    --slate-light: #8B93A3;
+    --line: #23364F;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{ background: var(--paper); }
+  body{
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    transition: background .2s ease, color .2s ease;
+  }
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  .wrap{ max-width:1240px; margin:0 auto; padding:0 6vw; }
+
+  /* ---------- UTILITY BAR ---------- */
+  .utility-bar{
+    background: var(--bg-alt);
+    border-bottom:1px solid var(--line);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color: var(--slate);
+  }
+  .utility-inner{
+    max-width:1240px; margin:0 auto; padding:9px 6vw;
+    display:flex; align-items:center; justify-content:space-between;
+    letter-spacing:0.02em;
+  }
+  .utility-links{ display:flex; gap:22px; }
+  .utility-links a:hover{ color: var(--crimson); }
+  .utility-right{ display:flex; align-items:center; gap:18px; }
+  .utility-social{ display:flex; align-items:center; gap:14px; }
+  .utility-social a{ display:flex; color: var(--ink); }
+  .utility-social svg{ width:14px; height:14px; }
+  .utility-social a:hover{ color: var(--crimson); }
+  .utility-search{ display:flex; color:var(--ink); cursor:pointer; }
+  .utility-search svg{ width:15px; height:15px; }
+  #themeToggle{
+    display:flex; align-items:center; justify-content:center;
+    width:24px; height:24px; background:none; border:1px solid var(--line);
+    border-radius:50%; color: var(--ink); cursor:pointer; padding:0;
+  }
+  #themeToggle:hover{ border-color: var(--crimson); color: var(--crimson); }
+  #themeToggle svg{ width:13px; height:13px; }
+  #themeToggle .icon-moon{ display:block; }
+  #themeToggle .icon-sun{ display:none; }
+  html[data-theme="dark"] #themeToggle .icon-moon{ display:none; }
+  html[data-theme="dark"] #themeToggle .icon-sun{ display:block; }
+
+  /* ---------- MASTHEAD ---------- */
+  .masthead{ background: var(--paper); padding: 18px 0; border-bottom: 1px solid var(--line); }
+  .masthead-inner{
+    max-width:1240px; margin:0 auto; padding:0 6vw;
+    display:flex; align-items:center; justify-content:space-between; gap:20px;
+  }
+  .brand-group{ display:flex; align-items:center; gap:18px; }
+  .brand{ display:flex; align-items:center; gap:12px; }
+  .brand-mark{
+    width:46px; height:46px;
+    background: var(--crimson);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Fraunces', serif; font-weight:900; font-size:24px; color:#fff;
+    flex-shrink:0;
+  }
+  .brand-name{ font-family:'Fraunces', serif; font-weight:900; font-size:24px; letter-spacing:-0.01em; line-height:1.1; color: var(--ink); }
+  .brand-tagline{
+    font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:0.16em;
+    text-transform:uppercase; color: var(--crimson); margin-top:3px;
+  }
+  .sangwa-link{
+    display:flex; align-items:center; gap:10px; flex-shrink:0;
+    padding-left:18px; border-left:1px solid var(--line);
+  }
+  .sangwa-link img{ height:36px; width:36px; border-radius:50%; }
+  .sangwa-wordmark{ display:flex; flex-direction:column; align-items:flex-start; line-height:1; font-family:'Fraunces', serif; }
+  .sangwa-wordmark .sw-main{ color:var(--ink); font-weight:600; letter-spacing:.22em; font-size:.92rem; }
+  .sangwa-wordmark .sw-sub{ display:flex; align-items:center; gap:6px; margin-top:5px; color:#f5740a; font-weight:500; letter-spacing:.24em; font-size:.5rem; }
+  .sangwa-wordmark .sw-sub i{ display:block; width:12px; height:1px; background:#f5740a; font-style:normal; }
+  .masthead-actions{ display:flex; align-items:center; gap:12px; }
+  .btn-outline{
+    display:flex; align-items:center; gap:8px;
+    border:1px solid var(--line); padding:10px 16px;
+    font-family:'IBM Plex Mono', monospace; font-size:11px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase;
+    color: var(--ink);
+  }
+  .btn-outline:hover{ border-color: var(--crimson); color: var(--crimson); }
+  .btn-outline svg{ width:11px; height:11px; }
+  .live-pill{
+    display:flex; align-items:center; gap:7px;
+    background: var(--crimson);
+    color:#fff; padding:10px 16px;
+    font-family:'IBM Plex Mono', monospace; font-size:11px; font-weight:700; letter-spacing:0.1em;
+  }
+  .live-dot{ width:6px; height:6px; border-radius:50%; background:#fff; animation: pulse 1.6s infinite; }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+  /* ---------- NAV ---------- */
+  .nav-bar{ background: var(--paper); border-bottom:1px solid var(--line); }
+  .nav-inner{
+    max-width:1240px; margin:0 auto; padding:0 6vw;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .nav-row{ display:flex; align-items:stretch; }
+  .nav-row a{
+    display:flex; align-items:center; gap:5px;
+    padding:15px 18px;
+    font-family:'IBM Plex Mono', monospace; font-size:11.5px; font-weight:600;
+    letter-spacing:0.06em; text-transform:uppercase; color: var(--ink);
+    border-bottom:3px solid transparent;
+  }
+  .nav-row a svg{ width:9px; height:9px; margin-top:1px; }
+  .nav-row a:first-child{ background: var(--crimson); color:#fff; padding-left:20px; padding-right:20px; }
+  .nav-row a:not(:first-child):hover{ color: var(--crimson); border-bottom-color: var(--crimson); }
+  .nav-row a.active:not(:first-child){ color: var(--crimson); border-bottom-color: var(--crimson); }
+  .nav-search{ display:flex; align-items:center; color: var(--ink); cursor:pointer; padding:0 4px; }
+  .nav-search svg{ width:16px; height:16px; }
+
+  /* ---------- PAGE HEAD ---------- */
+  .cat-head{
+    max-width:1240px; margin: 40px auto 22px; padding: 0 6vw 20px;
+    border-bottom: 3px solid var(--navy);
+  }
+  .cat-eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size:11px; font-weight:700; letter-spacing:0.1em;
+    text-transform:uppercase; color: var(--crimson); margin-bottom:8px; display:block;
+  }
+  .cat-title{ font-family:'Fraunces', serif; font-weight:900; font-size:34px; letter-spacing:-0.01em; }
+  .cat-sub{ font-size:13.5px; color: var(--slate); margin-top:8px; }
+
+  /* ---------- GRID ---------- */
+  .grid{ max-width:1240px; margin:0 auto; padding: 0 6vw 60px; display:grid; grid-template-columns: repeat(4, 1fr); gap: 26px 24px; min-height:200px; }
+  .card{
+    background: var(--card); cursor:pointer; display:flex; flex-direction:column;
+  }
+  .card-thumb{ position:relative; aspect-ratio:16/10; overflow:hidden; margin-bottom:14px; background: linear-gradient(150deg,#3A5A78,#0E1C2B); }
+  .card-body{ display:flex; flex-direction:column; gap:8px; flex:1; }
+  .card-cat{
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px; font-weight:700; letter-spacing:0.07em;
+    text-transform:uppercase; color: var(--crimson);
+  }
+  .card-title{ font-family:'Fraunces', serif; font-weight:600; font-size:16.5px; line-height:1.28; color: var(--ink); }
+  .card:hover .card-title{ color: var(--crimson-dark); }
+  .card-dek{ font-size:13px; line-height:1.5; color: var(--slate); }
+  .card-stats{
+    display:flex; align-items:center; gap:14px; margin-top:4px;
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px; color: var(--slate-light); letter-spacing:0.02em;
+  }
+  .card-stats .stat{ display:flex; align-items:center; gap:4px; }
+  .card-stats svg{ width:13px; height:13px; fill:none; stroke:currentColor; stroke-width:2; flex-shrink:0; }
+  .stat-share{
+    display:flex; align-items:center; gap:4px; margin-left:auto;
+    background:transparent; border:none; padding:0; color: var(--slate-light);
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:0.02em; text-transform:uppercase; cursor:pointer;
+  }
+  .stat-share:hover{ color: var(--crimson); }
+  .stat-share.copied{ color: var(--crimson); }
+  .card-meta{ font-family:'IBM Plex Mono', monospace; font-size:10.5px; color: var(--slate-light); text-transform:uppercase; letter-spacing:0.02em; margin-top:2px; }
+
+  .empty-state{
+    grid-column: 1 / -1; text-align:center; padding: 60px 20px;
+    color: var(--slate); font-family:'IBM Plex Mono', monospace; font-size:13px;
+  }
+  .empty-state a{ color: var(--crimson); text-decoration:underline; }
+  .load-more-wrap{ max-width:1240px; margin:0 auto; padding: 0 6vw 60px; text-align:center; }
+  .load-more-btn{
+    display:inline-flex; align-items:center; gap:8px;
+    border:1px solid var(--line); background:none; color: var(--ink);
+    padding:12px 24px; font-family:'IBM Plex Mono', monospace; font-size:11.5px; font-weight:600;
+    letter-spacing:0.06em; text-transform:uppercase; cursor:pointer;
+  }
+  .load-more-btn:hover{ border-color: var(--crimson); color: var(--crimson); }
+  .load-more-btn:disabled{ opacity:.5; cursor:default; }
+
+  /* ---------- FOOTER ---------- */
+  footer{ background: var(--navy); color: var(--slate-light); margin-top:40px; }
+  .footer-top{
+    max-width:1240px; margin:0 auto; padding: 50px 6vw;
+    display:grid; grid-template-columns: 1.4fr 1fr 1fr 1.3fr; gap:36px;
+  }
+  .footer-brand-name{ font-family:'Fraunces', serif; font-weight:900; font-size:19px; color:#fff; margin-bottom:14px; }
+  .footer-desc{ font-size:13px; line-height:1.7; color:#AAB4C0; margin-bottom:20px; max-width:32ch; }
+  .footer-social{ display:flex; gap:12px; }
+  .footer-social a{
+    width:32px; height:32px; border:1px solid rgba(255,255,255,0.18); display:flex; align-items:center; justify-content:center; color:#fff;
+  }
+  .footer-social a:hover{ border-color: var(--crimson); background: var(--crimson); }
+  .footer-social svg{ width:14px; height:14px; }
+  .footer-col-title{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; font-weight:700; letter-spacing:0.08em;
+    text-transform:uppercase; color:#fff; margin-bottom:18px;
+  }
+  .footer-col a{ display:block; font-size:13.5px; color:#AAB4C0; margin-bottom:12px; }
+  .footer-col a:hover{ color:#fff; }
+  .footer-col a.active{ color:#fff; }
+  .newsletter-desc{ font-size:13px; color:#AAB4C0; line-height:1.6; margin-bottom:16px; }
+  .newsletter-form{ display:flex; }
+  .newsletter-form input{
+    flex:1; min-width:0; background: rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.16);
+    color:#fff; padding:11px 12px; font-family:'Inter', sans-serif; font-size:13px;
+  }
+  .newsletter-form input::placeholder{ color:#7C8794; }
+  .newsletter-form button{
+    background: var(--crimson); color:#fff; border:none; padding:0 18px;
+    font-family:'IBM Plex Mono', monospace; font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer;
+  }
+  .newsletter-form button:hover{ background: var(--crimson-dark); }
+  .footer-bottom{
+    border-top:1px solid rgba(255,255,255,0.1);
+    padding: 18px 6vw; max-width:1240px; margin:0 auto;
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;
+    font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:0.02em; color:#7C8794;
+  }
+  .footer-bottom .heart{ color: var(--crimson); }
+
+  @media (max-width: 980px){
+    .grid{ grid-template-columns: repeat(2,1fr); }
+    .footer-top{ grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 880px){
+    .nav-row a:not(:first-child):not(:nth-child(-n+5)){ display:none; }
+    .utility-links{ display:none; }
+  }
+  @media (max-width: 640px){
+    .brand-name{ font-size:19px; }
+    .brand-mark{ width:38px; height:38px; font-size:19px; }
+    .sangwa-link{ display:none; }
+    .btn-outline{ display:none; }
+    .grid{ grid-template-columns: 1fr 1fr; padding:0 5vw 12px; }
+    .cat-head{ padding:0 5vw 16px; }
+    .cat-title{ font-size:26px; }
+    .footer-top{ grid-template-columns: 1fr; padding:36px 5vw; gap:30px; }
+    .footer-bottom{ flex-direction:column; text-align:center; padding:18px 5vw; }
+  }
+  @media (max-width: 460px){
+    .grid{ grid-template-columns: 1fr; }
+    .nav-row a:not(:first-child){ display:none; }
+  }
+</style>
+</head>
+<body data-site-root="../">
+
+<div class="utility-bar">
+  <div class="utility-inner">
+    <span id="topDate"></span>
+    <div class="utility-links">
+      <a href="#">About Us</a>
+      <a href="#">Contact</a>
+      <a href="#">Advertise</a>
+    </div>
+    <div class="utility-right">
+      <div class="utility-social">
+        <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12Z"/></svg></a>
+        <a href="#" aria-label="Twitter"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 5.9c-.7.3-1.5.6-2.3.7.8-.5 1.5-1.3 1.8-2.3-.8.5-1.7.8-2.6 1a4.1 4.1 0 0 0-7 3.7A11.6 11.6 0 0 1 3.4 4.6a4.1 4.1 0 0 0 1.3 5.5c-.7 0-1.3-.2-1.9-.5v.1c0 2 1.4 3.6 3.3 4a4.1 4.1 0 0 1-1.9.1 4.1 4.1 0 0 0 3.9 2.9A8.3 8.3 0 0 1 2 18.4a11.6 11.6 0 0 0 6.3 1.9c7.5 0 11.7-6.3 11.7-11.7v-.5c.8-.6 1.5-1.3 2-2.2Z"/></svg></a>
+        <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.5-.4-5.2c-.3-1-1-1.7-2-2C18.9 4.3 12 4.3 12 4.3s-6.9 0-8.6.5c-1 .3-1.7 1-2 2C1 8.5 1 12 1 12s0 3.5.4 5.2c.3 1 1 1.7 2 2 1.7.5 8.6.5 8.6.5s6.9 0 8.6-.5c1-.3 1.7-1 2-2 .4-1.7.4-5.2.4-5.2ZM9.8 15.3V8.7l6 3.3-6 3.3Z"/></svg></a>
+        <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c2.7 0 3.1 0 4.1.1 1.1 0 1.8.2 2.5.5.7.3 1.2.6 1.7 1.1.5.5.9 1 1.1 1.7.3.7.4 1.4.5 2.5 0 1 .1 1.4.1 4.1s0 3.1-.1 4.1c0 1.1-.2 1.8-.5 2.5-.3.7-.6 1.2-1.1 1.7-.5.5-1 .9-1.7 1.1-.7.3-1.4.4-2.5.5-1 0-1.4.1-4.1.1s-3.1 0-4.1-.1c-1.1 0-1.8-.2-2.5-.5-.7-.3-1.2-.6-1.7-1.1-.5-.5-.9-1-1.1-1.7-.3-.7-.4-1.4-.5-2.5C2 15.1 2 14.7 2 12s0-3.1.1-4.1c0-1.1.2-1.8.5-2.5.3-.7.6-1.2 1.1-1.7.5-.5 1-.9 1.7-1.1.7-.3 1.4-.4 2.5-.5C8.9 2 9.3 2 12 2Zm0 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10Zm0 8.2a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4Zm5.2-8.4a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0Z"/></svg></a>
+      </div>
+      <div class="utility-search" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+      <button type="button" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8l1.8-1.8M18 6l1.8-1.8"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="brand-group">
+      <a href="../index.html" class="brand" aria-label="GAKORO MEDIA TV — Home">
+        <div class="brand-mark">G</div>
+        <div>
+          <div class="brand-name">GAKORO MEDIA TV</div>
+          <div class="brand-tagline">INSPIRE &middot; INFORM &middot; TRANSFORM</div>
+        </div>
+      </a>
+      <a href="../studio/" class="sangwa-link" aria-label="SANGWA STUDIO — Home">
+        <img src="../assets/logo-small.png" alt="SANGWA STUDIO logo">
+        <span class="sangwa-wordmark"><span class="sw-main">SANGWA</span><span class="sw-sub"><i></i>STUDIO</span></span>
+      </a>
+    </div>
+    <div class="masthead-actions">
+      <a href="../index.html#tvPlayer" class="btn-outline"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> WATCH LIVE</a>
+      <a href="../index.html#tvPlayer" class="live-pill"><span class="live-dot"></span> LIVE</a>
+    </div>
+  </div>
+</header>
+
+<div class="nav-bar">
+  <div class="nav-inner">
+    <nav class="nav-row" id="navRow">
+      <a href="../index.html">Home</a>
+      <a href="../index.html#latest-articles">News <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg></a>
+      <a href="index.html?cat=Education">Education</a>
+      <a href="index.html?cat=Sports">Sports <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg></a>
+      <a href="index.html?cat=Community">Community</a>
+      <a href="index.html?cat=Interviews">Interviews</a>
+      <a href="index.html?cat=Business">Business</a>
+      <a href="index.html?cat=Opinion">Opinion</a>
+    </nav>
+    <div class="nav-search" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+  </div>
+</div>
+
+<div class="cat-head">
+  <span class="cat-eyebrow">Category</span>
+  <h1 class="cat-title" id="catTitle">Category</h1>
+  <p class="cat-sub" id="catSub"></p>
+</div>
+
+<section class="grid" id="catGrid"></section>
+
+<div class="load-more-wrap" id="loadMoreWrap" style="display:none;">
+  <button type="button" class="load-more-btn" id="loadMoreBtn">Load more</button>
+</div>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-col">
+      <div class="footer-brand-name">GAKORO MEDIA TV</div>
+      <p class="footer-desc">Gakoro Media TV is your trusted source for credible news, inspiring stories and information that transforms lives.</p>
+      <div class="footer-social">
+        <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12Z"/></svg></a>
+        <a href="#" aria-label="Twitter"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 5.9c-.7.3-1.5.6-2.3.7.8-.5 1.5-1.3 1.8-2.3-.8.5-1.7.8-2.6 1a4.1 4.1 0 0 0-7 3.7A11.6 11.6 0 0 1 3.4 4.6a4.1 4.1 0 0 0 1.3 5.5c-.7 0-1.3-.2-1.9-.5v.1c0 2 1.4 3.6 3.3 4a4.1 4.1 0 0 1-1.9.1 4.1 4.1 0 0 0 3.9 2.9A8.3 8.3 0 0 1 2 18.4a11.6 11.6 0 0 0 6.3 1.9c7.5 0 11.7-6.3 11.7-11.7v-.5c.8-.6 1.5-1.3 2-2.2Z"/></svg></a>
+        <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.5-.4-5.2c-.3-1-1-1.7-2-2C18.9 4.3 12 4.3 12 4.3s-6.9 0-8.6.5c-1 .3-1.7 1-2 2C1 8.5 1 12 1 12s0 3.5.4 5.2c.3 1 1 1.7 2 2 1.7.5 8.6.5 8.6.5s6.9 0 8.6-.5c1-.3 1.7-1 2-2 .4-1.7.4-5.2.4-5.2ZM9.8 15.3V8.7l6 3.3-6 3.3Z"/></svg></a>
+        <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c2.7 0 3.1 0 4.1.1 1.1 0 1.8.2 2.5.5.7.3 1.2.6 1.7 1.1.5.5.9 1 1.1 1.7.3.7.4 1.4.5 2.5 0 1 .1 1.4.1 4.1s0 3.1-.1 4.1c0 1.1-.2 1.8-.5 2.5-.3.7-.6 1.2-1.1 1.7-.5.5-1 .9-1.7 1.1-.7.3-1.4.4-2.5.5-1 0-1.4.1-4.1.1s-3.1 0-4.1-.1c-1.1 0-1.8-.2-2.5-.5-.7-.3-1.2-.6-1.7-1.1-.5-.5-.9-1-1.1-1.7-.3-.7-.4-1.4-.5-2.5C2 15.1 2 14.7 2 12s0-3.1.1-4.1c0-1.1.2-1.8.5-2.5.3-.7.6-1.2 1.1-1.7.5-.5 1-.9 1.7-1.1.7-.3 1.4-.4 2.5-.5C8.9 2 9.3 2 12 2Zm0 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10Zm0 8.2a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4Zm5.2-8.4a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0Z"/></svg></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Quick Links</div>
+      <a href="../index.html">Home</a>
+      <a href="#">About Us</a>
+      <a href="#">Contact Us</a>
+      <a href="../privacy/">Privacy Policy</a>
+      <a href="../terms/">Terms of Use</a>
+    </div>
+    <div class="footer-col" id="footerCategories">
+      <div class="footer-col-title">Categories</div>
+      <a href="../index.html#latest-articles">News</a>
+      <a href="index.html?cat=Education">Education</a>
+      <a href="index.html?cat=Sports">Sports</a>
+      <a href="index.html?cat=Community">Community</a>
+      <a href="index.html?cat=Interviews">Interviews</a>
+      <a href="index.html?cat=Business">Business</a>
+      <a href="index.html?cat=Opinion">Opinion</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Newsletter</div>
+      <p class="newsletter-desc">Subscribe to our newsletter and get the latest news updates.</p>
+      <form class="newsletter-form" id="newsletterForm">
+        <input type="email" placeholder="Enter your email" required aria-label="Email address">
+        <button type="submit">SUBSCRIBE</button>
+      </form>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; <span id="yearNow2"></span> GAKORO MEDIA TV. All Rights Reserved.</span>
+    <span>Made with <span class="heart">&hearts;</span> by <a href="../studio/" style="color:#AAB4C0; text-decoration:underline;">Sangwa Studio</a> in Rwanda</span>
+  </div>
+</footer>
+
+<script>
+document.getElementById('yearNow2').textContent = new Date().getFullYear();
+document.getElementById('topDate').textContent = new Date().toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric', year:'numeric' });
+document.getElementById('newsletterForm').addEventListener('submit', function(e){ e.preventDefault(); });
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script defer src="../js/config.js"></script>
+<script defer src="../js/category.js"></script>
+<script defer src="../js/nav-categories.js"></script>
+<script defer src="../js/consent.js"></script>
+<script>
+  (function(){
+    var btn = document.getElementById('themeToggle');
+    if(!btn) return;
+    btn.addEventListener('click', function(){
+      var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      if(isDark){
+        document.documentElement.removeAttribute('data-theme');
+        try{ localStorage.setItem('gm_theme','light'); }catch(e){}
+      } else {
+        document.documentElement.setAttribute('data-theme','dark');
+        try{ localStorage.setItem('gm_theme','dark'); }catch(e){}
+      }
+    });
+  })();
+</script>
+</body>
+</html>
