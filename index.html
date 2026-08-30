@@ -3,15 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gakoro Media TV — Video Desk</title>
-<meta name="description" content="GAKORO MEDIA TV — live channel and latest uploads from SANGWA STUDIO's in-house YouTube channel. Watch continuously, right here.">
+<title>Gakoro Media TV — Inspire. Inform. Transform.</title>
+<meta name="description" content="GAKORO MEDIA TV — live channel, breaking news and latest stories from SANGWA STUDIO's in-house newsroom.">
 <link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
 <link rel="manifest" href="/assets/favicon/site.webmanifest">
-<meta name="theme-color" content="#0E1C2B">
+<meta name="theme-color" content="#D3242C">
 <meta name="google-adsense-account" content="ca-pub-2056887490896774">
+<script>
+  (function(){
+    try{
+      var t = localStorage.getItem('gm_theme');
+      if(t === 'dark'){ document.documentElement.setAttribute('data-theme','dark'); }
+    }catch(e){}
+  })();
+</script>
 <!--
   GOOGLE ADSENSE — verification meta tag is above. The actual ad
   script is intentionally NOT hard-coded here; it's injected by
@@ -21,431 +29,273 @@
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
   :root{
     --navy: #0E1C2B;
-    --navy-soft: #16283C;
     --crimson: #D3242C;
     --crimson-dark: #9C1A20;
+    --paper: #ffffff;
+    --bg-alt: #F7F7F8;
+    --card: #ffffff;
+    --ink: #12202F;
+    --slate: #55606C;
+    --slate-light: #8A93A0;
+    --gold: #C69A4E;
+    --line: #E7E7E9;
+  }
+  html[data-theme="dark"]{
+    --navy: #060B12;
     --paper: #0B1524;
+    --bg-alt: #0F1E30;
     --card: #122238;
     --ink: #F2F0E9;
     --slate: #A9B4C4;
     --slate-light: #8B93A3;
-    --gold: #C69A4E;
     --line: #23364F;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
+  html{ background: var(--paper); }
   body{
     background: var(--paper);
     color: var(--ink);
     font-family: 'Inter', sans-serif;
     -webkit-font-smoothing: antialiased;
+    transition: background .2s ease, color .2s ease;
   }
   a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  .wrap{ max-width:1240px; margin:0 auto; padding:0 6vw; }
 
-  /* ---------- MASTHEAD ---------- */
-  .masthead{
-    background: var(--navy);
-    color: #fff;
-    padding: 14px 6vw 0;
-  }
-  .masthead-top{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding-bottom: 14px;
-    border-bottom: 1px solid rgba(255,255,255,0.12);
-  }
-  .brand{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    cursor:pointer;
-    transition:opacity .2s ease;
-  }
-  .brand:hover{
-    opacity:.85;
-  }
-  .brand-group{
-    display:flex;
-    align-items:center;
-    gap:16px;
-  }
-  .sangwa-link{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    flex-shrink:0;
-    padding-left:16px;
-    border-left:1px solid rgba(255,255,255,0.12);
-    cursor:pointer;
-    transition:opacity .2s ease;
-  }
-  .sangwa-link:hover{
-    opacity:.85;
-  }
-  .sangwa-link img{
-    height:34px;
-    width:34px;
-    border-radius:50%;
-    transition:height .35s ease,width .35s ease;
-  }
-  .sangwa-wordmark{
-    display:flex;flex-direction:column;align-items:center;
-    line-height:1;font-family:'Fraunces', serif;
-  }
-  .sangwa-wordmark .sw-main{
-    color:#f7f4ee;font-weight:600;
-    letter-spacing:.26em;font-size:1rem;
-  }
-  .sangwa-wordmark .sw-sub{
-    display:flex;align-items:center;gap:6px;
-    margin-top:4px;
-    color:#f5740a;font-weight:500;
-    letter-spacing:.3em;font-size:.52rem;
-  }
-  .sangwa-wordmark .sw-sub i{
-    display:block;width:14px;height:1px;background:#f5740a;
-    font-style:normal;
-  }
-  .brand-mark{
-    width:34px; height:34px;
-    background: var(--crimson);
-    display:flex; align-items:center; justify-content:center;
-    font-family:'Fraunces', serif;
-    font-weight:900;
-    font-size:18px;
-    flex-shrink:0;
-  }
-  .brand-name{
-    font-family:'Fraunces', serif;
-    font-weight:900;
-    font-size: 26px;
-    letter-spacing: -0.01em;
-  }
-  .brand-tagline{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:10.5px;
-    letter-spacing:0.14em;
-    text-transform:uppercase;
-    color: var(--slate-light);
-    margin-top:2px;
-  }
-  .masthead-meta{
-    display:flex;
-    align-items:center;
-    gap:22px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11.5px;
-    color: var(--slate-light);
-    letter-spacing:0.04em;
-  }
-  .live-pill{
-    display:flex; align-items:center; gap:6px;
-    background: var(--crimson-dark);
-    border:1px solid var(--crimson);
-    color:#fff;
-    padding:5px 10px;
-    font-weight:600;
-  }
-  .live-dot{
-    width:6px; height:6px; border-radius:50%;
-    background:#FF3B3B;
-    animation: pulse 1.6s infinite;
-  }
-  @keyframes pulse{
-    0%,100%{opacity:1;} 50%{opacity:0.25;}
-  }
-  .nav-row{
-    display:flex;
-    gap: 26px;
-    padding: 12px 0 12px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11.5px;
-    letter-spacing:0.08em;
-    text-transform:uppercase;
-    color: var(--slate-light);
-  }
-  .nav-row a:hover{ color:#fff; }
-  .nav-row .active{ color:#fff; border-bottom:2px solid var(--crimson); padding-bottom:10px; }
-
-  /* ---------- TICKER ---------- */
-  .ticker{
-    background: var(--crimson);
-    color:#fff;
-    display:flex;
-    align-items:center;
-    white-space:nowrap;
-  }
-  .ticker-label{
-    background: var(--crimson-dark);
-    padding: 8px 16px;
+  /* ---------- UTILITY BAR ---------- */
+  .utility-bar{
+    background: var(--bg-alt);
+    border-bottom:1px solid var(--line);
     font-family:'IBM Plex Mono', monospace;
     font-size:11px;
-    font-weight:600;
-    letter-spacing:0.1em;
+    color: var(--slate);
+  }
+  .utility-inner{
+    max-width:1240px; margin:0 auto; padding:9px 6vw;
+    display:flex; align-items:center; justify-content:space-between;
+    letter-spacing:0.02em;
+  }
+  .utility-links{ display:flex; gap:22px; }
+  .utility-links a:hover{ color: var(--crimson); }
+  .utility-right{ display:flex; align-items:center; gap:18px; }
+  .utility-social{ display:flex; align-items:center; gap:14px; }
+  .utility-social a{ display:flex; color: var(--ink); }
+  .utility-social svg{ width:14px; height:14px; }
+  .utility-social a:hover{ color: var(--crimson); }
+  .utility-search{ display:flex; color:var(--ink); cursor:pointer; }
+  .utility-search svg{ width:15px; height:15px; }
+  #themeToggle{
+    display:flex; align-items:center; justify-content:center;
+    width:24px; height:24px; background:none; border:1px solid var(--line);
+    border-radius:50%; color: var(--ink); cursor:pointer; padding:0;
+  }
+  #themeToggle:hover{ border-color: var(--crimson); color: var(--crimson); }
+  #themeToggle svg{ width:13px; height:13px; }
+  #themeToggle .icon-moon{ display:block; }
+  #themeToggle .icon-sun{ display:none; }
+  html[data-theme="dark"] #themeToggle .icon-moon{ display:none; }
+  html[data-theme="dark"] #themeToggle .icon-sun{ display:block; }
+
+  /* ---------- MASTHEAD ---------- */
+  .masthead{ background: var(--paper); padding: 18px 0; border-bottom: 1px solid var(--line); }
+  .masthead-inner{
+    max-width:1240px; margin:0 auto; padding:0 6vw;
+    display:flex; align-items:center; justify-content:space-between; gap:20px;
+  }
+  .brand-group{ display:flex; align-items:center; gap:18px; }
+  .brand{ display:flex; align-items:center; gap:12px; }
+  .brand-mark{
+    width:46px; height:46px;
+    background: var(--crimson);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Fraunces', serif; font-weight:900; font-size:24px; color:#fff;
     flex-shrink:0;
-    position:relative;
-    z-index:2;
   }
-  .ticker-viewport{
-    flex:1 1 auto;
-    min-width:0;
-    overflow:hidden;
+  .brand-name{ font-family:'Fraunces', serif; font-weight:900; font-size:24px; letter-spacing:-0.01em; line-height:1.1; color: var(--ink); }
+  .brand-tagline{
+    font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:0.16em;
+    text-transform:uppercase; color: var(--crimson); margin-top:3px;
   }
-  .ticker-track{
-    display:flex;
-    padding: 8px 0;
-    width:max-content;
-    animation: scroll var(--ticker-duration, 28s) linear infinite;
+  .sangwa-link{
+    display:flex; align-items:center; gap:10px; flex-shrink:0;
+    padding-left:18px; border-left:1px solid var(--line);
   }
+  .sangwa-link img{ height:36px; width:36px; border-radius:50%; }
+  .sangwa-wordmark{ display:flex; flex-direction:column; align-items:flex-start; line-height:1; font-family:'Fraunces', serif; }
+  .sangwa-wordmark .sw-main{ color:var(--ink); font-weight:600; letter-spacing:.22em; font-size:.92rem; }
+  .sangwa-wordmark .sw-sub{ display:flex; align-items:center; gap:6px; margin-top:5px; color:#f5740a; font-weight:500; letter-spacing:.24em; font-size:.5rem; }
+  .sangwa-wordmark .sw-sub i{ display:block; width:12px; height:1px; background:#f5740a; font-style:normal; }
+  .masthead-actions{ display:flex; align-items:center; gap:12px; }
+  .btn-outline{
+    display:flex; align-items:center; gap:8px;
+    border:1px solid var(--line); padding:10px 16px;
+    font-family:'IBM Plex Mono', monospace; font-size:11px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase;
+    color: var(--ink);
+  }
+  .btn-outline:hover{ border-color: var(--crimson); color: var(--crimson); }
+  .btn-outline svg{ width:11px; height:11px; }
+  .live-pill{
+    display:flex; align-items:center; gap:7px;
+    background: var(--crimson);
+    color:#fff; padding:10px 16px;
+    font-family:'IBM Plex Mono', monospace; font-size:11px; font-weight:700; letter-spacing:0.1em;
+  }
+  .live-dot{ width:6px; height:6px; border-radius:50%; background:#fff; animation: pulse 1.6s infinite; }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+  /* ---------- NAV ---------- */
+  .nav-bar{ background: var(--paper); border-bottom:1px solid var(--line); }
+  .nav-inner{
+    max-width:1240px; margin:0 auto; padding:0 6vw;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .nav-row{ display:flex; align-items:stretch; }
+  .nav-row a{
+    display:flex; align-items:center; gap:5px;
+    padding:15px 18px;
+    font-family:'IBM Plex Mono', monospace; font-size:11.5px; font-weight:600;
+    letter-spacing:0.06em; text-transform:uppercase; color: var(--ink);
+    border-bottom:3px solid transparent;
+  }
+  .nav-row a svg{ width:9px; height:9px; margin-top:1px; }
+  .nav-row a:first-child{ background: var(--crimson); color:#fff; padding-left:20px; padding-right:20px; }
+  .nav-row a:not(:first-child):hover{ color: var(--crimson); border-bottom-color: var(--crimson); }
+  .nav-search{ display:flex; align-items:center; color: var(--ink); cursor:pointer; padding:0 4px; }
+  .nav-search svg{ width:16px; height:16px; }
+
+  /* ---------- TICKER ---------- */
+  .ticker{ background: var(--crimson); color:#fff; display:flex; align-items:center; white-space:nowrap; }
+  .ticker-label{
+    background: var(--crimson-dark); padding: 9px 16px;
+    font-family:'IBM Plex Mono', monospace; font-size:11px; font-weight:700; letter-spacing:0.1em;
+    flex-shrink:0; position:relative; z-index:2;
+  }
+  .ticker-viewport{ flex:1 1 auto; min-width:0; overflow:hidden; }
+  .ticker-track{ display:flex; padding: 9px 0; width:max-content; animation: scroll var(--ticker-duration, 28s) linear infinite; }
   .ticker:hover .ticker-track{ animation-play-state: paused; }
-  .ticker-track span,
-  .ticker-track a{
-    display:inline-block;
-    padding: 0 30px;
-    font-size:12.5px;
-    font-weight:500;
+  .ticker-track span, .ticker-track a{
+    display:inline-block; padding: 0 30px; font-size:12.5px; font-weight:500;
     border-right: 1px solid rgba(255,255,255,0.35);
   }
   .ticker-track a:hover{ text-decoration: underline; }
-  @keyframes scroll{
-    0%{ transform: translateX(0); }
-    100%{ transform: translateX(-50%); }
-  }
+  @keyframes scroll{ 0%{ transform: translateX(0); } 100%{ transform: translateX(-50%); } }
+  .ticker-controls{ display:flex; align-items:center; gap:2px; padding:0 12px; flex-shrink:0; }
+  .ticker-controls button{ background:none; border:none; color:#fff; opacity:0.85; cursor:pointer; padding:4px; }
+  .ticker-controls button:hover{ opacity:1; }
+  .ticker-controls svg{ width:11px; height:11px; }
 
   /* ---------- HERO ---------- */
   .hero{
-    max-width:900px;
-    margin:0 auto;
-    padding: 44px 6vw 8px;
-    display:grid;
-    grid-template-columns: 1fr;
-    gap:36px;
+    max-width:1240px; margin:0 auto; padding: 34px 6vw 0;
+    display:grid; grid-template-columns: 1.65fr 1fr; gap:34px;
   }
-  /* ---------- LIVE TV PLAYER ---------- */
-  .tv-player{
-    position:relative;
-    aspect-ratio:16/9;
-    background:#000;
-    overflow:hidden;
-    border:1px solid var(--line);
-    box-shadow: 0 18px 40px rgba(0,0,0,0.35);
-  }
-  .tv-player iframe{
-    position:absolute; inset:0;
-    width:100%; height:100%;
-    border:0;
-  }
+  .hero-main{ position:relative; }
+  .tv-player{ position:relative; aspect-ratio:16/10; background:#000; overflow:hidden; }
+  .tv-player iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
   .tv-badge{
-    position:absolute; top:12px; left:12px; z-index:2;
+    position:absolute; top:14px; left:14px; z-index:2;
     display:flex; align-items:center; gap:6px;
-    background: var(--crimson-dark);
-    border:1px solid var(--crimson);
-    color:#fff;
-    padding:5px 10px 5px 8px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11px;
-    font-weight:600;
-    letter-spacing:0.08em;
+    background: var(--crimson); color:#fff; padding:6px 12px 6px 10px;
+    font-family:'IBM Plex Mono', monospace; font-size:11px; font-weight:700; letter-spacing:0.08em;
     pointer-events:none;
   }
-  .tv-badge .live-dot{ background:#FF3B3B; }
+  .tv-badge .live-dot{ background:#fff; }
   .mute-toggle{
-    position:absolute; bottom:12px; left:12px; z-index:3;
+    position:absolute; bottom:60px; left:14px; z-index:3;
     display:flex; align-items:center; gap:6px;
-    background: rgba(11,21,36,0.85);
-    border:1px solid rgba(255,255,255,0.25);
-    color:#fff;
-    padding:8px 12px;
-    border-radius:999px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11px;
-    font-weight:600;
-    letter-spacing:0.04em;
-    cursor:pointer;
-    -webkit-tap-highlight-color: transparent;
-    transition: background .15s ease, opacity .15s ease;
+    background: rgba(10,15,22,0.78); border:1px solid rgba(255,255,255,0.25); color:#fff;
+    padding:8px 12px; border-radius:999px;
+    font-family:'IBM Plex Mono', monospace; font-size:11px; font-weight:600; letter-spacing:0.04em;
+    cursor:pointer; -webkit-tap-highlight-color: transparent;
   }
-  .mute-toggle:hover{ background: rgba(11,21,36,0.98); }
   .mute-toggle .icon-unmuted{ display:none; }
   .mute-toggle.is-unmuted .icon-muted{ display:none; }
   .mute-toggle.is-unmuted .icon-unmuted{ display:block; }
   .mute-toggle.is-unmuted .mute-toggle-label{ display:none; }
   .mute-toggle.is-unmuted{ padding:8px; }
-  .duration-badge{
-    position:absolute; bottom:12px; right:12px;
-    background: rgba(0,0,0,0.75);
-    color:#fff;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11.5px;
-    padding: 3px 8px;
+  .hero-overlay{
+    position:absolute; left:0; right:0; bottom:0; z-index:2;
+    padding: 60px 22px 20px;
+    background: linear-gradient(0deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 100%);
+    pointer-events:none;
   }
-  .play-btn{
-    position:absolute; top:50%; left:50%;
-    transform:translate(-50%,-50%);
-    width:64px; height:64px;
-    background: rgba(255,255,255,0.95);
-    border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-    transition: transform 0.15s ease;
+  .hero-overlay > *{ pointer-events:auto; }
+  .hero-eyebrow{
+    display:flex; align-items:center; gap:8px;
+    font-family:'IBM Plex Mono', monospace; font-size:11px; font-weight:700; letter-spacing:0.1em;
+    text-transform:uppercase; color:#FF5A5A; margin-bottom:10px;
   }
-  .side-card:hover .play-btn{ transform:translate(-50%,-50%) scale(1.08); }
-  .play-btn::after{
-    content:"";
-    border-style:solid;
-    border-width:11px 0 11px 18px;
-    border-color: transparent transparent transparent var(--navy);
-    margin-left:4px;
-  }
-  .eyebrow{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11px;
-    font-weight:600;
-    letter-spacing:0.1em;
-    text-transform:uppercase;
-    color: var(--crimson);
-    display:flex;
-    align-items:center;
-    gap:8px;
-    margin: 18px 0 10px;
-  }
-  .eyebrow.gold{ color:#9A752F; }
+  .hero-eyebrow .live-dot{ background:#FF5A5A; }
   .hero-headline{
-    font-family:'Fraunces', serif;
-    font-weight:600;
-    font-size: 34px;
-    line-height:1.12;
-    letter-spacing:-0.01em;
-    margin-bottom:14px;
+    font-family:'Fraunces', serif; font-weight:600; font-size: 26px; line-height:1.18;
+    color:#fff; margin-bottom:12px; max-width:34ch;
   }
-  .hero-dek{
-    font-size:15px;
-    line-height:1.6;
-    color: var(--slate);
-    margin-bottom:18px;
-    max-width: 46ch;
+  .hero-byline{
+    display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+    font-size:12px; color:#D8DCE2; font-family:'IBM Plex Mono', monospace;
+    margin-bottom:16px;
   }
-  .byline{
-    display:flex; align-items:center; gap:10px;
-    font-size:12.5px;
-    color: var(--slate-light);
-    font-family:'IBM Plex Mono', monospace;
+  .hero-byline .sep{ opacity:0.5; }
+  .hero-watch-btn{
+    display:inline-flex; align-items:center; gap:8px;
+    background: var(--crimson); color:#fff; padding:11px 18px;
+    font-family:'IBM Plex Mono', monospace; font-size:11.5px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase;
   }
-  .byline .sep{ opacity:0.5; }
+  .hero-watch-btn:hover{ background: var(--crimson-dark); }
+  .hero-watch-btn svg{ width:11px; height:11px; }
+  .hero-dots{ position:absolute; bottom:16px; right:18px; z-index:3; display:flex; gap:6px; }
+  .hero-dots span{ width:7px; height:7px; border-radius:50%; background: rgba(255,255,255,0.4); }
+  .hero-dots span.active{ background: var(--crimson); }
 
-  .player-col{ display:flex; flex-direction:column; }
-  .hero-side{ display:flex; flex-direction:column; gap:22px; }
-  .side-label{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11px;
-    font-weight:600;
-    letter-spacing:0.1em;
-    text-transform:uppercase;
-    color: var(--crimson);
-    margin-bottom:2px;
+  /* ---------- TOP STORIES ---------- */
+  .top-stories{ display:flex; flex-direction:column; }
+  .top-stories-head{
+    font-family:'Fraunces', serif; font-weight:900; font-size:19px;
+    padding-bottom:12px; margin-bottom:16px; border-bottom:3px solid var(--navy);
+    display:flex; align-items:center; gap:8px;
   }
-  .side-card{
-    display:grid;
-    grid-template-columns: 108px 1fr;
-    gap:14px;
-    cursor:pointer;
-    padding-bottom:20px;
-    border-bottom:1px solid var(--line);
+  .top-stories-head::before{ content:''; width:4px; height:16px; background: var(--crimson); display:inline-block; }
+  .top-story-item{
+    display:grid; grid-template-columns: 84px 1fr; gap:13px;
+    padding-bottom:16px; margin-bottom:16px; border-bottom:1px solid var(--line);
   }
-  .side-card:focus-visible,
-  .card:focus-visible{ outline:2px solid var(--crimson); outline-offset:3px; }
-  .watch-ext{
-    position:absolute; top:8px; right:8px; z-index:2;
-    display:flex; align-items:center; gap:4px;
-    background:rgba(11,21,36,0.82);
-    color:#fff;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:9.5px;
-    letter-spacing:0.04em;
-    padding:3px 6px;
-    text-decoration:none;
-    opacity:0;
-    transition:opacity .15s ease;
+  .top-story-item:last-child{ border-bottom:none; margin-bottom:0; padding-bottom:0; }
+  .ts-thumb{ position:relative; aspect-ratio:1/1; overflow:hidden; background:#eee; flex-shrink:0; }
+  .ts-thumb .g1{ background: linear-gradient(150deg,#3A5A78,#0E1C2B); }
+  .ts-cat{
+    font-family:'IBM Plex Mono', monospace; font-size:10px; font-weight:700; letter-spacing:0.06em;
+    text-transform:uppercase; color: var(--crimson); margin-bottom:4px; display:block;
   }
-  .side-card:hover .watch-ext{ opacity:1; }
-  .side-card:last-child{ border-bottom:none; }
-  .side-thumb{
-    position:relative;
-    aspect-ratio:16/10;
-    background: linear-gradient(140deg, var(--gold) 0%, #7A5A22 100%);
-  }
-  .side-thumb.b{ background: linear-gradient(140deg, #3A5A78 0%, var(--navy) 100%); }
-  .side-thumb.c{ background: linear-gradient(140deg, #7A2E2E 0%, var(--navy) 100%); }
-  .side-thumb .duration-badge{ font-size:9.5px; bottom:5px; right:5px; padding:1px 5px; }
-  .side-title{
-    font-family:'Fraunces', serif;
-    font-weight:600;
-    font-size:15.5px;
-    line-height:1.28;
-    margin-bottom:6px;
-  }
-  .side-card:hover .side-title{ color: var(--crimson-dark); }
-  .side-meta{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:10.5px;
-    color: var(--slate-light);
-    text-transform:uppercase;
-    letter-spacing:0.04em;
-  }
+  .ts-title{ font-family:'Fraunces', serif; font-weight:600; font-size:14.5px; line-height:1.3; color: var(--ink); margin-bottom:6px; }
+  .top-story-item:hover .ts-title{ color: var(--crimson); }
+  .ts-meta{ font-family:'IBM Plex Mono', monospace; font-size:10px; color: var(--slate-light); text-transform:uppercase; }
 
   /* ---------- SECTION HEADER ---------- */
   .section-head{
-    max-width:1240px;
-    margin: 50px auto 20px;
-    padding: 0 6vw;
-    display:flex;
-    align-items:baseline;
-    justify-content:space-between;
-    border-bottom: 2px solid var(--navy);
-    padding-bottom:10px;
+    max-width:1240px; margin: 52px auto 22px; padding: 0 6vw;
+    display:flex; align-items:baseline; justify-content:space-between;
+    border-bottom: 2px solid var(--navy); padding-bottom:12px;
   }
-  .section-title{
-    font-family:'Fraunces', serif;
-    font-weight:900;
-    font-size:22px;
+  .section-title{ font-family:'Fraunces', serif; font-weight:900; font-size:22px; letter-spacing:-0.01em; }
+  .section-title::before{ content:''; display:inline-block; width:5px; height:5px; }
+  .view-all{
+    font-family:'IBM Plex Mono', monospace; font-size:11px; font-weight:600; letter-spacing:0.06em;
+    text-transform:uppercase; color: var(--crimson); display:flex; align-items:center; gap:5px;
   }
-  .section-sub{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11px;
-    color: var(--slate-light);
-    letter-spacing:0.06em;
-    text-transform:uppercase;
-  }
+  .view-all:hover{ color: var(--crimson-dark); }
+  .view-all svg{ width:11px; height:11px; }
 
   /* ---------- GRID ---------- */
-  .grid{
-    max-width:1240px;
-    margin:0 auto;
-    padding: 0 6vw 60px;
-    display:grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 28px 26px;
-  }
+  .grid{ max-width:1240px; margin:0 auto; padding: 0 6vw 20px; display:grid; grid-template-columns: repeat(4, 1fr); gap: 26px 24px; }
   .card{
-    background: var(--card);
-    border:1px solid var(--line);
-    cursor:pointer;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-    display:flex;
-    flex-direction:column;
+    background: var(--card); cursor:pointer; display:flex; flex-direction:column;
   }
-  .card:hover{
-    transform: translateY(-3px);
-    box-shadow: 0 10px 22px rgba(14,28,43,0.1);
-  }
-  .card-thumb{
-    position:relative;
-    aspect-ratio:16/9;
-    overflow:hidden;
-  }
+  .card-thumb{ position:relative; aspect-ratio:16/10; overflow:hidden; margin-bottom:14px; }
   .g1{ background: linear-gradient(150deg,#3A5A78,#0E1C2B); }
   .g2{ background: linear-gradient(150deg,#9C1A20,#0E1C2B); }
   .g3{ background: linear-gradient(150deg,#C69A4E,#5C441E); }
@@ -454,150 +304,172 @@
   .g6{ background: linear-gradient(150deg,#2E6B78,#0E1C2B); }
   .g7{ background: linear-gradient(150deg,#7A3E5C,#0E1C2B); }
   .g8{ background: linear-gradient(150deg,#6B5A2E,#0E1C2B); }
-  .card-body{ padding: 16px 18px 18px; display:flex; flex-direction:column; gap:8px; flex:1; }
-  .card-title{
-    font-family:'Fraunces', serif;
-    font-weight:600;
-    font-size:17px;
-    line-height:1.28;
+  .card-body{ display:flex; flex-direction:column; gap:8px; flex:1; }
+  .card-cat{
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px; font-weight:700; letter-spacing:0.07em;
+    text-transform:uppercase; color: var(--crimson);
   }
+  .card-title{ font-family:'Fraunces', serif; font-weight:600; font-size:16.5px; line-height:1.28; color: var(--ink); }
   .card:hover .card-title{ color: var(--crimson-dark); }
-  .card-dek{
-    font-size:13px;
-    color: var(--slate);
-    line-height:1.55;
-    flex:1;
-  }
-  .card-meta{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:10.5px;
-    color: var(--slate-light);
-    text-transform:uppercase;
-    letter-spacing:0.04em;
-    padding-top:8px;
-    border-top:1px solid var(--line);
-  }
   .card-stats{
-    display:flex;
-    align-items:center;
-    gap:14px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:10.5px;
-    color: var(--slate-light);
-    letter-spacing:0.04em;
+    display:flex; align-items:center; gap:14px; margin-top:4px;
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px; color: var(--slate-light); letter-spacing:0.02em;
   }
-  .card-stats .stat{
-    display:flex;
-    align-items:center;
-    gap:4px;
-  }
+  .card-stats .stat{ display:flex; align-items:center; gap:4px; }
   .card-stats svg{ width:13px; height:13px; fill:none; stroke:currentColor; stroke-width:2; flex-shrink:0; }
   .stat-share{
-    display:flex;
-    align-items:center;
-    gap:4px;
-    margin-left:auto;
-    background:transparent;
-    border:none;
-    padding:0;
-    color: var(--slate-light);
-    font-family:'IBM Plex Mono', monospace;
-    font-size:10.5px;
-    letter-spacing:0.04em;
-    text-transform:uppercase;
-    cursor:pointer;
-    transition: color .15s ease;
+    display:flex; align-items:center; gap:4px; margin-left:auto;
+    background:transparent; border:none; padding:0; color: var(--slate-light);
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:0.02em; text-transform:uppercase; cursor:pointer;
   }
-  .stat-share:hover{ color: var(--gold); }
-  .stat-share.copied{ color: var(--gold); }
+  .stat-share:hover{ color: var(--crimson); }
+  .stat-share.copied{ color: var(--crimson); }
+  .card-meta{ font-family:'IBM Plex Mono', monospace; font-size:10.5px; color: var(--slate-light); text-transform:uppercase; letter-spacing:0.02em; margin-top:2px; }
 
   /* ---------- FOOTER ---------- */
-  footer{
-    background: var(--navy);
-    color: var(--slate-light);
-    padding: 30px 6vw;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11px;
-    letter-spacing:0.04em;
+  footer{ background: var(--navy); color: var(--slate-light); margin-top:40px; }
+  .footer-top{
+    max-width:1240px; margin:0 auto; padding: 50px 6vw;
+    display:grid; grid-template-columns: 1.4fr 1fr 1fr 1.3fr; gap:36px;
   }
-  footer .brand-name{ font-size:16px; color:#fff; }
-  .footer-legal{ display:flex; align-items:center; gap:18px; }
-  .footer-legal a:hover{ color:#fff; }
+  .footer-brand-name{ font-family:'Fraunces', serif; font-weight:900; font-size:19px; color:#fff; margin-bottom:14px; }
+  .footer-desc{ font-size:13px; line-height:1.7; color:#AAB4C0; margin-bottom:20px; max-width:32ch; }
+  .footer-social{ display:flex; gap:12px; }
+  .footer-social a{
+    width:32px; height:32px; border:1px solid rgba(255,255,255,0.18); display:flex; align-items:center; justify-content:center; color:#fff;
+  }
+  .footer-social a:hover{ border-color: var(--crimson); background: var(--crimson); }
+  .footer-social svg{ width:14px; height:14px; }
+  .footer-col-title{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; font-weight:700; letter-spacing:0.08em;
+    text-transform:uppercase; color:#fff; margin-bottom:18px;
+  }
+  .footer-col a{ display:block; font-size:13.5px; color:#AAB4C0; margin-bottom:12px; }
+  .footer-col a:hover{ color:#fff; }
+  .newsletter-desc{ font-size:13px; color:#AAB4C0; line-height:1.6; margin-bottom:16px; }
+  .newsletter-form{ display:flex; }
+  .newsletter-form input{
+    flex:1; min-width:0; background: rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.16);
+    color:#fff; padding:11px 12px; font-family:'Inter', sans-serif; font-size:13px;
+  }
+  .newsletter-form input::placeholder{ color:#7C8794; }
+  .newsletter-form button{
+    background: var(--crimson); color:#fff; border:none; padding:0 18px;
+    font-family:'IBM Plex Mono', monospace; font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer;
+  }
+  .newsletter-form button:hover{ background: var(--crimson-dark); }
+  .footer-bottom{
+    border-top:1px solid rgba(255,255,255,0.1);
+    padding: 18px 6vw; max-width:1240px; margin:0 auto;
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;
+    font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:0.02em; color:#7C8794;
+  }
+  .footer-bottom .heart{ color: var(--crimson); }
 
-  @media (max-width: 880px){
-    .hero{ grid-template-columns: 1fr; gap:28px; padding-top:32px; }
+  @media (max-width: 980px){
+    .hero{ grid-template-columns: 1fr; }
     .grid{ grid-template-columns: repeat(2,1fr); }
-    .meta-date{ display:none; }
-    .masthead-top{ position:relative; }
+    .footer-top{ grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 880px){
+    .nav-row a:not(:first-child):not(:nth-child(-n+5)){ display:none; }
+    .utility-links{ display:none; }
   }
   @media (max-width: 640px){
-    .masthead{ padding:12px 5vw 0; }
-    .brand-name{ font-size:20px; }
-    .brand-tagline{ font-size:9px; letter-spacing:0.1em; }
-    .brand-mark{ width:30px; height:30px; font-size:16px; }
-    .sangwa-link{ padding-left:12px; gap:8px; }
-    .sangwa-link img{ height:28px; width:28px; }
-    .sangwa-wordmark .sw-main{ font-size:.82rem; }
-    .sangwa-wordmark .sw-sub{ font-size:.44rem; }
-    .brand-group{ gap:10px; }
-    .live-pill{ font-size:10px; padding:4px 8px; }
-    .section-head{ margin-top:36px; }
-  }
-  @media (max-width: 560px){
-    .grid{ grid-template-columns: 1fr; }
-    .nav-row{ display:none; }
-    .hero-headline{ font-size:24px; }
-    .hero{ padding:26px 5vw 8px; }
-    .grid{ padding:0 5vw 48px; }
+    .brand-name{ font-size:19px; }
+    .brand-mark{ width:38px; height:38px; font-size:19px; }
+    .sangwa-link{ display:none; }
+    .btn-outline{ display:none; }
+    .grid{ grid-template-columns: 1fr 1fr; padding:0 5vw 12px; }
+    .hero{ padding:22px 5vw 0; }
     .section-head{ padding:0 5vw; }
-    .ticker-label{ padding:8px 10px; font-size:10px; }
-    footer{ flex-direction:column; gap:10px; text-align:center; padding:24px 5vw; }
+    .footer-top{ grid-template-columns: 1fr; padding:36px 5vw; gap:30px; }
+    .footer-bottom{ flex-direction:column; text-align:center; padding:18px 5vw; }
+  }
+  @media (max-width: 460px){
+    .grid{ grid-template-columns: 1fr; }
+    .nav-row a:not(:first-child){ display:none; }
   }
 </style>
 </head>
-<body>
+<body data-site-root="">
+
+<div class="utility-bar">
+  <div class="utility-inner">
+    <span id="topDate"></span>
+    <div class="utility-links">
+      <a href="#">About Us</a>
+      <a href="#">Contact</a>
+      <a href="#">Advertise</a>
+    </div>
+    <div class="utility-right">
+      <div class="utility-social">
+        <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12Z"/></svg></a>
+        <a href="#" aria-label="Twitter"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 5.9c-.7.3-1.5.6-2.3.7.8-.5 1.5-1.3 1.8-2.3-.8.5-1.7.8-2.6 1a4.1 4.1 0 0 0-7 3.7A11.6 11.6 0 0 1 3.4 4.6a4.1 4.1 0 0 0 1.3 5.5c-.7 0-1.3-.2-1.9-.5v.1c0 2 1.4 3.6 3.3 4a4.1 4.1 0 0 1-1.9.1 4.1 4.1 0 0 0 3.9 2.9A8.3 8.3 0 0 1 2 18.4a11.6 11.6 0 0 0 6.3 1.9c7.5 0 11.7-6.3 11.7-11.7v-.5c.8-.6 1.5-1.3 2-2.2Z"/></svg></a>
+        <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.5-.4-5.2c-.3-1-1-1.7-2-2C18.9 4.3 12 4.3 12 4.3s-6.9 0-8.6.5c-1 .3-1.7 1-2 2C1 8.5 1 12 1 12s0 3.5.4 5.2c.3 1 1 1.7 2 2 1.7.5 8.6.5 8.6.5s6.9 0 8.6-.5c1-.3 1.7-1 2-2 .4-1.7.4-5.2.4-5.2ZM9.8 15.3V8.7l6 3.3-6 3.3Z"/></svg></a>
+        <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c2.7 0 3.1 0 4.1.1 1.1 0 1.8.2 2.5.5.7.3 1.2.6 1.7 1.1.5.5.9 1 1.1 1.7.3.7.4 1.4.5 2.5 0 1 .1 1.4.1 4.1s0 3.1-.1 4.1c0 1.1-.2 1.8-.5 2.5-.3.7-.6 1.2-1.1 1.7-.5.5-1 .9-1.7 1.1-.7.3-1.4.4-2.5.5-1 0-1.4.1-4.1.1s-3.1 0-4.1-.1c-1.1 0-1.8-.2-2.5-.5-.7-.3-1.2-.6-1.7-1.1-.5-.5-.9-1-1.1-1.7-.3-.7-.4-1.4-.5-2.5C2 15.1 2 14.7 2 12s0-3.1.1-4.1c0-1.1.2-1.8.5-2.5.3-.7.6-1.2 1.1-1.7.5-.5 1-.9 1.7-1.1.7-.3 1.4-.4 2.5-.5C8.9 2 9.3 2 12 2Zm0 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10Zm0 8.2a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4Zm5.2-8.4a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0Z"/></svg></a>
+      </div>
+      <div class="utility-search" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+      <button type="button" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8l1.8-1.8M18 6l1.8-1.8"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
 
 <header class="masthead">
-  <div class="masthead-top">
+  <div class="masthead-inner">
     <div class="brand-group">
       <a href="index.html" class="brand" aria-label="GAKORO MEDIA TV — Home">
         <div class="brand-mark">G</div>
         <div>
           <div class="brand-name">GAKORO MEDIA TV</div>
-          <div class="brand-tagline">INSPIRE &middot; IMPOWER &middot; TRANSFORM</div>
+          <div class="brand-tagline">INSPIRE &middot; INFORM &middot; TRANSFORM</div>
         </div>
       </a>
       <a href="studio/" class="sangwa-link" aria-label="SANGWA STUDIO — Home">
         <img src="assets/logo-small.png" alt="SANGWA STUDIO logo">
-        <span class="sangwa-wordmark"><span class="sw-main">SANGWA</span><span class="sw-sub"><i></i>STUDIO<i></i></span></span>
+        <span class="sangwa-wordmark"><span class="sw-main">SANGWA</span><span class="sw-sub"><i></i>STUDIO</span></span>
       </a>
     </div>
-    <div class="masthead-meta">
-      <span class="meta-date">WED, AUG 12 2026</span>
-      <span class="live-pill"><span class="live-dot"></span> LIVE NOW</span>
+    <div class="masthead-actions">
+      <a href="#tvPlayer" class="btn-outline"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> WATCH LIVE</a>
+      <a href="#tvPlayer" class="live-pill"><span class="live-dot"></span> LIVE</a>
     </div>
   </div>
-  <nav class="nav-row">
-    <a href="#" class="active">Latest</a>
-  </nav>
 </header>
 
-<div class="ticker" id="tickerBar" style="display:none;">
-  <div class="ticker-label">BREAKING</div>
-  <div class="ticker-viewport">
-  <div class="ticker-track">
+<div class="nav-bar">
+  <div class="nav-inner">
+    <nav class="nav-row" id="navRow">
+      <a href="index.html">Home</a>
+      <a href="#latest-articles">News <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg></a>
+      <a href="category/index.html?cat=Education">Education</a>
+      <a href="category/index.html?cat=Sports">Sports <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg></a>
+      <a href="category/index.html?cat=Community">Community</a>
+      <a href="category/index.html?cat=Interviews">Interviews</a>
+      <a href="category/index.html?cat=Business">Business</a>
+      <a href="category/index.html?cat=Opinion">Opinion</a>
+    </nav>
+    <div class="nav-search" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
   </div>
+</div>
+
+<div class="ticker" id="tickerBar" style="display:none;">
+  <div class="ticker-label">BREAKING NEWS</div>
+  <div class="ticker-viewport">
+    <div class="ticker-track"></div>
+  </div>
+  <div class="ticker-controls">
+    <button type="button" aria-label="Previous" id="tickerPrev"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15 6l-6 6 6 6"/></svg></button>
+    <button type="button" aria-label="Pause" id="tickerPause"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg></button>
+    <button type="button" aria-label="Next" id="tickerNext"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 6l6 6-6 6"/></svg></button>
   </div>
 </div>
 
 <section class="hero" id="heroSection">
-  <div class="player-col">
+  <div class="hero-main">
     <div class="tv-player" id="tvPlayer">
       <div class="tv-badge"><span class="live-dot"></span> LIVE</div>
       <iframe
@@ -609,29 +481,70 @@
         loading="eager"
         frameborder="0"></iframe>
       <button type="button" id="tvMuteToggle" class="mute-toggle" aria-label="Unmute video">
-        <svg class="icon-muted" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.42.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3 3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06a8.99 8.99 0 0 0 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4 9.91 6.09 12 8.18V4z"/></svg>
-        <svg class="icon-unmuted" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+        <svg class="icon-muted" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.42.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3 3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06a8.99 8.99 0 0 0 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4 9.91 6.09 12 8.18V4z"/></svg>
+        <svg class="icon-unmuted" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
         <span class="mute-toggle-label">Tap to unmute</span>
       </button>
+      <div class="hero-overlay">
+        <div class="hero-eyebrow"><span class="live-dot"></span> NOW PLAYING</div>
+        <div class="hero-headline" id="nowPlayingTitle">GAKORO MEDIA TV — playing continuously</div>
+        <div class="hero-byline" id="nowPlayingByline">GAKORO MEDIA TV <span class="sep">&bull;</span> Streaming now</div>
+        <a href="#tvPlayer" class="hero-watch-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> WATCH LIVE</a>
+      </div>
+      <div class="hero-dots">
+        <span class="active"></span><span></span><span></span><span></span>
+      </div>
     </div>
-    <div class="eyebrow"><span class="live-dot" style="background:var(--crimson)"></span> NOW PLAYING</div>
-    <div class="hero-headline" id="nowPlayingTitle">GAKORO MEDIA TV — playing continuously</div>
-    <p class="hero-dek" id="nowPlayingDek">The player runs through our latest uploads back to back, like a live broadcast.</p>
-    <div class="byline" id="nowPlayingByline">GAKORO MEDIA TV <span class="sep">&bull;</span> Streaming now</div>
   </div>
+
+  <aside class="top-stories" id="topStories" style="display:none;">
+    <div class="top-stories-head">TOP STORIES</div>
+    <a class="top-story-item" href="article/index.html" style="display:none;">
+      <div class="ts-thumb g1"></div>
+      <div>
+        <span class="ts-cat"></span>
+        <div class="ts-title"></div>
+        <div class="ts-meta"></div>
+      </div>
+    </a>
+    <a class="top-story-item" href="article/index.html" style="display:none;">
+      <div class="ts-thumb g2"></div>
+      <div>
+        <span class="ts-cat"></span>
+        <div class="ts-title"></div>
+        <div class="ts-meta"></div>
+      </div>
+    </a>
+    <a class="top-story-item" href="article/index.html" style="display:none;">
+      <div class="ts-thumb g3"></div>
+      <div>
+        <span class="ts-cat"></span>
+        <div class="ts-title"></div>
+        <div class="ts-meta"></div>
+      </div>
+    </a>
+    <a class="top-story-item" href="article/index.html" style="display:none;">
+      <div class="ts-thumb g4"></div>
+      <div>
+        <span class="ts-cat"></span>
+        <div class="ts-title"></div>
+        <div class="ts-meta"></div>
+      </div>
+    </a>
+  </aside>
 </section>
 
-<div class="section-head">
-  <div class="section-title">Latest articles</div>
-  <div class="section-sub">Fresh from the newsroom</div>
+<div class="section-head" id="latest-articles">
+  <div class="section-title">Latest Articles</div>
+  <a href="#" class="view-all">VIEW ALL <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 6l6 6-6 6"/></svg></a>
 </div>
 
 <section class="grid" id="articleGrid" style="display:none;">
   <a class="card" href="article/index.html" style="display:none;">
     <div class="card-thumb g1"></div>
     <div class="card-body">
+      <div class="card-cat"></div>
       <div class="card-title"></div>
-      <div class="card-dek"></div>
       <div class="card-stats">
         <span class="stat stat-views">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -643,7 +556,6 @@
         </span>
         <button type="button" class="stat-share" aria-label="Share this article">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>
-          <span class="stat-share-label">Share</span>
         </button>
       </div>
       <div class="card-meta"></div>
@@ -652,8 +564,8 @@
   <a class="card" href="article/index.html" style="display:none;">
     <div class="card-thumb g2"></div>
     <div class="card-body">
+      <div class="card-cat"></div>
       <div class="card-title"></div>
-      <div class="card-dek"></div>
       <div class="card-stats">
         <span class="stat stat-views">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -665,7 +577,6 @@
         </span>
         <button type="button" class="stat-share" aria-label="Share this article">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>
-          <span class="stat-share-label">Share</span>
         </button>
       </div>
       <div class="card-meta"></div>
@@ -674,8 +585,8 @@
   <a class="card" href="article/index.html" style="display:none;">
     <div class="card-thumb g3"></div>
     <div class="card-body">
+      <div class="card-cat"></div>
       <div class="card-title"></div>
-      <div class="card-dek"></div>
       <div class="card-stats">
         <span class="stat stat-views">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -687,7 +598,6 @@
         </span>
         <button type="button" class="stat-share" aria-label="Share this article">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>
-          <span class="stat-share-label">Share</span>
         </button>
       </div>
       <div class="card-meta"></div>
@@ -696,8 +606,8 @@
   <a class="card" href="article/index.html" style="display:none;">
     <div class="card-thumb g4"></div>
     <div class="card-body">
+      <div class="card-cat"></div>
       <div class="card-title"></div>
-      <div class="card-dek"></div>
       <div class="card-stats">
         <span class="stat stat-views">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -709,17 +619,24 @@
         </span>
         <button type="button" class="stat-share" aria-label="Share this article">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>
-          <span class="stat-share-label">Share</span>
         </button>
       </div>
       <div class="card-meta"></div>
     </div>
   </a>
+</section>
+
+<div class="section-head">
+  <div class="section-title">More Stories</div>
+  <a href="#" class="view-all">VIEW ALL <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 6l6 6-6 6"/></svg></a>
+</div>
+
+<section class="grid" id="moreStoriesGrid" style="display:none;">
   <a class="card" href="article/index.html" style="display:none;">
     <div class="card-thumb g5"></div>
     <div class="card-body">
+      <div class="card-cat"></div>
       <div class="card-title"></div>
-      <div class="card-dek"></div>
       <div class="card-stats">
         <span class="stat stat-views">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -731,7 +648,6 @@
         </span>
         <button type="button" class="stat-share" aria-label="Share this article">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>
-          <span class="stat-share-label">Share</span>
         </button>
       </div>
       <div class="card-meta"></div>
@@ -740,8 +656,8 @@
   <a class="card" href="article/index.html" style="display:none;">
     <div class="card-thumb g6"></div>
     <div class="card-body">
+      <div class="card-cat"></div>
       <div class="card-title"></div>
-      <div class="card-dek"></div>
       <div class="card-stats">
         <span class="stat stat-views">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -753,7 +669,6 @@
         </span>
         <button type="button" class="stat-share" aria-label="Share this article">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>
-          <span class="stat-share-label">Share</span>
         </button>
       </div>
       <div class="card-meta"></div>
@@ -762,8 +677,8 @@
   <a class="card" href="article/index.html" style="display:none;">
     <div class="card-thumb g7"></div>
     <div class="card-body">
+      <div class="card-cat"></div>
       <div class="card-title"></div>
-      <div class="card-dek"></div>
       <div class="card-stats">
         <span class="stat stat-views">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -775,7 +690,6 @@
         </span>
         <button type="button" class="stat-share" aria-label="Share this article">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>
-          <span class="stat-share-label">Share</span>
         </button>
       </div>
       <div class="card-meta"></div>
@@ -784,8 +698,8 @@
   <a class="card" href="article/index.html" style="display:none;">
     <div class="card-thumb g8"></div>
     <div class="card-body">
+      <div class="card-cat"></div>
       <div class="card-title"></div>
-      <div class="card-dek"></div>
       <div class="card-stats">
         <span class="stat stat-views">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -797,7 +711,6 @@
         </span>
         <button type="button" class="stat-share" aria-label="Share this article">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>
-          <span class="stat-share-label">Share</span>
         </button>
       </div>
       <div class="card-meta"></div>
@@ -806,21 +719,89 @@
 </section>
 
 <footer>
-  <div class="brand-name">GAKORO MEDIA TV</div>
-  <div class="footer-legal">
-    <a href="/privacy/">Privacy Policy</a>
-    <a href="/terms/">Terms of Use</a>
-    <span>&copy; <span id="yearNow2"></span> GAKORO MEDIA TV</span>
+  <div class="footer-top">
+    <div class="footer-col">
+      <div class="footer-brand-name">GAKORO MEDIA TV</div>
+      <p class="footer-desc">Gakoro Media TV is your trusted source for credible news, inspiring stories and information that transforms lives.</p>
+      <div class="footer-social">
+        <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12Z"/></svg></a>
+        <a href="#" aria-label="Twitter"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 5.9c-.7.3-1.5.6-2.3.7.8-.5 1.5-1.3 1.8-2.3-.8.5-1.7.8-2.6 1a4.1 4.1 0 0 0-7 3.7A11.6 11.6 0 0 1 3.4 4.6a4.1 4.1 0 0 0 1.3 5.5c-.7 0-1.3-.2-1.9-.5v.1c0 2 1.4 3.6 3.3 4a4.1 4.1 0 0 1-1.9.1 4.1 4.1 0 0 0 3.9 2.9A8.3 8.3 0 0 1 2 18.4a11.6 11.6 0 0 0 6.3 1.9c7.5 0 11.7-6.3 11.7-11.7v-.5c.8-.6 1.5-1.3 2-2.2Z"/></svg></a>
+        <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.5-.4-5.2c-.3-1-1-1.7-2-2C18.9 4.3 12 4.3 12 4.3s-6.9 0-8.6.5c-1 .3-1.7 1-2 2C1 8.5 1 12 1 12s0 3.5.4 5.2c.3 1 1 1.7 2 2 1.7.5 8.6.5 8.6.5s6.9 0 8.6-.5c1-.3 1.7-1 2-2 .4-1.7.4-5.2.4-5.2ZM9.8 15.3V8.7l6 3.3-6 3.3Z"/></svg></a>
+        <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c2.7 0 3.1 0 4.1.1 1.1 0 1.8.2 2.5.5.7.3 1.2.6 1.7 1.1.5.5.9 1 1.1 1.7.3.7.4 1.4.5 2.5 0 1 .1 1.4.1 4.1s0 3.1-.1 4.1c0 1.1-.2 1.8-.5 2.5-.3.7-.6 1.2-1.1 1.7-.5.5-1 .9-1.7 1.1-.7.3-1.4.4-2.5.5-1 0-1.4.1-4.1.1s-3.1 0-4.1-.1c-1.1 0-1.8-.2-2.5-.5-.7-.3-1.2-.6-1.7-1.1-.5-.5-.9-1-1.1-1.7-.3-.7-.4-1.4-.5-2.5C2 15.1 2 14.7 2 12s0-3.1.1-4.1c0-1.1.2-1.8.5-2.5.3-.7.6-1.2 1.1-1.7.5-.5 1-.9 1.7-1.1.7-.3 1.4-.4 2.5-.5C8.9 2 9.3 2 12 2Zm0 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10Zm0 8.2a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4Zm5.2-8.4a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0Z"/></svg></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Quick Links</div>
+      <a href="#">About Us</a>
+      <a href="#">Contact Us</a>
+      <a href="#">Advertise</a>
+      <a href="/privacy/">Privacy Policy</a>
+      <a href="/terms/">Terms of Use</a>
+    </div>
+    <div class="footer-col" id="footerCategories">
+      <div class="footer-col-title">Categories</div>
+      <a href="#latest-articles">News</a>
+      <a href="category/index.html?cat=Education">Education</a>
+      <a href="category/index.html?cat=Sports">Sports</a>
+      <a href="category/index.html?cat=Community">Community</a>
+      <a href="category/index.html?cat=Interviews">Interviews</a>
+      <a href="category/index.html?cat=Business">Business</a>
+      <a href="category/index.html?cat=Opinion">Opinion</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Newsletter</div>
+      <p class="newsletter-desc">Subscribe to our newsletter and get the latest news updates.</p>
+      <form class="newsletter-form" id="newsletterForm">
+        <input type="email" placeholder="Enter your email" required aria-label="Email address">
+        <button type="submit">SUBSCRIBE</button>
+      </form>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; <span id="yearNow2"></span> GAKORO MEDIA TV. All Rights Reserved.</span>
+    <span>Made with <span class="heart">&hearts;</span> by <a href="studio/" style="color:#AAB4C0; text-decoration:underline;">Sangwa Studio</a> in Rwanda</span>
   </div>
 </footer>
 
-<script>document.getElementById('yearNow2').textContent = new Date().getFullYear();</script>
+<script>
+document.getElementById('yearNow2').textContent = new Date().getFullYear();
+document.getElementById('topDate').textContent = new Date().toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric', year:'numeric' });
+document.getElementById('newsletterForm').addEventListener('submit', function(e){ e.preventDefault(); });
+(function(){
+  var track = document.querySelector('.ticker-track');
+  var pauseBtn = document.getElementById('tickerPause');
+  if (pauseBtn && track){
+    pauseBtn.addEventListener('click', function(){
+      var paused = track.style.animationPlayState === 'paused';
+      track.style.animationPlayState = paused ? 'running' : 'paused';
+    });
+  }
+})();
+</script>
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script defer src="js/config.js"></script>
 <script defer src="js/live-player.js"></script>
 <script defer src="js/youtube.js"></script>
 <script defer src="js/latest-articles.js"></script>
+<script defer src="js/top-stories.js"></script>
 <script defer src="js/news.js"></script>
+<script defer src="js/nav-categories.js"></script>
 <script defer src="js/consent.js"></script>
+<script>
+  (function(){
+    var btn = document.getElementById('themeToggle');
+    if(!btn) return;
+    btn.addEventListener('click', function(){
+      var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      if(isDark){
+        document.documentElement.removeAttribute('data-theme');
+        try{ localStorage.setItem('gm_theme','light'); }catch(e){}
+      } else {
+        document.documentElement.setAttribute('data-theme','dark');
+        try{ localStorage.setItem('gm_theme','dark'); }catch(e){}
+      }
+    });
+  })();
+</script>
 </body>
 </html>
