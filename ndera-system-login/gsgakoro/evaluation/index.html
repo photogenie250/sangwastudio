@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evaluation — NDERA SYSTEM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="../assets/img/ndera-logo.svg">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/dashboard.css">
+<link rel="stylesheet" href="../css/admin-forms.css">
+<link rel="stylesheet" href="../css/students.css">
+<link rel="stylesheet" href="../css/evaluation.css">
+<link rel="stylesheet" href="../css/polish.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" defer></script>
+</head>
+<body>
+
+<div class="shell">
+
+  <aside class="sidebar">
+    <div class="sidebar__brand">
+      <a href="../dashboard-admin/" class="sidebar__logo-link" aria-label="NDERA SYSTEM home">
+        <img src="../assets/img/ndera-logo.svg" alt="NDERA SYSTEM" class="sidebar__logo">
+      </a>
+      <p class="sidebar__title">GS GAKORO</p>
+    </div>
+
+    <nav class="sidebar__nav" aria-label="Main navigation">
+      <a class="sidebar__link" href="../dashboard-admin/">Dashboard</a>
+      <a class="sidebar__link" href="../students/">Students</a>
+      <a class="sidebar__link" href="../classes/">Classes</a>
+      <a class="sidebar__link" href="../offenses/">Offenses</a>
+      <a class="sidebar__link" href="../incidents/">Incidents</a>
+      <a class="sidebar__link sidebar__link--active" href="../evaluation/">Evaluation</a>
+      <a class="sidebar__link" href="../reports/">Reports</a>
+      <a class="sidebar__link" href="../users/">Users</a>
+      <a class="sidebar__link" href="../counseling/">Counseling</a>
+      <a class="sidebar__link" href="../letters/">Letters</a>
+      <a class="sidebar__link" href="../announcements/">Announcements</a>
+    </nav>
+
+    <div class="sidebar__footer">
+      <p class="sidebar__user" id="user-name">Loading…</p>
+      <p class="sidebar__role" id="user-role">&nbsp;</p>
+      <button class="sidebar__logout" id="logout-btn" type="button">Sign out</button>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <header class="topbar">
+      <div>
+        <h1 class="topbar__title">Evaluation</h1>
+        <p class="topbar__subtitle">Insert mark sheets by class and export them to Excel.</p>
+      </div>
+      <div class="topbar__actions">
+        <button class="secondary-action" id="export-all-btn" type="button">Export all classes</button>
+      </div>
+    </header>
+
+    <section class="panel readonly-notice" id="readonly-notice" hidden>
+      <p class="readonly-notice__title">Your account is read-only</p>
+      <p class="readonly-notice__body">
+        You can view and export mark sheets, but only administrators and discipline teachers can save changes to marks.
+      </p>
+    </section>
+
+    <section class="panel filters-panel">
+      <div class="filters">
+        <div class="field field--grow">
+          <label class="field__label" for="eval-class-select">Class</label>
+          <select class="field__input" id="eval-class-select">
+            <option value="">Select a class…</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field__label" for="eval-term-input">Evaluation label</label>
+          <input class="field__input" type="text" id="eval-term-input" placeholder="e.g. Term 2, Week 6" autocomplete="off">
+        </div>
+      </div>
+    </section>
+
+    <div id="eval-empty-state" class="panel eval-empty">
+      <p>Choose a class above to open its mark sheet.</p>
+    </div>
+
+    <div id="eval-sheet" hidden>
+
+      <section class="stat-ledger eval-summary" aria-label="Class mark summary">
+        <div class="stat-ledger__entry">
+          <p class="stat-ledger__value" id="eval-stat-count">—</p>
+          <p class="stat-ledger__label">Students</p>
+        </div>
+        <div class="stat-ledger__divider" aria-hidden="true"></div>
+        <div class="stat-ledger__entry">
+          <p class="stat-ledger__value" id="eval-stat-average">—</p>
+          <p class="stat-ledger__label">Average marks</p>
+        </div>
+        <div class="stat-ledger__divider" aria-hidden="true"></div>
+        <div class="stat-ledger__entry stat-ledger__entry--warn">
+          <p class="stat-ledger__value" id="eval-stat-below">—</p>
+          <p class="stat-ledger__label">Below 28 marks</p>
+        </div>
+      </section>
+
+      <div id="eval-banner" class="inline-banner" hidden></div>
+
+      <section class="panel">
+        <div class="panel__header eval-panel-header">
+          <h2 class="panel__title" id="eval-sheet-title">Mark sheet</h2>
+          <div class="eval-panel-actions">
+            <button class="secondary-action" id="export-class-btn" type="button">Export to Excel</button>
+            <button class="submit-btn" id="save-marks-btn" type="button" disabled>Save changes</button>
+          </div>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Student number</th>
+              <th>Name</th>
+              <th>Status</th>
+              <th>Marks</th>
+            </tr>
+          </thead>
+          <tbody id="eval-sheet-body">
+            <tr><td colspan="5" class="data-table__empty">Loading…</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+    </div>
+
+  </main>
+</div>
+
+<script src="../js/polish.js" defer></script>
+<script src="../js/vendor/supabase-js-2.112.3.min.js" defer></script>
+<script type="module" src="../js/evaluation.js"></script>
+</body>
+</html>

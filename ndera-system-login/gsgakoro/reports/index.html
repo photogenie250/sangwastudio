@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reports — NDERA SYSTEM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="../assets/img/ndera-logo.svg">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/dashboard.css">
+<link rel="stylesheet" href="../css/reports.css">
+<link rel="stylesheet" href="../css/polish.css">
+</head>
+<body>
+
+<div class="shell">
+
+  <aside class="sidebar">
+    <div class="sidebar__brand">
+      <a href="../dashboard-admin/" class="sidebar__logo-link" aria-label="NDERA SYSTEM home">
+        <img src="../assets/img/ndera-logo.svg" alt="NDERA SYSTEM" class="sidebar__logo">
+      </a>
+      <p class="sidebar__title">GS GAKORO</p>
+    </div>
+
+    <nav class="sidebar__nav" aria-label="Main navigation">
+      <a class="sidebar__link" href="../dashboard-admin/">Dashboard</a>
+      <a class="sidebar__link" href="../students/">Students</a>
+      <a class="sidebar__link" href="../classes/">Classes</a>
+      <a class="sidebar__link" href="../offenses/">Offenses</a>
+      <a class="sidebar__link" href="../incidents/">Incidents</a>
+      <a class="sidebar__link" href="../evaluation/">Evaluation</a>
+      <a class="sidebar__link sidebar__link--active" href="../reports/">Reports</a>
+      <a class="sidebar__link" href="../users/">Users</a>
+      <a class="sidebar__link" href="../counseling/">Counseling</a>
+      <a class="sidebar__link" href="../letters/">Letters</a>
+      <a class="sidebar__link" href="../announcements/">Announcements</a>
+    </nav>
+
+    <div class="sidebar__footer">
+      <p class="sidebar__user" id="user-name">Loading…</p>
+      <p class="sidebar__role" id="user-role">&nbsp;</p>
+      <button class="sidebar__logout" id="logout-btn" type="button">Sign out</button>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <header class="topbar">
+      <div>
+        <h1 class="topbar__title">Reports</h1>
+        <p class="topbar__subtitle">Patterns across offenses, students, and time.</p>
+      </div>
+    </header>
+
+    <div class="content-grid">
+
+      <section class="panel">
+        <div class="panel__header">
+          <h2 class="panel__title">Most common offenses</h2>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr><th>Offense</th><th>Category</th><th>Times recorded</th><th>Total points</th></tr>
+          </thead>
+          <tbody id="common-offenses-body">
+            <tr><td colspan="4" class="data-table__empty">Loading…</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="panel">
+        <div class="panel__header">
+          <h2 class="panel__title">Top repeated offenders</h2>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr><th>Student</th><th>Class</th><th>Incidents</th><th>Marks</th></tr>
+          </thead>
+          <tbody id="repeat-offenders-body">
+            <tr><td colspan="4" class="data-table__empty">Loading…</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+    </div>
+
+    <section class="panel">
+      <div class="panel__header">
+        <h2 class="panel__title">Incidents by date range</h2>
+      </div>
+
+      <form class="range-form" id="range-form">
+        <div class="field">
+          <label class="field__label" for="range-start">From</label>
+          <input class="field__input" type="date" id="range-start" required>
+        </div>
+        <div class="field">
+          <label class="field__label" for="range-end">To</label>
+          <input class="field__input" type="date" id="range-end" required>
+        </div>
+        <button class="submit-btn range-form__submit" type="submit">Run report</button>
+      </form>
+
+      <p class="range-summary" id="range-summary" hidden></p>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>Date</th><th>Student</th><th>Class</th><th>Offense</th><th>Category</th><th>Deduction</th><th>Recorded by</th></tr>
+        </thead>
+        <tbody id="range-body">
+          <tr><td colspan="7" class="data-table__empty">Choose a date range and run the report.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+  </main>
+</div>
+
+<script src="../js/polish.js" defer></script>
+<script src="../js/vendor/supabase-js-2.112.3.min.js" defer></script>
+<script type="module" src="../js/reports.js"></script>
+</body>
+</html>

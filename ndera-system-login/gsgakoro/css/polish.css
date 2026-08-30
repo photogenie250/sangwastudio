@@ -1,0 +1,353 @@
+/* ============================================================
+   SDMS — Launch polish layer
+   Loaded after every other stylesheet. Adds motion, depth and
+   micro-interactions on top of the existing design tokens —
+   no structural rules are overridden, only enhanced.
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+html { scroll-behavior: smooth; }
+
+/* ------------------------------------------------------------
+   Scrollbars — quiet, on-brand
+   ------------------------------------------------------------ */
+* { scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+
+::-webkit-scrollbar { width: 9px; height: 9px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover { background: #C7D2E6; background-clip: padding-box; }
+
+/* ------------------------------------------------------------
+   Keyframes
+   ------------------------------------------------------------ */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInLeft {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes shake {
+  10%, 90% { transform: translateX(-1px); }
+  20%, 80% { transform: translateX(2px); }
+  30%, 50%, 70% { transform: translateX(-3px); }
+  40%, 60% { transform: translateX(3px); }
+}
+
+@keyframes shimmer {
+  0%   { opacity: 0.45; }
+  50%  { opacity: 0.9; }
+  100% { opacity: 0.45; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes tickGrow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+@keyframes brandGlow {
+  0%, 100% { opacity: 0.55; transform: translate3d(0,0,0) scale(1); }
+  50%      { opacity: 0.85; transform: translate3d(10px,-10px,0) scale(1.06); }
+}
+
+/* ------------------------------------------------------------
+   Page entrance
+   ------------------------------------------------------------ */
+body { animation: fadeIn 320ms ease both; }
+
+.page > .panel-brand { animation: fadeIn 520ms ease both; }
+.page > .panel-form   { animation: fadeInUp 460ms cubic-bezier(.22,.9,.32,1) both; }
+
+.shell > .sidebar { animation: fadeInLeft 420ms cubic-bezier(.22,.9,.32,1) both; }
+.shell > .main    { animation: fadeInUp 460ms cubic-bezier(.22,.9,.32,1) 60ms both; }
+
+/* ------------------------------------------------------------
+   Sidebar micro-interactions
+   ------------------------------------------------------------ */
+.sidebar__logo-link { display: inline-block; transition: transform 220ms ease; }
+.sidebar__logo-link:hover { transform: scale(1.05) rotate(-1deg); }
+
+.sidebar__nav { position: relative; }
+
+.sidebar__link {
+  position: relative;
+  transform: translateX(0);
+  animation: fadeInLeft 360ms cubic-bezier(.22,.9,.32,1) both;
+}
+
+.sidebar__nav .sidebar__link:nth-child(1)  { animation-delay: 40ms; }
+.sidebar__nav .sidebar__link:nth-child(2)  { animation-delay: 70ms; }
+.sidebar__nav .sidebar__link:nth-child(3)  { animation-delay: 100ms; }
+.sidebar__nav .sidebar__link:nth-child(4)  { animation-delay: 130ms; }
+.sidebar__nav .sidebar__link:nth-child(5)  { animation-delay: 160ms; }
+.sidebar__nav .sidebar__link:nth-child(6)  { animation-delay: 190ms; }
+.sidebar__nav .sidebar__link:nth-child(7)  { animation-delay: 220ms; }
+.sidebar__nav .sidebar__link:nth-child(8)  { animation-delay: 250ms; }
+.sidebar__nav .sidebar__link:nth-child(9)  { animation-delay: 280ms; }
+.sidebar__nav .sidebar__link:nth-child(10) { animation-delay: 310ms; }
+
+.sidebar__link::before {
+  content: "";
+  position: absolute;
+  left: -24px;
+  top: 50%;
+  width: 3px;
+  height: 0;
+  border-radius: 0 3px 3px 0;
+  background: var(--brass);
+  transform: translateY(-50%);
+  transition: height 200ms ease;
+}
+
+.sidebar__link--active::before { height: 60%; }
+
+.sidebar__link:hover { transform: translateX(3px); }
+.sidebar__link, .sidebar__link--active { transition: transform 200ms ease, background 160ms ease, color 160ms ease; }
+
+.sidebar__logout, .sidebar__logout:hover { transition: background 160ms ease, transform 160ms ease; }
+.sidebar__logout:hover { transform: translateY(-1px); }
+.sidebar__logout:active { transform: translateY(0) scale(0.98); }
+
+/* ------------------------------------------------------------
+   Buttons — lift, glow, press
+   ------------------------------------------------------------ */
+.quick-action,
+.submit-btn,
+.secondary-action,
+.crud-form__cancel {
+  transform: translateY(0);
+  will-change: transform;
+}
+
+.quick-action { transition: background 160ms ease, transform 180ms ease, box-shadow 180ms ease; }
+.quick-action:hover  { transform: translateY(-2px); box-shadow: 0 10px 22px -8px rgba(226, 113, 29, 0.55); }
+.quick-action:active { transform: translateY(0) scale(0.98); }
+
+.submit-btn { transition: background var(--transition), transform 180ms ease, box-shadow 180ms ease; position: relative; overflow: hidden; }
+.submit-btn:hover:not(:disabled)  { transform: translateY(-2px); box-shadow: 0 10px 24px -10px rgba(10, 31, 77, 0.55); }
+.submit-btn:active:not(:disabled) { transform: translateY(0) scale(0.98); }
+
+.submit-btn:disabled { position: relative; }
+.submit-btn:disabled::after {
+  content: "";
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  margin-top: -7px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.35);
+  border-top-color: #fff;
+  animation: spin 650ms linear infinite;
+}
+.submit-btn:disabled .submit-btn__label { margin-left: 18px; }
+
+.secondary-action, .crud-form__cancel {
+  transition: background 140ms ease, transform 180ms ease, border-color 180ms ease;
+}
+.secondary-action:hover, .crud-form__cancel:hover { transform: translateY(-1px); }
+.secondary-action:active, .crud-form__cancel:active { transform: translateY(0) scale(0.98); }
+
+.row-action-btn { transition: background 140ms ease, transform 140ms ease; }
+.row-action-btn:hover { transform: translateY(-1px); }
+.row-action-btn:active { transform: scale(0.94); }
+
+/* ------------------------------------------------------------
+   Cards & panels — soft depth, hover lift
+   ------------------------------------------------------------ */
+.form-card, .panel, .stat-ledger, .selected-student, .combobox__list {
+  transition: box-shadow 220ms ease, transform 220ms ease, border-color 220ms ease;
+}
+
+.form-card  { box-shadow: 0 1px 2px rgba(10,31,77,0.04), 0 20px 44px -28px rgba(10,31,77,0.28); }
+.panel      { box-shadow: 0 1px 2px rgba(10,31,77,0.03), 0 14px 32px -26px rgba(10,31,77,0.22); animation: fadeInUp 420ms cubic-bezier(.22,.9,.32,1) both; }
+.stat-ledger{ box-shadow: 0 1px 2px rgba(10,31,77,0.03), 0 14px 32px -26px rgba(10,31,77,0.22); animation: fadeInUp 380ms cubic-bezier(.22,.9,.32,1) both; }
+
+.content-grid .panel:nth-child(1) { animation-delay: 40ms; }
+.content-grid .panel:nth-child(2) { animation-delay: 90ms; }
+
+.panel:hover { box-shadow: 0 1px 2px rgba(10,31,77,0.05), 0 18px 40px -22px rgba(10,31,77,0.30); }
+
+.combobox__list { animation: popIn 160ms cubic-bezier(.22,.9,.32,1) both; transform-origin: top center; }
+
+/* ------------------------------------------------------------
+   Stat ledger — value emphasis
+   ------------------------------------------------------------ */
+.stat-ledger__entry { transition: transform 200ms ease; }
+.stat-ledger__entry:hover { transform: translateY(-2px); }
+.stat-ledger__value { font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------
+   Data tables & lists — row hover, staggered entrance
+   ------------------------------------------------------------ */
+.data-table tbody tr,
+.watch-list__item,
+.combobox__item,
+.offense-reference__item {
+  transition: background 140ms ease;
+}
+
+.data-table tbody tr:hover { background: rgba(20, 51, 107, 0.035); }
+.watch-list__item:hover { background: rgba(226, 113, 29, 0.05); border-radius: 6px; }
+
+.row-pop { animation: fadeIn 340ms ease both; }
+
+/* Loading / empty states — quiet pulse instead of static text */
+.data-table__empty,
+.watch-list__empty,
+.combobox__empty,
+.offense-reference__empty {
+  animation: shimmer 1500ms ease-in-out infinite;
+}
+
+/* ------------------------------------------------------------
+   Form fields — focus polish
+   ------------------------------------------------------------ */
+.field__input, .field__input--textarea {
+  transition: border-color var(--transition), box-shadow var(--transition), transform 140ms ease;
+}
+.field__input:focus-visible { transform: translateY(-1px); }
+
+.form-error:not([hidden]) { animation: fadeInUp 220ms ease both, shake 420ms ease 220ms; }
+.form-success { animation: fadeInUp 240ms ease both; }
+.inline-banner { animation: fadeInUp 240ms ease both; }
+
+/* Toggle switch — slightly springier */
+.toggle__track, .toggle__track::before { transition: background 180ms ease, transform 260ms cubic-bezier(.34,1.56,.64,1); }
+
+/* Badges — subtle hover pop */
+.role-badge, .import-status { transition: transform 160ms ease; }
+.role-badge:hover, .import-status:hover { transform: scale(1.05); }
+
+/* ------------------------------------------------------------
+   Login — branding panel ambience
+   ------------------------------------------------------------ */
+.panel-brand::before, .panel-brand::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(2px);
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(226,113,29,0.35) 0%, rgba(226,113,29,0) 70%);
+}
+.panel-brand::before {
+  width: 360px; height: 360px;
+  top: -120px; right: -100px;
+  animation: brandGlow 9s ease-in-out infinite;
+}
+.panel-brand::after {
+  width: 260px; height: 260px;
+  bottom: -100px; left: -60px;
+  background: radial-gradient(circle, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0) 70%);
+  animation: brandGlow 11s ease-in-out infinite reverse;
+}
+.panel-brand > * { position: relative; z-index: 1; }
+
+.brand-copy__logo { animation: fadeInUp 520ms cubic-bezier(.22,.9,.32,1) both; }
+.brand-copy__title { animation: fadeInUp 560ms cubic-bezier(.22,.9,.32,1) 60ms both; }
+.brand-copy__tagline { animation: fadeInUp 600ms cubic-bezier(.22,.9,.32,1) 110ms both; }
+
+.ledger { animation: fadeIn 700ms ease 140ms both; }
+.ledger__tick::before { transform-origin: left; animation: tickGrow 500ms cubic-bezier(.22,.9,.32,1) both; }
+.ledger__tick:nth-child(1)  .ledger__value,
+.ledger__tick:nth-child(1)::before  { animation-delay: 160ms; }
+.ledger__tick:nth-child(2)::before  { animation-delay: 195ms; }
+.ledger__tick:nth-child(3)::before  { animation-delay: 230ms; }
+.ledger__tick:nth-child(4)::before  { animation-delay: 265ms; }
+.ledger__tick:nth-child(5)::before  { animation-delay: 300ms; }
+.ledger__tick:nth-child(6)::before  { animation-delay: 335ms; }
+.ledger__tick:nth-child(7)::before  { animation-delay: 370ms; }
+.ledger__tick:nth-child(8)::before  { animation-delay: 405ms; }
+.ledger__tick:nth-child(9)::before  { animation-delay: 440ms; }
+.ledger__tick:nth-child(10)::before { animation-delay: 475ms; }
+.ledger__tick:nth-child(11)::before { animation-delay: 510ms; }
+
+.whatsapp-link {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-navy);
+  text-decoration: none;
+  background: transparent;
+  margin: 18px 0 0;
+  padding: 16px 0 0;
+  border: none;
+  border-top: 1px solid var(--line);
+  cursor: pointer;
+}
+
+.whatsapp-link:hover,
+.whatsapp-link:focus-visible {
+  text-decoration: underline;
+}
+
+.footer-credit {
+  font-size: 11px;
+  color: var(--charcoal-soft);
+  opacity: 0.7;
+  text-align: center;
+  margin: 6px 0 0;
+}
+
+/* ------------------------------------------------------------
+   Permission request form
+   ------------------------------------------------------------ */
+textarea.field__input {
+  resize: vertical;
+  min-height: 72px;
+  font-family: var(--font-body);
+}
+
+.form-success {
+  font-size: 13px;
+  color: #1B7A4B;
+  background: rgba(27, 122, 75, 0.08);
+  border: 1px solid rgba(27, 122, 75, 0.2);
+  border-radius: 8px;
+  padding: 11px 13px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* ------------------------------------------------------------
+   Focus ring consistency (keyboard users keep a crisp outline,
+   pointer users don't see a flash on click)
+   ------------------------------------------------------------ */
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+  outline-offset: 2px;
+}
