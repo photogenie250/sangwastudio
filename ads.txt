@@ -1,0 +1,21 @@
+# ads.txt — Authorized Digital Sellers
+#
+# Required by Google AdSense (and most other ad networks) so that
+# buyers can verify who is authorized to sell ad space on this
+# domain. Without a correct ads.txt file, AdSense review can fail
+# and/or your ad revenue can be reduced.
+#
+# HOW TO FILL THIS IN:
+# 1. Sign up for Google AdSense at https://www.google.com/adsense
+# 2. Once approved, AdSense shows you an ads.txt snippet containing
+#    YOUR publisher ID, e.g.:
+#      google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0
+# 3. Replace the commented example line below with your real line
+#    (remove the leading "#") and keep this file at the domain
+#    root: https://gakoromedia.rw/ads.txt — it must NOT be moved
+#    into a subfolder or it won't be found.
+# 4. If you add other ad networks later, add one line per network
+#    the same way — AdSense's guide explains the format:
+#    https://support.google.com/adsense/answer/7532444
+
+google.com, pub-2056887490896774, DIRECT, f08c47fec0942fa0
