@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us — Gakoro Media TV</title>
+<meta name="description" content="Gakoro Media TV is Rwanda's trusted source for credible news, inspiring stories and information that transforms lives. Learn who we are and what we cover.">
+<meta name="robots" content="index, follow">
+<link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+<link rel="manifest" href="/assets/favicon/site.webmanifest">
+<meta name="theme-color" content="#0E1C2B">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0E1C2B; --navy-soft:#16283C; --crimson:#D3242C; --crimson-dark:#9C1A20;
+    --paper:#0B1524; --card:#122238; --ink:#F2F0E9; --slate:#A9B4C4; --slate-light:#8B93A3;
+    --gold:#C69A4E; --line:#23364F;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{ background:var(--paper); color:var(--ink); font-family:'Inter', sans-serif; -webkit-font-smoothing:antialiased; }
+  a{ color:var(--gold); }
+  .masthead{
+    background:var(--navy); color:#fff; padding:14px 6vw; display:flex; align-items:center;
+    justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.12);
+  }
+  .brand{ display:flex; align-items:center; gap:12px; text-decoration:none; }
+  .brand-mark{ width:34px; height:34px; background:var(--crimson); display:flex; align-items:center; justify-content:center; font-family:'Fraunces', serif; font-weight:900; font-size:18px; flex-shrink:0; color:#fff; }
+  .brand-name{ font-family:'Fraunces', serif; font-weight:900; font-size:22px; letter-spacing:-0.01em; color:#fff; }
+  .back-link{ display:flex; align-items:center; gap:8px; font-family:'IBM Plex Mono', monospace; font-size:11.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--slate-light); text-decoration:none; }
+  .back-link:hover{ color:#fff; }
+  main{ max-width:760px; margin:0 auto; padding:48px 6vw 100px; }
+  .eyebrow{ font-family:'IBM Plex Mono', monospace; font-size:11px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--crimson); margin-bottom:14px; }
+  h1{ font-family:'Fraunces', serif; font-weight:600; font-size:36px; line-height:1.15; margin-bottom:22px; max-width:16ch; }
+  h2{ font-family:'Fraunces', serif; font-weight:600; font-size:21px; margin:38px 0 12px; }
+  p{ font-size:15.5px; line-height:1.8; color:var(--ink); margin-bottom:14px; }
+  .lede{ font-size:18px; line-height:1.7; color:var(--slate); margin-bottom:30px; padding-bottom:30px; border-bottom:1px solid var(--line); }
+  ul{ margin:0 0 14px 22px; }
+  li{ font-size:15.5px; line-height:1.8; margin-bottom:8px; }
+  .pillars{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:26px 0 10px; }
+  .pillar{ background:var(--card); border:1px solid var(--line); padding:20px 18px; }
+  .pillar .num{ font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--crimson); letter-spacing:0.1em; margin-bottom:8px; }
+  .pillar h3{ font-family:'Fraunces', serif; font-weight:600; font-size:16px; margin-bottom:8px; }
+  .pillar p{ font-size:13.5px; color:var(--slate); margin-bottom:0; }
+  .cats{ display:flex; flex-wrap:wrap; gap:8px; margin:14px 0 6px; }
+  .cats a{
+    font-family:'IBM Plex Mono', monospace; font-size:11px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--ink); background:var(--card); border:1px solid var(--line); padding:8px 14px; text-decoration:none;
+  }
+  .cats a:hover{ border-color:var(--crimson); color:var(--crimson); }
+  .cta-box{ background:var(--card); border:1px solid var(--line); border-left:3px solid var(--gold); padding:24px; margin:38px 0 6px; display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; }
+  .cta-box p{ margin:0; max-width:38ch; }
+  .btn{
+    display:inline-flex; align-items:center; gap:8px; background:var(--crimson); color:#fff !important; text-decoration:none;
+    padding:12px 20px; font-family:'IBM Plex Mono', monospace; font-size:11.5px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; flex-shrink:0;
+  }
+  .btn:hover{ background:var(--crimson-dark); }
+  footer{ background:var(--navy); color:var(--slate-light); padding:30px 6vw; display:flex; justify-content:space-between; align-items:center; font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:0.04em; flex-wrap:wrap; gap:10px; }
+  footer a{ color:var(--slate-light); text-decoration:none; }
+  footer a:hover{ color:#fff; }
+  .footer-legal{ display:flex; gap:18px; }
+  @media (max-width:640px){ main{ padding:34px 5vw 70px; } h1{ font-size:27px; } .pillars{ grid-template-columns:1fr; } .cta-box{ flex-direction:column; align-items:flex-start; } }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <a href="/" class="brand" aria-label="GAKORO MEDIA TV — Home">
+    <div class="brand-mark">G</div>
+    <div class="brand-name">GAKORO MEDIA TV</div>
+  </a>
+  <a href="/" class="back-link">&larr; Back to site</a>
+</header>
+
+<main>
+  <div class="eyebrow">About Us</div>
+  <h1>News that inspires, informs and transforms.</h1>
+  <p class="lede">Gakoro Media TV is Rwanda's home for credible news, inspiring stories and reporting that helps our community make sense of the world around it — on air, on our live stream, and in writing on this site.</p>
+
+  <h2>What we do</h2>
+  <p>We publish daily coverage across education, sports, community life, business, interviews and opinion, alongside a continuous live video stream. Every article on this site goes through an editorial review before it's published, and our "breaking news" ticker is reserved strictly for stories our newsroom has verified — never syndicated filler.</p>
+
+  <div class="pillars">
+    <div class="pillar">
+      <div class="num">01</div>
+      <h3>Inspire</h3>
+      <p>Stories about people and communities doing remarkable things across Rwanda.</p>
+    </div>
+    <div class="pillar">
+      <div class="num">02</div>
+      <h3>Inform</h3>
+      <p>Timely, accurate reporting on the news that affects daily life.</p>
+    </div>
+    <div class="pillar">
+      <div class="num">03</div>
+      <h3>Transform</h3>
+      <p>Journalism that opens conversations and moves communities forward.</p>
+    </div>
+  </div>
+
+  <h2>What we cover</h2>
+  <div class="cats">
+    <a href="/category/index.html?cat=Education">Education</a>
+    <a href="/category/index.html?cat=Sports">Sports</a>
+    <a href="/category/index.html?cat=Community">Community</a>
+    <a href="/category/index.html?cat=Interviews">Interviews</a>
+    <a href="/category/index.html?cat=Business">Business</a>
+    <a href="/category/index.html?cat=Opinion">Opinion</a>
+  </div>
+
+  <h2>Who's behind it</h2>
+  <p>Gakoro Media TV is produced and engineered by <a href="/studio/">Sangwa Studio</a>, a Musanze-based photo, video and music production house. Sangwa Studio also builds and hosts the Ndera School System, a records platform used by partner schools.</p>
+
+  <div class="cta-box">
+    <p>Have a story tip, a correction, or want to reach the newsroom directly?</p>
+    <a href="/contact/" class="btn">Contact Us →</a>
+  </div>
+</main>
+
+<footer>
+  <div>&copy; <span id="yearNow"></span> Sangwa Studio / Gakoro Media TV</div>
+  <div class="footer-legal">
+    <a href="/">Home</a>
+    <a href="/privacy/">Privacy</a>
+    <a href="/terms/">Terms</a>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('yearNow').textContent = new Date().getFullYear();
+</script>
+<script defer src="/js/consent.js"></script>
+</body>
+</html>
