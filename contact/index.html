@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us — Gakoro Media TV</title>
+<meta name="description" content="Get in touch with Gakoro Media TV — send a message, email, call, or reach us on Telegram.">
+<meta name="robots" content="index, follow">
+<link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+<link rel="manifest" href="/assets/favicon/site.webmanifest">
+<meta name="theme-color" content="#0E1C2B">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0E1C2B; --navy-soft:#16283C; --crimson:#D3242C; --crimson-dark:#9C1A20;
+    --paper:#0B1524; --card:#122238; --ink:#F2F0E9; --slate:#A9B4C4; --slate-light:#8B93A3;
+    --gold:#C69A4E; --line:#23364F;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{ background:var(--paper); color:var(--ink); font-family:'Inter', sans-serif; -webkit-font-smoothing:antialiased; }
+  a{ color:var(--gold); }
+  .masthead{
+    background:var(--navy); color:#fff; padding:14px 6vw; display:flex; align-items:center;
+    justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.12);
+  }
+  .brand{ display:flex; align-items:center; gap:12px; text-decoration:none; }
+  .brand-mark{ width:34px; height:34px; background:var(--crimson); display:flex; align-items:center; justify-content:center; font-family:'Fraunces', serif; font-weight:900; font-size:18px; flex-shrink:0; color:#fff; }
+  .brand-name{ font-family:'Fraunces', serif; font-weight:900; font-size:22px; letter-spacing:-0.01em; color:#fff; }
+  .back-link{ display:flex; align-items:center; gap:8px; font-family:'IBM Plex Mono', monospace; font-size:11.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--slate-light); text-decoration:none; }
+  .back-link:hover{ color:#fff; }
+  main{ max-width:920px; margin:0 auto; padding:48px 6vw 100px; }
+  .eyebrow{ font-family:'IBM Plex Mono', monospace; font-size:11px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--crimson); margin-bottom:14px; }
+  h1{ font-family:'Fraunces', serif; font-weight:600; font-size:36px; line-height:1.15; margin-bottom:12px; }
+  .lede{ font-size:16px; line-height:1.7; color:var(--slate); margin-bottom:40px; max-width:56ch; }
+  .contact-grid{ display:grid; grid-template-columns:1.2fr 1fr; gap:44px; }
+  .card{ background:var(--card); border:1px solid var(--line); padding:26px; }
+  h2{ font-family:'Fraunces', serif; font-weight:600; font-size:19px; margin-bottom:18px; }
+  label{ display:block; font-family:'IBM Plex Mono', monospace; font-size:10.5px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--slate-light); margin-bottom:6px; }
+  .field{ margin-bottom:16px; }
+  input, textarea{
+    width:100%; background:var(--navy-soft); border:1px solid var(--line); color:var(--ink);
+    padding:12px 13px; font-family:'Inter', sans-serif; font-size:14px; border-radius:2px;
+  }
+  input:focus, textarea:focus{ outline:none; border-color:var(--gold); }
+  textarea{ min-height:120px; resize:vertical; }
+  .submit-btn{
+    display:inline-flex; align-items:center; gap:8px; background:var(--crimson); color:#fff; border:none; cursor:pointer;
+    padding:13px 22px; font-family:'IBM Plex Mono', monospace; font-size:11.5px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; width:100%; justify-content:center;
+  }
+  .submit-btn:hover{ background:var(--crimson-dark); }
+  .submit-btn:disabled{ opacity:0.6; cursor:default; }
+  .toast{ margin-top:14px; font-size:13px; padding:10px 12px; display:none; border-left:3px solid var(--gold); background:var(--navy-soft); }
+  .toast.show{ display:block; }
+  .toast.ok{ border-color:#4C9A6A; }
+  .toast.err{ border-color:var(--crimson); }
+  .info-item{ display:flex; gap:14px; align-items:flex-start; margin-bottom:22px; }
+  .info-item:last-child{ margin-bottom:0; }
+  .info-icon{ width:38px; height:38px; flex-shrink:0; border:1px solid var(--line); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--gold); }
+  .info-icon svg{ width:16px; height:16px; }
+  .info-item h3{ font-family:'Fraunces', serif; font-weight:600; font-size:15px; margin-bottom:3px; }
+  .info-item p, .info-item a{ font-size:14px; color:var(--slate); line-height:1.6; }
+  .info-item a{ color:var(--ink); text-decoration:none; }
+  .info-item a:hover{ color:var(--gold); }
+  footer{ background:var(--navy); color:var(--slate-light); padding:30px 6vw; display:flex; justify-content:space-between; align-items:center; font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:0.04em; flex-wrap:wrap; gap:10px; }
+  footer a{ color:var(--slate-light); text-decoration:none; }
+  footer a:hover{ color:#fff; }
+  .footer-legal{ display:flex; gap:18px; }
+  @media (max-width:820px){ .contact-grid{ grid-template-columns:1fr; } }
+  @media (max-width:640px){ main{ padding:34px 5vw 70px; } h1{ font-size:27px; } }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <a href="/" class="brand" aria-label="GAKORO MEDIA TV — Home">
+    <div class="brand-mark">G</div>
+    <div class="brand-name">GAKORO MEDIA TV</div>
+  </a>
+  <a href="/" class="back-link">&larr; Back to site</a>
+</header>
+
+<main>
+  <div class="eyebrow">Get in touch</div>
+  <h1>Contact Us</h1>
+  <p class="lede">Have a story tip, a correction, a booking question for Sangwa Studio, or an advertising inquiry? Send us a message below, or reach us directly.</p>
+
+  <div class="contact-grid">
+    <div class="card">
+      <h2>Send a message</h2>
+      <form id="contactForm">
+        <div class="field">
+          <label for="fullName">Full name</label>
+          <input type="text" id="fullName" name="fullName" required>
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <div class="field">
+          <label for="subject">Subject</label>
+          <input type="text" id="subject" name="subject" placeholder="What's this about?">
+        </div>
+        <div class="field">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" required></textarea>
+        </div>
+        <button type="submit" class="submit-btn" id="submitBtn">Send Message</button>
+        <div class="toast" id="formToast"></div>
+      </form>
+    </div>
+
+    <div>
+      <div class="info-item">
+        <div class="info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z" opacity="0"/><path d="M22 6 12 13 2 6"/><path d="M2 6h20v12H2z"/></svg></div>
+        <div>
+          <h3>Email</h3>
+          <a href="mailto:hello@gakoromedia.rw">hello@gakoromedia.rw</a>
+        </div>
+      </div>
+      <div class="info-item">
+        <div class="info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .3 2 .7 2.9a2 2 0 0 1-.4 2.1L8 10a16 16 0 0 0 6 6l1.3-1.4a2 2 0 0 1 2.1-.4c.9.4 1.9.6 2.9.7a2 2 0 0 1 1.7 2Z"/></svg></div>
+        <div>
+          <h3>Phone / Telegram</h3>
+          <a href="tel:+250787692411">+250 787 692 411</a>
+        </div>
+      </div>
+      <div class="info-item">
+        <div class="info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 12-9 12S3 17 3 10a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div>
+          <h3>Based in</h3>
+          <p>Musanze, Rwanda</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div>&copy; <span id="yearNow"></span> Sangwa Studio / Gakoro Media TV</div>
+  <div class="footer-legal">
+    <a href="/">Home</a>
+    <a href="/privacy/">Privacy</a>
+    <a href="/terms/">Terms</a>
+  </div>
+</footer>
+
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script defer src="/js/config.js"></script>
+<script>
+  document.getElementById('yearNow').textContent = new Date().getFullYear();
+
+  // Pre-fill the subject line if the page was opened with ?subject=...
+  // (used by the Advertise page's "Talk to us" button).
+  (function(){
+    var params = new URLSearchParams(window.location.search);
+    var s = params.get('subject');
+    if (s) document.getElementById('subject').value = s;
+  })();
+
+  window.addEventListener('DOMContentLoaded', function(){
+    var form = document.getElementById('contactForm');
+    var toast = document.getElementById('formToast');
+    var btn = document.getElementById('submitBtn');
+
+    function showToast(msg, ok){
+      toast.textContent = msg;
+      toast.className = 'toast show ' + (ok ? 'ok' : 'err');
+    }
+
+    form.addEventListener('submit', async function(e){
+      e.preventDefault();
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+
+      var fd = new FormData(form);
+      var data = Object.fromEntries(fd.entries());
+
+      function fallbackToEmail(reason){
+        showToast(reason, false);
+        window.location.href = 'mailto:hello@gakoromedia.rw?subject=' +
+          encodeURIComponent(data.subject || 'Website message') + '&body=' +
+          encodeURIComponent(data.message + '\n\n— ' + data.fullName + ' (' + data.email + ')');
+      }
+
+      if (window.sbClient){
+        try{
+          var res = await window.sbClient.from('messages').insert([{
+            full_name: data.fullName,
+            email: data.email || null,
+            subject: data.subject || null,
+            message: data.message
+          }]);
+          if (res.error){
+            console.error(res.error);
+            fallbackToEmail("Couldn't save your message — opening your email app instead.");
+          } else {
+            showToast("Message sent. We'll get back to you soon.", true);
+            form.reset();
+          }
+        } catch(err){
+          console.error(err);
+          fallbackToEmail("Couldn't reach the server — opening your email app instead.");
+        }
+      } else {
+        fallbackToEmail('Opening your email app to send this message…');
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Send Message';
+    });
+  });
+</script>
+<script defer src="/js/consent.js"></script>
+</body>
+</html>
