@@ -1,0 +1,106 @@
+/* =====================================================
+   GAKORO MEDIA TV — breaking news ticker.
+
+   Populates the ticker from real published articles marked
+   breaking=true, each one linking to article/?slug=... so a
+   click opens the full report (photo + report box), right
+   here on the site.
+
+   The ticker bar (#tickerBar) starts hidden in the markup and
+   only becomes visible once real breaking headlines load — no
+   fake/aggregated placeholder headlines are ever shown, so the
+   site never displays syndicated-looking content it doesn't
+   actually have yet.
+===================================================== */
+(function () {
+  const bar = document.getElementById("tickerBar");
+  const track = document.querySelector(".ticker-track");
+  if (!track) return;
+
+  /* ---------- SPEED ----------
+     Fixed-duration scrolling means more headlines = less time per
+     headline, but the ticker never speeds up to compensate, so late
+     items get scrolled past before anyone reads them.
+
+     Instead we give each headline ~3.5s of "reading time", but cap
+     the total loop at 35s so a big batch of breaking news speeds up
+     rather than dragging the whole loop out. A floor of 18s keeps a
+     short list (2-3 headlines) from flying by unreadably fast.
+
+     Note: the DOM holds two copies of the list back-to-back (for the
+     seamless -50% loop), so we divide the count in half first.       */
+  function applyTickerSpeed() {
+    const items = track.querySelectorAll(":scope > span, :scope > a").length;
+    const headlineCount = Math.max(1, Math.round(items / 2));
+
+    const SECONDS_PER_HEADLINE = 2.5;
+    const MIN_DURATION = 14;
+    const MAX_DURATION = 25;
+
+    const duration = Math.min(
+      MAX_DURATION,
+      Math.max(MIN_DURATION, headlineCount * SECONDS_PER_HEADLINE)
+    );
+
+    track.style.setProperty("--ticker-duration", `${duration}s`);
+  }
+
+  // Set speed for whatever is in the markup right now (static
+  // placeholder headlines), then again below once/if real data
+  // replaces them.
+  applyTickerSpeed();
+
+  const SUPABASE_URL = window.SUPABASE_URL;
+  const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY;
+
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY || !window.supabase) return;
+
+  function escapeHtml(str) {
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function buildSpan(article, hidden) {
+    const a = document.createElement("a");
+    a.href = `/article/?slug=${encodeURIComponent(article.slug)}`;
+    a.style.color = "inherit";
+    a.style.textDecoration = "none";
+    if (hidden) a.setAttribute("aria-hidden", "true");
+    const tag = (article.category || "GAKORO").toUpperCase();
+    a.innerHTML = `${escapeHtml(tag)}: ${escapeHtml(article.headline)}`;
+    return a;
+  }
+
+  async function init() {
+    try {
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      const { data, error } = await client
+        .from("news_articles")
+        .select("headline, slug, category")
+        .eq("status", "published")
+        .eq("breaking", true)
+        .neq("visibility", "unlisted")
+        .lte("published_at", new Date().toISOString())
+        .order("published_at", { ascending: false })
+        .limit(12);
+
+      if (error) throw error;
+      if (!data || data.length === 0) return; // no real breaking headlines yet — keep ticker hidden
+
+      track.innerHTML = "";
+      // Render the list twice back to back so the -50% scroll
+      // animation loops seamlessly, same as the original markup.
+      // The second copy is aria-hidden so screen readers don't
+      // announce every headline twice.
+      data.forEach((article) => track.appendChild(buildSpan(article, false)));
+      data.forEach((article) => track.appendChild(buildSpan(article, true)));
+      applyTickerSpeed();
+      if (bar) bar.style.display = "";
+    } catch (err) {
+      console.warn("Gakoro Media TV: could not load breaking headlines, keeping ticker hidden.", err);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", init);
+})();
