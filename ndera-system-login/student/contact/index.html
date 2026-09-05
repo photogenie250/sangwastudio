@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="rw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gusaba uruhushya — NDERA SYSTEM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="../assets/img/ndera-icon.svg">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/parent.css">
+</head>
+<body>
+
+<div class="page">
+
+  <!-- Branding panel -->
+  <section class="panel-brand" aria-hidden="true">
+    <div class="ledger">
+      <p class="ledger__caption">Amanota yo gutangira</p>
+      <div class="ledger__scale">
+        <div class="ledger__tick ledger__tick--peak">
+          <span class="ledger__value">40</span>
+        </div>
+        <div class="ledger__tick"><span class="ledger__value">36</span></div>
+        <div class="ledger__tick"><span class="ledger__value">32</span></div>
+        <div class="ledger__tick"><span class="ledger__value">28</span></div>
+        <div class="ledger__tick"><span class="ledger__value">24</span></div>
+        <div class="ledger__tick"><span class="ledger__value">20</span></div>
+        <div class="ledger__tick"><span class="ledger__value">16</span></div>
+        <div class="ledger__tick"><span class="ledger__value">12</span></div>
+        <div class="ledger__tick"><span class="ledger__value">8</span></div>
+        <div class="ledger__tick"><span class="ledger__value">4</span></div>
+        <div class="ledger__tick"><span class="ledger__value">0</span></div>
+      </div>
+    </div>
+
+    <div class="brand-copy">
+      <img src="../assets/img/ndera-logo.svg" alt="NDERA SYSTEM" class="brand-copy__logo">
+      <h1 class="brand-copy__title">GS GAKORO</h1>
+      <p class="brand-copy__tagline">Buri manota arakurikiranwa, kuva kuyanditswe bwa mbere kugeza ku ya nyuma.</p>
+    </div>
+  </section>
+
+  <!-- Request panel -->
+  <section class="panel-form">
+    <div class="form-card">
+
+      <div class="form-card__header">
+        <h2 class="form-card__title">Gusaba uruhushya</h2>
+      </div>
+
+      <form id="permission-form" class="login-form" novalidate>
+
+        <div class="field">
+          <label class="field__label" for="req-name">Amazina y'umubyeyi</label>
+          <input class="field__input" type="text" id="req-name" name="requester_name" required>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="req-phone">Nomero ya telephone (umubyeyi)</label>
+          <input class="field__input" type="tel" id="req-phone" name="requester_phone" required>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="req-student">Amazina y'umunyeshuri</label>
+          <input class="field__input" type="text" id="req-student" name="student_name" required>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="req-class">Ishuri/level</label>
+          <input class="field__input" type="text" id="req-class" name="student_class">
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="req-reason">Impamvu</label>
+          <textarea class="field__input" id="req-reason" name="reason" rows="3" required></textarea>
+        </div>
+
+        <div id="permission-form-error" class="form-error" role="alert" hidden></div>
+        <div id="permission-form-success" class="form-success" role="status" hidden></div>
+
+        <button class="submit-btn" type="submit" id="permission-submit-btn">
+          <span class="submit-btn__label">Ohereza</span>
+        </button>
+
+      </form>
+
+      <a class="telegram-link" href="../dashboard/">&larr; Subira ku ipaji y'umunyeshuri</a>
+    </div>
+
+    <p class="footer-note">Kwinjira kwemerewe gusa ku bakozi bemejwe na GS GAKORO.</p>
+
+<p class="footer-credit">
+    Sisitemu yakozwe na <strong>DOD MAKUZA</strong>.
+</p>
+  </section>
+
+</div>
+
+<script src="../js/vendor/supabase-js-2.112.3.min.js" defer></script>
+<script type="module" src="../js/contact.js"></script>
+</body>
+</html>
