@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Static pages sitemap. Individual news articles are listed
+  separately in sitemap-articles.xml (generated dynamically from
+  Supabase, see that file and supabase/functions/sitemap-articles)
+  because they change too often to maintain by hand here.
+
+  Both this file and sitemap-articles.xml are referenced from the
+  sitemap index at the domain root, sitemap.xml — that's the URL
+  submitted to Google Search Console / listed in robots.txt, not
+  this one directly.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://gakoromedia.rw/</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://gakoromedia.rw/studio/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gakoromedia.rw/about/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gakoromedia.rw/contact/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gakoromedia.rw/advertise/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://gakoromedia.rw/privacy/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://gakoromedia.rw/terms/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+</urlset>
