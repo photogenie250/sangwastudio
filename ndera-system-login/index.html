@@ -185,6 +185,91 @@
   /* ===== Login card link styling ===== */
   .login-card{ text-decoration:none; display:block; }
   .nav-links a.active{color:var(--flame, #ff6a3d);}
+
+  /* ===== Android app download button (hero) ===== */
+  .apk-download-btn{
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    gap:12px;
+    text-decoration:none;
+    padding:14px 26px;
+    border-radius:999px;
+    margin-bottom:26px;
+    font-family:var(--kid-font);
+    font-weight:800;
+    font-size:1rem;
+    color:#0b1846;
+    background:linear-gradient(90deg,var(--ndera-yellow),var(--ndera-green) 35%,var(--ndera-sky) 68%,var(--ndera-pink));
+    background-size:300% 100%;
+    animation:apk-gradient-shift 6s ease infinite;
+    box-shadow:0 10px 26px rgba(255,111,145,.28), 0 4px 14px rgba(56,182,255,.22);
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .apk-download-btn:hover{
+    transform:translateY(-4px) scale(1.03);
+    box-shadow:0 16px 34px rgba(255,111,145,.35), 0 6px 18px rgba(56,182,255,.3);
+  }
+  .apk-download-btn svg{width:22px; height:22px; stroke:#0b1846; flex-shrink:0;}
+  .apk-download-btn .apk-btn-text{display:flex; flex-direction:column; align-items:flex-start; line-height:1.15;}
+  .apk-download-btn .apk-btn-sub{
+    font-family:"Space Mono", monospace;
+    font-weight:400;
+    font-size:.66rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    opacity:.75;
+  }
+  @keyframes apk-gradient-shift{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+  }
+  @media (max-width:640px){
+    .apk-download-btn{
+      width:100%;
+      max-width:340px;
+      padding:14px 18px;
+      gap:10px;
+      justify-content:center;
+      text-align:left;
+    }
+    .apk-download-btn .apk-btn-text{
+      font-size:.86rem;
+      line-height:1.25;
+    }
+    .apk-download-btn .apk-btn-sub{font-size:.6rem;}
+    .apk-download-btn svg{width:20px; height:20px;}
+  }
+  @media (max-width:380px){
+    .apk-download-btn{padding:12px 14px;}
+    .apk-download-btn .apk-btn-text{font-size:.78rem;}
+  }
+
+  /* ===== Parent/Student app "coming soon" pill (nav) ===== */
+  .coming-soon-pill{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-family:"Space Mono", monospace;
+    font-size:.68rem;
+    font-weight:700;
+    letter-spacing:.03em;
+    color:#0b1846;
+    background:linear-gradient(90deg,var(--ndera-sky),var(--ndera-purple));
+    padding:5px 12px;
+    border-radius:999px;
+    margin-left:10px;
+    white-space:nowrap;
+    box-shadow:0 4px 10px rgba(140,107,255,.28);
+  }
+  .coming-soon-pill::before{content:"✨";}
+  .mobile-drawer .coming-soon-pill{
+    margin:6px 0 0;
+    align-self:flex-start;
+    font-size:.72rem;
+    padding:6px 14px;
+  }
 </style>
 </head>
 <body>
@@ -219,6 +304,7 @@
         <a href="../#testimonials">Reviews</a>
         <a href="./" class="active">Education</a>
         <a href="../#contact">Contact</a>
+        <span class="coming-soon-pill">Parent/Student App coming soon</span>
       </div>
       <div class="nav-cta">
         <a href="../#contact" class="btn btn-outline btn-small">Book Now</a>
@@ -235,6 +321,7 @@
   <a href="../#testimonials">Reviews</a>
   <a href="./">Education</a>
   <a href="../#contact">Contact</a>
+  <span class="coming-soon-pill">Parent/Student App coming soon</span>
   <a href="../#contact" class="btn btn-solid">Book Now</a>
 </div>
 
@@ -250,6 +337,15 @@
 
   <div class="edu-hero-inner reveal">
     <span class="edu-badge">Ndera System</span>
+
+    <a class="apk-download-btn" href="https://svairnqnnvxcwjasuziz.supabase.co/storage/v1/object/public/Ndera%20System.apk/Ndera%20System.apk" id="staffApkDownload" download>
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
+      <span class="apk-btn-text">
+        Download Ndera System Android App for Staff
+        <span class="apk-btn-sub">APK · Direct Download</span>
+      </span>
+    </a>
+
     <h1>Welcome to the <span class="hl-sky">Ndera</span> <span class="hl-pink">System</span></h1>
     <p>Reba uko uhagaze muri Discipline </p>
 
