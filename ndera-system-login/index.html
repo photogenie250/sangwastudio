@@ -185,6 +185,73 @@
   /* ===== Login card link styling ===== */
   .login-card{ text-decoration:none; display:block; }
   .nav-links a.active{color:var(--flame, #ff6a3d);}
+
+  /* ===== App download buttons ===== */
+  .app-downloads{
+    margin:40px auto 0;
+    max-width:640px;
+  }
+  .app-downloads .dl-label{
+    display:block;
+    font-family:"Space Mono", monospace;
+    font-size:.74rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--paper-dim,#a9a6a1);
+    margin-bottom:16px;
+  }
+  .dl-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:16px;
+    justify-content:center;
+  }
+  .dl-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:12px;
+    text-decoration:none;
+    background:var(--ink-3,#1d1a17);
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:16px;
+    padding:12px 20px;
+    transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+  }
+  .dl-btn:hover{
+    transform:translateY(-3px);
+    box-shadow:0 14px 28px rgba(0,0,0,.3);
+  }
+  .dl-btn.dl-parents{border-color:rgba(57,217,138,.35);}
+  .dl-btn.dl-parents:hover{border-color:var(--ndera-green);}
+  .dl-btn.dl-staff{border-color:rgba(255,111,145,.35);}
+  .dl-btn.dl-staff:hover{border-color:var(--ndera-pink);}
+  .dl-btn .dl-icon{
+    width:36px; height:36px;
+    border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .dl-btn.dl-parents .dl-icon{background:rgba(57,217,138,.14);}
+  .dl-btn.dl-staff .dl-icon{background:rgba(255,111,145,.14);}
+  .dl-btn .dl-icon svg{width:20px; height:20px;}
+  .dl-btn.dl-parents .dl-icon svg{stroke:var(--ndera-green);}
+  .dl-btn.dl-staff .dl-icon svg{stroke:var(--ndera-pink);}
+  .dl-btn .dl-text{text-align:left;}
+  .dl-btn .dl-text small{
+    display:block;
+    font-family:"Space Mono", monospace;
+    font-size:.68rem;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--paper-dim,#a9a6a1);
+  }
+  .dl-btn .dl-text strong{
+    display:block;
+    font-family:var(--kid-font);
+    font-weight:700;
+    font-size:.98rem;
+    color:#fff;
+  }
 </style>
 </head>
 <body>
@@ -271,6 +338,31 @@
         <p>Manage classes, students and Discipline Reports.</p>
         <span class="btn-mini">Staff Login</span>
       </a>
+    </div>
+
+    <div class="app-downloads">
+      <span class="dl-label">Or get the app</span>
+      <div class="dl-row">
+        <a class="dl-btn dl-parents" href="https://svairnqnnvxcwjasuziz.supabase.co/storage/v1/object/public/Ndera%20System.apk/NDERA%20SYSTEM%20Parent/NDERA%20SYSTEM%20Parent-1.apk" download>
+          <span class="dl-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
+          </span>
+          <span class="dl-text">
+            <small>Android APK</small>
+            <strong>Ndera System — Parents</strong>
+          </span>
+        </a>
+
+        <a class="dl-btn dl-staff" href="https://svairnqnnvxcwjasuziz.supabase.co/storage/v1/object/public/Ndera%20System.apk/NDERA%20SYSTEM.apk" download>
+          <span class="dl-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
+          </span>
+          <span class="dl-text">
+            <small>Android APK</small>
+            <strong>Ndera System — Staff</strong>
+          </span>
+        </a>
+      </div>
     </div>
   </div>
 </main>
