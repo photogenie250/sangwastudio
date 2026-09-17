@@ -1,0 +1,352 @@
+/* ============================================================
+   SDMS Login — Design Tokens
+   ============================================================ */
+:root {
+  --ink-navy: #14336B;
+  --ink-navy-deep: #0A1F4D;
+  --paper: #F4F7FC;
+  --paper-raised: #FFFFFF;
+  --brass: #E2711D;
+  --brass-light: #F5A15C;
+  --clay: #C1392B;
+  --charcoal: #1F2430;
+  --charcoal-soft: #5B6272;
+  --line: #E1E7F2;
+  --line-on-navy: rgba(255, 255, 255, 0.16);
+
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+
+  --radius: 10px;
+  --transition: 180ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --transition: 0ms; }
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--charcoal);
+  background: var(--paper);
+}
+
+/* ============================================================
+   Layout
+   ============================================================ */
+.page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+@media (max-width: 900px) {
+  .page {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================================
+   Branding panel
+   ============================================================ */
+.panel-brand {
+  background: linear-gradient(160deg, var(--ink-navy) 0%, var(--ink-navy-deep) 100%);
+  color: var(--paper);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 56px;
+  padding: 72px 64px;
+  position: relative;
+  overflow: hidden;
+}
+
+@media (max-width: 900px) {
+  .panel-brand {
+    padding: 40px 32px 32px;
+    gap: 28px;
+  }
+}
+
+.brand-copy__logo {
+  width: 220px;
+  height: auto;
+  display: block;
+  margin: 0 0 24px;
+}
+
+@media (max-width: 900px) {
+  .brand-copy__logo {
+    width: 168px;
+    margin: 0 0 16px;
+  }
+}
+
+.brand-copy__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(28px, 3.4vw, 40px);
+  line-height: 1.15;
+  margin: 0 0 18px;
+}
+
+.brand-copy__tagline {
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.68);
+  max-width: 34ch;
+  margin: 0;
+}
+
+/* Ledger — signature element */
+.ledger {
+  max-width: 220px;
+}
+
+.ledger__caption {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0 12px;
+}
+
+.ledger__scale {
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--line-on-navy);
+  padding-left: 16px;
+}
+
+.ledger__tick {
+  display: flex;
+  align-items: center;
+  height: 22px;
+  position: relative;
+}
+
+.ledger__tick::before {
+  content: "";
+  position: absolute;
+  left: -17px;
+  width: 10px;
+  height: 1px;
+  background: var(--line-on-navy);
+}
+
+.ledger__value {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.ledger__tick--peak {
+  height: 34px;
+}
+
+.ledger__tick--peak::before {
+  width: 16px;
+  height: 2px;
+  background: var(--brass);
+}
+
+.ledger__tick--peak .ledger__value {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--brass-light);
+}
+
+@media (max-width: 900px) {
+  .ledger { display: none; }
+}
+
+/* ============================================================
+   Form panel
+   ============================================================ */
+.panel-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 32px;
+  gap: 24px;
+}
+
+.form-card {
+  width: 100%;
+  max-width: 380px;
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 40px 36px;
+}
+
+@media (max-width: 480px) {
+  .form-card { padding: 32px 24px; }
+}
+
+.form-card__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 26px;
+  margin: 0 0 6px;
+  color: var(--ink-navy);
+}
+
+.form-card__subtitle {
+  font-size: 14px;
+  color: var(--charcoal-soft);
+  margin: 0 0 32px;
+}
+
+/* ============================================================
+   Form fields
+   ============================================================ */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.login-form[hidden] {
+  display: none;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* .field sets its own `display`, which (being an author-stylesheet
+   rule of equal specificity to the browser's `[hidden] { display:
+   none }` UA rule) was silently winning the cascade and keeping
+   hidden .field elements visible — e.g. #student-status-field in
+   students/index.html and the audience-specific fields in
+   announcements/index.html both rely on toggling `hidden` via JS.
+   This restores the expected behavior for any .field element. */
+.field[hidden] {
+  display: none;
+}
+
+.field__label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--charcoal);
+}
+
+.field__input {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--charcoal);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px 14px;
+  width: 100%;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.field__input:focus-visible {
+  outline: none;
+  border-color: var(--brass);
+  box-shadow: 0 0 0 3px rgba(226, 113, 29, 0.22);
+}
+
+.field__input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.field__input-wrap .field__input {
+  padding-right: 64px;
+}
+
+.field__toggle {
+  position: absolute;
+  right: 6px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--charcoal-soft);
+  background: transparent;
+  border: none;
+  padding: 8px 10px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: color var(--transition), background var(--transition);
+}
+
+.field__toggle:hover {
+  color: var(--ink-navy);
+  background: var(--line);
+}
+
+.field__toggle:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 1px;
+}
+
+/* ============================================================
+   Submit + states
+   ============================================================ */
+.submit-btn {
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--paper);
+  background: var(--ink-navy);
+  border: none;
+  border-radius: 8px;
+  padding: 13px 20px;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: background var(--transition), opacity var(--transition);
+}
+
+.submit-btn:hover { background: var(--ink-navy-deep); }
+
+.submit-btn:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 2px;
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form-error {
+  font-size: 13px;
+  color: var(--clay);
+  background: rgba(193, 57, 43, 0.08);
+  border: 1px solid rgba(193, 57, 43, 0.2);
+  border-radius: 8px;
+  padding: 11px 13px;
+  line-height: 1.5;
+}
+
+.help-text {
+  font-size: 13px;
+  color: var(--charcoal-soft);
+  text-align: center;
+  margin: 4px 0 0;
+}
+
+.footer-note {
+  font-size: 12px;
+  color: var(--charcoal-soft);
+  text-align: center;
+  margin: 0;
+}
