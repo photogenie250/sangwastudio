@@ -1,0 +1,68 @@
+/* ============================================================
+   Evaluation page — mark sheets by class
+   ============================================================ */
+
+.eval-empty {
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--charcoal-soft);
+  font-size: 14px;
+}
+
+.eval-summary { margin-bottom: 20px; }
+
+.eval-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.eval-panel-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.eval-marks-input {
+  width: 80px;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 14px;
+  padding: 7px 9px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--paper);
+  color: var(--ink-navy);
+}
+
+.eval-marks-input:focus {
+  outline: none;
+  border-color: var(--brass);
+  box-shadow: 0 0 0 2px rgba(226, 113, 29, 0.15);
+}
+
+.eval-marks-input--low {
+  border-color: rgba(226, 113, 29, 0.5);
+  color: var(--brass);
+}
+
+.eval-marks-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.eval-row--dirty {
+  background: rgba(226, 113, 29, 0.05);
+}
+
+.eval-row--dirty td:first-child {
+  position: relative;
+}
+
+.eval-row-index {
+  font-family: var(--font-mono);
+  color: var(--charcoal-soft);
+  font-size: 12px;
+}
