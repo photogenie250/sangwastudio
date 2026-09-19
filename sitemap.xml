@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Sitemap INDEX — this is the file to submit in Google Search
+  Console and the one linked from robots.txt. It just points to
+  the two real sitemaps:
+
+    1. sitemap-pages.xml   — static pages, kept by hand (this repo).
+    2. sitemap-articles.xml — every published news article, built
+       fresh on each request by a Supabase Edge Function (queries
+       news_articles where status='published') and served at this
+       path via the Cloudflare Worker at
+       cloudflare-worker/sitemap-proxy.js. See that file and
+       supabase/functions/sitemap-articles for setup.
+
+  Previously this repo only shipped sitemap-pages.xml's content
+  under the name sitemap.xml, and article URLs were never listed
+  anywhere — Google had no way to discover them except by crawling
+  links from the homepage, which itself only appear after
+  client-side JS runs. That's the main reason articles weren't
+  showing up in search.
+-->
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>https://gakoromedia.rw/sitemap-pages.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>https://gakoromedia.rw/sitemap-articles.xml</loc>
+  </sitemap>
+</sitemapindex>
