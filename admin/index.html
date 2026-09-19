@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gakoro Media TV — News Desk Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<script>
+  (function(){
+    try{
+      var t = localStorage.getItem('gm_admin_theme');
+      document.documentElement.setAttribute('data-theme', t === 'dark' ? 'dark' : 'light');
+    }catch(e){
+      document.documentElement.setAttribute('data-theme','light');
+    }
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,900&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy: #0E1C2B;
+    --navy-soft: #16283C;
+    --crimson: #D3242C;
+    --crimson-dark: #9C1A20;
+    --paper: #0B1524;
+    --card: #122238;
+    --card-soft: #0F1E30;
+    --ink: #F2F0E9;
+    --slate: #A9B4C4;
+    --slate-light: #8B93A3;
+    --gold: #C69A4E;
+    --line: #23364F;
+    --ok: #3E9C6E;
+    --warn: #C69A4E;
+  }
+  html[data-theme="light"]{
+    --navy: #0E1C2B;
+    --navy-soft: #EDEEF1;
+    --paper: #F7F7F8;
+    --card: #ffffff;
+    --card-soft: #F0F1F3;
+    --ink: #12202F;
+    --slate: #55606C;
+    --slate-light: #78828F;
+    --line: #DCDFE3;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{ background: var(--paper); }
+  body{
+    background: var(--paper);
+    color: var(--ink);
+    font-family:'Inter', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    transition: background .2s ease, color .2s ease;
+  }
+  a{ color:inherit; }
+  input, textarea, select, button{ font-family:inherit; }
+
+  header.masthead{
+    background: var(--navy);
+    padding: 14px 5vw;
+    display:flex; align-items:center; justify-content:space-between;
+    border-bottom:1px solid rgba(255,255,255,0.12);
+    position:sticky; top:0; z-index:20;
+  }
+  .brand{ display:flex; align-items:center; gap:12px; }
+  .brand-mark{
+    width:32px; height:32px;
+    background: var(--crimson);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Fraunces', serif; font-weight:900; font-size:16px; color:#fff;
+  }
+  .brand-name{ font-family:'Fraunces', serif; font-weight:900; font-size:18px; color:#fff; }
+  .brand-sub{ font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.1em; color: var(--slate-light); text-transform:uppercase; }
+  .head-actions{ display:flex; align-items:center; gap:16px; }
+  #notifBell{
+    position:relative; background:none; border:1px solid var(--line); color: var(--slate-light);
+    width:34px; height:34px; display:none; align-items:center; justify-content:center; cursor:pointer;
+  }
+  #notifBell:hover{ color: var(--ink); border-color: var(--slate-light); }
+  #notifBell svg{ width:16px; height:16px; }
+  #notifBadge{
+    position:absolute; top:-6px; right:-6px; min-width:16px; height:16px; padding:0 4px;
+    background: var(--crimson); color:#fff; border-radius:8px; font-size:9.5px; font-weight:700;
+    display:none; align-items:center; justify-content:center; font-family:'IBM Plex Mono', monospace;
+  }
+  #logoutBtn{
+    background:none; border:1px solid var(--line); color: var(--slate-light);
+    padding:7px 14px; font-family:'IBM Plex Mono', monospace; font-size:11px;
+    letter-spacing:.06em; text-transform:uppercase; cursor:pointer; display:none;
+  }
+  #logoutBtn:hover{ color: var(--ink); border-color: var(--slate-light); }
+  #themeToggle{
+    position:relative; background:none; border:1px solid var(--line); color: var(--slate-light);
+    width:34px; height:34px; display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+  #themeToggle:hover{ color: var(--ink); border-color: var(--slate-light); }
+  #themeToggle svg{ width:16px; height:16px; }
+  #themeToggle .icon-moon{ display:block; }
+  #themeToggle .icon-sun{ display:none; }
+  html[data-theme="light"] #themeToggle .icon-moon{ display:none; }
+  html[data-theme="light"] #themeToggle .icon-sun{ display:block; }
+
+  main{ max-width:1180px; margin:0 auto; padding: 0 5vw; }
+  #loginWrap, #resetWrap{ max-width:920px; margin:0 auto; padding: 40px 5vw 90px; }
+
+  /* ---------- LOGIN ---------- */
+  #loginPanel, #resetPanel{
+    max-width:380px; margin: 60px auto 0;
+    background: var(--card); border:1px solid var(--line); padding:32px;
+  }
+  #loginPanel h1, #resetPanel h1{ font-family:'Fraunces', serif; font-size:22px; font-weight:600; margin-bottom:6px; }
+  #loginPanel p.sub, #resetPanel p.sub{ color: var(--slate-light); font-size:13px; margin-bottom:24px; }
+  .field{ margin-bottom:16px; }
+  .field label{
+    display:block; font-family:'IBM Plex Mono', monospace; font-size:10.5px;
+    letter-spacing:.08em; text-transform:uppercase; color: var(--slate-light); margin-bottom:6px;
+  }
+  .field input, .field textarea, .field select{
+    width:100%; background: var(--navy-soft); border:1px solid var(--line); color: var(--ink);
+    padding:10px 12px; font-size:14px;
+  }
+  .field input:focus, .field textarea:focus, .field select:focus{ outline:2px solid var(--crimson); outline-offset:1px; }
+  .field textarea{ resize:vertical; min-height:80px; line-height:1.5; }
+  .field-hint{ font-size:11.5px; color: var(--slate-light); margin-top:5px; }
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:6px;
+    background: var(--crimson); color:#fff; border:none;
+    padding:11px 20px; font-family:'IBM Plex Mono', monospace; font-size:12px;
+    font-weight:600; letter-spacing:.06em; text-transform:uppercase; cursor:pointer;
+  }
+  .btn:hover{ background: var(--crimson-dark); }
+  .btn.secondary{ background: transparent; border:1px solid var(--line); color: var(--slate-light); }
+  .btn.secondary:hover{ color: var(--ink); border-color: var(--slate-light); }
+  .btn.small{ padding:7px 12px; font-size:10.5px; }
+  .btn:disabled{ opacity:.5; cursor:not-allowed; }
+  .form-msg{ font-size:12.5px; margin-top:12px; display:none; }
+  .form-msg.show{ display:block; }
+  .form-msg.ok{ color: var(--ok); }
+  .form-msg.err{ color: var(--crimson); }
+
+  /* ---------- IDLE / AUTO-LOGOUT WARNING ---------- */
+  #idleWarnOverlay{
+    display:none; position:fixed; inset:0; z-index:200;
+    background: rgba(11,21,36,0.72); backdrop-filter: blur(2px);
+    align-items:center; justify-content:center; padding:20px;
+  }
+  #idleWarnOverlay.show{ display:flex; }
+  #idleWarnCard{
+    max-width:380px; width:100%; background: var(--card); border:1px solid var(--line);
+    padding:28px; text-align:center;
+  }
+  #idleWarnCard h2{
+    font-family:'Fraunces', serif; font-size:19px; font-weight:600; margin-bottom:10px; color: var(--ink);
+  }
+  #idleWarnCard p{ font-size:13.5px; color: var(--slate-light); line-height:1.5; margin-bottom:6px; }
+  #idleWarnCountdown{
+    font-family:'IBM Plex Mono', monospace; font-size:28px; font-weight:600; color: var(--warn);
+    margin: 14px 0 20px;
+  }
+  #idleWarnCard .idle-actions{ display:flex; gap:10px; justify-content:center; }
+
+  /* ---------- APP SHELL ---------- */
+  #appPanel{ display:none; }
+  .shell{ display:grid; grid-template-columns: 208px 1fr; gap:28px; align-items:start; padding:28px 0 90px; }
+
+  .sidenav{ position:sticky; top:70px; }
+  .sidenav-group{ margin-bottom:18px; }
+  .sidenav button.nav-item{
+    display:flex; align-items:center; gap:10px; width:100%; text-align:left;
+    background:none; border:none; color: var(--slate); cursor:pointer;
+    padding:9px 10px; font-size:13.5px; border-left:2px solid transparent;
+  }
+  .sidenav button.nav-item svg{ width:16px; height:16px; flex-shrink:0; opacity:.8; }
+  .sidenav button.nav-item:hover{ color: var(--ink); background: var(--card-soft); }
+  .sidenav button.nav-item.active{ color: var(--ink); border-left-color: var(--crimson); background: rgba(211,36,44,0.08); font-weight:600; }
+  .sidenav-foot{
+    margin-top:22px; padding-top:16px; border-top:1px solid var(--line);
+    font-size:11.5px; color: var(--slate-light); font-family:'IBM Plex Mono', monospace;
+  }
+  .sidenav-foot strong{ display:block; color: var(--ink); font-family:'Inter', sans-serif; font-size:13px; margin-bottom:2px; }
+
+  .tab-panel{ display:none; }
+  .tab-panel.active{ display:block; }
+
+  .panel{ background: var(--card); border:1px solid var(--line); padding:26px 28px; margin-bottom:24px; }
+  .panel h2{ font-family:'Fraunces', serif; font-size:19px; font-weight:600; margin-bottom:4px; }
+  .panel .panel-sub{ color: var(--slate-light); font-size:12.5px; margin-bottom:22px; }
+  .row{ display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+  .checkbox-row{ display:flex; align-items:center; gap:8px; margin-bottom:14px; }
+  .checkbox-row input{ width:16px; height:16px; }
+  .checkbox-row label{ font-size:13px; color: var(--slate); }
+
+  .composer-grid{ display:grid; grid-template-columns: 1fr 300px; gap:24px; align-items:start; }
+  .rail-panel{ background: var(--card); border:1px solid var(--line); padding:20px 20px; margin-bottom:20px; }
+  .rail-panel h3{ font-family:'Fraunces', serif; font-size:15.5px; font-weight:600; margin-bottom:14px; }
+  .rail-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:9px 0; border-bottom:1px solid var(--line); }
+  .rail-row:last-child{ border-bottom:none; }
+  .rail-row .rail-label{ display:flex; align-items:center; gap:8px; font-size:12.5px; color: var(--slate); }
+  .rail-row .rail-label svg{ width:14px; height:14px; opacity:.75; }
+  .rail-panel .field{ margin-bottom:12px; }
+  .rail-panel .field:last-child{ margin-bottom:0; }
+  .tips-list{ font-size:12.5px; color: var(--slate); line-height:1.6; padding-left:18px; }
+  .tips-list li{ margin-bottom:8px; }
+
+  #photoPreviewWrap{
+    margin-top:8px; aspect-ratio:16/9; max-width:320px;
+    background: var(--navy-soft); border:1px dashed var(--line);
+    display:flex; align-items:center; justify-content:center; overflow:hidden;
+  }
+  #photoPreviewWrap img{ width:100%; height:100%; object-fit:cover; display:none; }
+  #photoPreviewWrap .placeholder{ font-size:11.5px; color: var(--slate-light); font-family:'IBM Plex Mono', monospace; text-align:center; padding:0 12px; }
+
+  #galleryPreviewWrap{ margin-top:8px; display:flex; flex-wrap:wrap; gap:10px; }
+  #galleryPreviewWrap .placeholder{ font-size:11.5px; color: var(--slate-light); font-family:'IBM Plex Mono', monospace; }
+  .gallery-thumb{ position:relative; width:88px; height:88px; background: var(--navy-soft); border:1px dashed var(--line); overflow:hidden; flex-shrink:0; }
+  .gallery-thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .gallery-thumb button{
+    position:absolute; top:2px; right:2px; width:20px; height:20px; line-height:18px;
+    background: rgba(11,21,36,0.85); color:#fff; border:1px solid var(--line);
+    font-size:13px; cursor:pointer; padding:0; text-align:center;
+  }
+  .gallery-thumb button:hover{ border-color: var(--crimson); color: var(--crimson); }
+  .gallery-thumb.uploading{ display:flex; align-items:center; justify-content:center; }
+  .gallery-thumb.uploading::after{ content:"…"; font-family:'IBM Plex Mono', monospace; color: var(--slate-light); font-size:18px; }
+
+  .composer-actions{ display:flex; gap:12px; margin-top:22px; flex-wrap:wrap; }
+  #wordCount{ font-family:'IBM Plex Mono', monospace; font-size:10.5px; color: var(--slate-light); margin-top:6px; }
+
+  /* ---------- DASHBOARD ---------- */
+  .stat-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap:14px; margin-bottom:8px; }
+  .stat-card{ background: var(--card-soft); border:1px solid var(--line); padding:16px 18px; }
+  .stat-card .stat-num{ font-family:'Fraunces', serif; font-size:26px; font-weight:600; }
+  .stat-card .stat-label{ font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase; color: var(--slate-light); margin-top:4px; }
+  .stat-card.accent .stat-num{ color: var(--crimson); }
+  .stat-card.warn .stat-num{ color: var(--gold); }
+
+  /* ---------- ARTICLE LIST ---------- */
+  .list-toolbar{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:18px; }
+  .list-toolbar input[type="text"], .list-toolbar select{
+    background: var(--navy-soft); border:1px solid var(--line); color: var(--ink);
+    padding:9px 12px; font-size:13px;
+  }
+  .list-toolbar input[type="text"]{ flex:1; min-width:180px; }
+  .art-row{
+    display:grid; grid-template-columns: 64px 1fr auto; gap:14px; align-items:center;
+    padding:14px 0; border-bottom:1px solid var(--line);
+  }
+  .art-row:last-child{ border-bottom:none; }
+  .art-row-thumb{ width:64px; height:40px; object-fit:cover; background: var(--navy-soft); }
+  .art-row-title{ font-size:14px; font-weight:600; line-height:1.3; }
+  .art-row-meta{ font-family:'IBM Plex Mono', monospace; font-size:10.5px; color: var(--slate-light); margin-top:4px; }
+  .status-pill{
+    display:inline-block; padding:2px 7px; font-size:9.5px; letter-spacing:.06em; text-transform:uppercase;
+    font-family:'IBM Plex Mono', monospace; margin-right:6px;
+  }
+  .status-pill.published{ background: rgba(62,156,110,0.18); color: var(--ok); border:1px solid rgba(62,156,110,0.4); }
+  .status-pill.draft{ background: rgba(169,180,196,0.12); color: var(--slate-light); border:1px solid var(--line); }
+  .status-pill.scheduled{ background: rgba(198,154,78,0.16); color: var(--gold); border:1px solid rgba(198,154,78,0.4); }
+  .status-pill.breaking{ background: var(--crimson-dark); color:#fff; border:1px solid var(--crimson); }
+  .status-pill.unlisted{ background: rgba(169,180,196,0.12); color: var(--slate-light); border:1px solid var(--line); }
+  .status-pill.pending{ background: rgba(198,154,78,0.16); color: var(--gold); border:1px solid rgba(198,154,78,0.4); }
+  .status-pill.hidden{ background: rgba(211,36,44,0.14); color: var(--crimson); border:1px solid rgba(211,36,44,0.4); }
+  .status-pill.approved{ background: rgba(62,156,110,0.18); color: var(--ok); border:1px solid rgba(62,156,110,0.4); }
+  .art-row-actions{ display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+  .art-row-actions button{
+    background:none; border:1px solid var(--line); color: var(--slate-light);
+    padding:6px 10px; font-size:10.5px; font-family:'IBM Plex Mono', monospace; cursor:pointer;
+    text-transform:uppercase; letter-spacing:.04em;
+  }
+  .art-row-actions button:hover{ color: var(--ink); border-color: var(--slate-light); }
+  .art-row-actions button.danger:hover{ color:#fff; border-color: var(--crimson); background: var(--crimson-dark); }
+  #emptyList, .empty-note{ color: var(--slate-light); font-size:13px; padding:14px 0; }
+
+  /* ---------- CATEGORIES / TAGS ---------- */
+  .chip-list{ display:flex; flex-wrap:wrap; gap:10px; }
+  .chip{
+    display:flex; align-items:center; gap:8px; background: var(--navy-soft); border:1px solid var(--line);
+    padding:7px 8px 7px 14px; font-size:13px;
+  }
+  .chip .chip-count{ font-family:'IBM Plex Mono', monospace; font-size:10px; color: var(--slate-light); }
+  .chip button{ background:none; border:none; color: var(--slate-light); cursor:pointer; font-size:12px; padding:2px 4px; }
+  .chip button:hover{ color: var(--crimson); }
+  .inline-add{ display:flex; gap:10px; margin-top:18px; max-width:420px; }
+  .inline-add input{ flex:1; background: var(--navy-soft); border:1px solid var(--line); color: var(--ink); padding:9px 12px; font-size:13px; }
+
+  /* ---------- MEDIA LIBRARY ---------- */
+  .media-grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap:14px; }
+  .media-item{ background: var(--navy-soft); border:1px solid var(--line); overflow:hidden; }
+  .media-item img{ width:100%; height:100px; object-fit:cover; display:block; }
+  .media-item-actions{ display:flex; gap:6px; padding:8px; }
+  .media-item-actions button{
+    flex:1; background:none; border:1px solid var(--line); color: var(--slate-light);
+    padding:5px 6px; font-size:10px; font-family:'IBM Plex Mono', monospace; cursor:pointer; text-transform:uppercase;
+  }
+  .media-item-actions button:hover{ color: var(--ink); border-color: var(--slate-light); }
+  .media-item-actions button.danger:hover{ border-color: var(--crimson); color:#fff; background: var(--crimson-dark); }
+
+  /* ---------- COMMENTS ---------- */
+  .comment-row{ padding:14px 0; border-bottom:1px solid var(--line); }
+  .comment-row:last-child{ border-bottom:none; }
+  .comment-row-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:6px; }
+  .comment-row-who{ font-size:13.5px; font-weight:600; }
+  .comment-row-meta{ font-family:'IBM Plex Mono', monospace; font-size:10.5px; color: var(--slate-light); }
+  .comment-row-body{ font-size:13px; color: var(--slate); line-height:1.5; margin-bottom:8px; }
+  .comment-row-actions{ display:flex; gap:8px; flex-wrap:wrap; }
+  .comment-row-actions button{
+    background:none; border:1px solid var(--line); color: var(--slate-light);
+    padding:5px 10px; font-size:10.5px; font-family:'IBM Plex Mono', monospace; cursor:pointer; text-transform:uppercase;
+  }
+  .comment-row-actions button:hover{ color: var(--ink); border-color: var(--slate-light); }
+  .comment-row-actions button.danger:hover{ border-color: var(--crimson); color:#fff; background: var(--crimson-dark); }
+
+  /* ---------- USERS ---------- */
+  .user-row{ display:grid; grid-template-columns: 1fr auto; gap:14px; align-items:center; padding:12px 0; border-bottom:1px solid var(--line); }
+  .user-row:last-child{ border-bottom:none; }
+  .user-row-name{ font-size:13.5px; font-weight:600; }
+  .user-row-meta{ font-family:'IBM Plex Mono', monospace; font-size:10.5px; color: var(--slate-light); margin-top:3px; }
+  .user-row select{ background: var(--navy-soft); border:1px solid var(--line); color: var(--ink); padding:6px 10px; font-size:12px; }
+
+  @media (max-width: 900px){
+    .shell{ grid-template-columns: 1fr; }
+    .sidenav{ position:static; }
+    .sidenav-group{ display:flex; flex-wrap:wrap; gap:4px; margin-bottom:14px; }
+    .sidenav button.nav-item{ width:auto; border-left:none; border-bottom:2px solid transparent; padding:8px 10px; }
+    .sidenav button.nav-item.active{ border-bottom-color: var(--crimson); background:none; }
+    .sidenav-foot{ display:none; }
+    .composer-grid{ grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px){
+    .row{ grid-template-columns: 1fr; }
+    #loginWrap, #resetWrap{ padding: 28px 5vw 70px; }
+    main{ padding: 0 5vw 70px; }
+    .panel{ padding:20px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="brand">
+    <div class="brand-mark">G</div>
+    <div>
+      <div class="brand-name">GAKORO MEDIA TV</div>
+      <div class="brand-sub">News Desk Admin</div>
+    </div>
+  </div>
+  <div class="head-actions">
+    <button type="button" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8l1.8-1.8M18 6l1.8-1.8"/></svg>
+    </button>
+    <button id="notifBell" title="Pending comments">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      <span id="notifBadge">0</span>
+    </button>
+    <button id="logoutBtn">Log out</button>
+  </div>
+</header>
+
+<div id="idleWarnOverlay">
+  <div id="idleWarnCard">
+    <h2>Still there?</h2>
+    <p>You've been inactive for a while. For security, you'll be signed out automatically.</p>
+    <div id="idleWarnCountdown">60</div>
+    <div class="idle-actions">
+      <button type="button" id="idleStayBtn" class="btn">Stay signed in</button>
+      <button type="button" id="idleLogoutNowBtn" class="btn secondary">Log out now</button>
+    </div>
+  </div>
+</div>
+
+<div id="loginWrap">
+  <div id="loginPanel">
+    <h1>News desk login</h1>
+    <p class="sub">Sign in to write and publish articles.</p>
+    <form id="loginForm">
+      <div class="field">
+        <label for="loginEmail">Email</label>
+        <input type="email" id="loginEmail" required autocomplete="username">
+      </div>
+      <div class="field">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" required autocomplete="current-password">
+      </div>
+      <button type="submit" class="btn" id="loginBtn">Log in</button>
+      <div class="form-msg" id="loginMsg"></div>
+    </form>
+    <p class="sub" style="margin:16px 0 0;">
+      <a href="#" id="showForgotLink" style="color:var(--slate-light); text-decoration:underline;">Forgot password?</a>
+    </p>
+
+    <form id="forgotForm" style="display:none; margin-top:16px; padding-top:16px; border-top:1px solid var(--line);">
+      <div class="field">
+        <label for="forgotEmail">Email</label>
+        <input type="email" id="forgotEmail" required autocomplete="username">
+      </div>
+      <button type="submit" class="btn secondary" id="forgotBtn">Send reset link</button>
+      <div class="form-msg" id="forgotMsg"></div>
+    </form>
+  </div>
+</div>
+
+<div id="resetWrap" style="display:none;">
+  <div id="resetPanel" style="display:none;">
+    <h1>Set a new password</h1>
+    <p class="sub">You followed a password reset link. Choose a new password below.</p>
+    <form id="resetPasswordForm">
+      <div class="field">
+        <label for="newPassword">New password</label>
+        <input type="password" id="newPassword" required minlength="6" autocomplete="new-password">
+      </div>
+      <div class="field">
+        <label for="confirmPassword">Confirm new password</label>
+        <input type="password" id="confirmPassword" required minlength="6" autocomplete="new-password">
+      </div>
+      <button type="submit" class="btn" id="resetPasswordBtn">Update password</button>
+      <div class="form-msg" id="resetPasswordMsg"></div>
+    </form>
+  </div>
+</div>
+
+<main>
+  <div id="appPanel">
+    <div class="shell">
+
+      <!-- ================= SIDEBAR ================= -->
+      <nav class="sidenav">
+        <div class="sidenav-group">
+          <button class="nav-item active" data-tab="dashboard">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+            Dashboard
+          </button>
+          <button class="nav-item" data-tab="write">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>
+            Write Article
+          </button>
+          <button class="nav-item" data-tab="articles">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>
+            All Articles
+          </button>
+          <button class="nav-item" data-tab="categories">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            Categories
+          </button>
+          <button class="nav-item" data-tab="media">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            Media Library
+          </button>
+          <button class="nav-item" data-tab="tags">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.6 13.4L13 21l-9-9V3h9z"/><circle cx="7" cy="7" r="1.4" fill="currentColor" stroke="none"/></svg>
+            Tags
+          </button>
+          <button class="nav-item" data-tab="comments">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            Comments
+            <span id="commentsNavBadge" style="display:none;margin-left:auto;background:var(--crimson);color:#fff;font-size:9.5px;padding:1px 6px;border-radius:8px;font-family:'IBM Plex Mono',monospace;"></span>
+          </button>
+          <button class="nav-item" data-tab="users" id="usersNavBtn" style="display:none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+            Users
+          </button>
+          <button class="nav-item" data-tab="settings">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.6a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09c0 .68.39 1.29 1 1.51.6.24 1.3.12 1.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06c-.45.52-.57 1.22-.33 1.82.22.61.83 1 1.51 1H21a2 2 0 010 4h-.09c-.68 0-1.29.39-1.51 1z"/></svg>
+            Settings
+          </button>
+        </div>
+        <div class="sidenav-foot">
+          <strong id="sideAccountName">Admin</strong>
+          News Desk
+        </div>
+      </nav>
+
+      <!-- ================= MAIN CONTENT ================= -->
+      <div>
+
+        <!-- ---------------- DASHBOARD ---------------- -->
+        <section class="tab-panel active" id="tab-dashboard">
+          <section class="panel">
+            <h2>Dashboard</h2>
+            <p class="panel-sub">A quick snapshot of the news desk right now.</p>
+            <div class="stat-grid" id="dashStats"></div>
+          </section>
+          <section class="panel">
+            <h2>Recently updated</h2>
+            <p class="panel-sub">The last few articles touched by the desk.</p>
+            <div id="dashRecent"></div>
+          </section>
+        </section>
+
+        <!-- ---------------- WRITE ARTICLE ---------------- -->
+        <section class="tab-panel" id="tab-write">
+          <div class="composer-grid">
+            <section class="panel" style="margin-bottom:0;">
+              <h2 id="composerTitle">Write a new article</h2>
+              <p class="panel-sub" id="composerSub">Fill this in and publish when it's ready. Every article needs a photo and a report.</p>
+              <form id="articleForm">
+                <input type="hidden" id="articleId">
+                <div class="field">
+                  <label for="fHeadline">Headline</label>
+                  <input type="text" id="fHeadline" required placeholder="e.g. NESA confirms new exam schedule for S3 and P6">
+                </div>
+                <div class="row">
+                  <div class="field">
+                    <label for="fSlug">URL slug</label>
+                    <input type="text" id="fSlug" required placeholder="auto-generated-from-headline">
+                  </div>
+                  <div class="field">
+                    <label for="fCategory">Category</label>
+                    <select id="fCategory"></select>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="fTags">Tags (comma-separated, optional)</label>
+                  <input type="text" id="fTags" placeholder="e.g. exams, nesa, education">
+                  <div class="field-hint">Used on the Tags tab and to help readers find related stories.</div>
+                </div>
+                <div class="field">
+                  <label for="fDek">Deck (one or two sentence summary)</label>
+                  <textarea id="fDek" placeholder="A short summary shown under the headline."></textarea>
+                </div>
+                <div class="field">
+                  <label for="fAuthor">Byline</label>
+                  <input type="text" id="fAuthor" value="GAKORO MEDIA TV">
+                </div>
+                <div class="field">
+                  <label for="fPhoto">Photo</label>
+                  <input type="file" id="fPhoto" accept="image/*">
+                  <div id="photoPreviewWrap">
+                    <img id="photoPreviewImg" alt="Photo preview">
+                    <div class="placeholder" id="photoPlaceholder">No photo uploaded yet</div>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="fPhotoCaption">Photo caption (optional)</label>
+                  <input type="text" id="fPhotoCaption" placeholder="Credit or short caption">
+                </div>
+                <div class="field">
+                  <label for="fGallery">More photos (optional, up to 4 — shown at the end of the report)</label>
+                  <input type="file" id="fGallery" accept="image/*" multiple>
+                  <div id="galleryPreviewWrap">
+                    <div class="placeholder" id="galleryPlaceholder">No extra photos added yet</div>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="fBody">Full report</label>
+                  <textarea id="fBody" required style="min-height:220px;" placeholder="Write the article. Leave a blank line between paragraphs."></textarea>
+                  <div id="wordCount">0 words</div>
+                </div>
+                <div class="composer-actions">
+                  <button type="button" class="btn secondary" id="saveDraftBtn">Save draft</button>
+                  <button type="button" class="btn" id="publishBtn">Publish</button>
+                  <button type="button" class="btn secondary" id="cancelEditBtn" style="display:none;">Cancel edit</button>
+                </div>
+                <div class="form-msg" id="composerMsg"></div>
+              </form>
+            </section>
+
+            <div>
+              <div class="rail-panel">
+                <h3>Publishing Options</h3>
+                <div class="rail-row">
+                  <span class="rail-label">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    Status
+                  </span>
+                  <span id="railStatusPill" class="status-pill draft">Draft</span>
+                </div>
+                <div class="field" style="margin-top:12px;">
+                  <label for="fPublishAt">Publish at</label>
+                  <input type="datetime-local" id="fPublishAt">
+                  <div class="field-hint">Set a future time to schedule this story — it won't appear on the site until then.</div>
+                </div>
+                <div class="field">
+                  <label for="fVisibility">Visibility</label>
+                  <select id="fVisibility">
+                    <option value="public">Public</option>
+                    <option value="unlisted">Unlisted (link only)</option>
+                  </select>
+                </div>
+                <div class="checkbox-row" style="margin-top:2px;">
+                  <input type="checkbox" id="fBreaking">
+                  <label for="fBreaking">Show in the breaking-news ticker</label>
+                </div>
+              </div>
+              <div class="rail-panel">
+                <h3>Tips</h3>
+                <ul class="tips-list">
+                  <li>Add a clear headline, summary, and a strong photo.</li>
+                  <li>Use categories and tags to help readers find this story.</li>
+                  <li>Schedule a "Publish at" time to line up a story with an event.</li>
+                  <li>Unlisted stories stay off every list but still work if you share the link.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ---------------- ALL ARTICLES ---------------- -->
+        <section class="tab-panel" id="tab-articles">
+          <section class="panel" style="margin-bottom:0;">
+            <h2>All articles</h2>
+            <p class="panel-sub">Click Edit to update an article, or Unpublish to pull it off the site without deleting it.</p>
+            <div class="list-toolbar">
+              <input type="text" id="articleSearch" placeholder="Search articles or tags…">
+              <select id="statusFilter">
+                <option value="">All statuses</option>
+                <option value="published">Published</option>
+                <option value="scheduled">Scheduled</option>
+                <option value="draft">Draft</option>
+              </select>
+              <select id="categoryFilter">
+                <option value="">All categories</option>
+              </select>
+            </div>
+            <div id="articleList"></div>
+            <div id="emptyList" class="empty-note" style="display:none;"></div>
+          </section>
+        </section>
+
+        <!-- ---------------- CATEGORIES ---------------- -->
+        <section class="tab-panel" id="tab-categories">
+          <section class="panel">
+            <h2>Categories</h2>
+            <p class="panel-sub">These populate the Category dropdown in the composer. Deleting one won't touch articles already using it.</p>
+            <div class="chip-list" id="categoryChips"></div>
+            <form class="inline-add" id="categoryAddForm">
+              <input type="text" id="newCategoryName" placeholder="New category name" required>
+              <button type="submit" class="btn small">Add</button>
+            </form>
+            <div class="form-msg" id="categoryMsg"></div>
+          </section>
+        </section>
+
+        <!-- ---------------- MEDIA LIBRARY ---------------- -->
+        <section class="tab-panel" id="tab-media">
+          <section class="panel">
+            <h2>Media library</h2>
+            <p class="panel-sub">Photos uploaded from the composer. Copy a link to reuse an image, or delete ones you no longer need.</p>
+            <div class="media-grid" id="mediaGrid"></div>
+            <div class="empty-note" id="mediaEmpty" style="display:none;">No photos uploaded yet.</div>
+          </section>
+        </section>
+
+        <!-- ---------------- TAGS ---------------- -->
+        <section class="tab-panel" id="tab-tags">
+          <section class="panel">
+            <h2>Tags</h2>
+            <p class="panel-sub">Every tag currently in use, pulled from published and draft articles. Click one to see its stories.</p>
+            <div class="chip-list" id="tagChips"></div>
+            <div class="empty-note" id="tagsEmpty" style="display:none;">No tags yet — add some in the composer.</div>
+          </section>
+        </section>
+
+        <!-- ---------------- COMMENTS ---------------- -->
+        <section class="tab-panel" id="tab-comments">
+          <section class="panel">
+            <h2>Comments</h2>
+            <p class="panel-sub">Moderate what readers post under your stories.</p>
+            <div class="list-toolbar">
+              <select id="commentStatusFilter">
+                <option value="">All comments</option>
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+                <option value="hidden">Hidden</option>
+              </select>
+            </div>
+            <div id="commentList"></div>
+            <div class="empty-note" id="commentsEmpty" style="display:none;">No comments yet.</div>
+          </section>
+        </section>
+
+        <!-- ---------------- USERS ---------------- -->
+        <section class="tab-panel" id="tab-users">
+          <section class="panel">
+            <h2>Users</h2>
+            <p class="panel-sub">News desk staff with access to this panel. New accounts are created from the Supabase dashboard; admins can change roles here.</p>
+            <div id="userList"></div>
+            <div class="empty-note" id="usersEmpty" style="display:none;"></div>
+          </section>
+        </section>
+
+        <!-- ---------------- SETTINGS ---------------- -->
+        <section class="tab-panel" id="tab-settings">
+          <section class="panel">
+            <h2>Account settings</h2>
+            <p class="panel-sub">Update how your byline appears and manage your login.</p>
+            <form id="accountForm">
+              <div class="field">
+                <label for="fDisplayName">Display name</label>
+                <input type="text" id="fDisplayName" placeholder="e.g. J. Uwase">
+              </div>
+              <div class="field">
+                <label>Email</label>
+                <input type="text" id="fAccountEmail" disabled>
+              </div>
+              <button type="submit" class="btn secondary" id="saveAccountBtn">Save</button>
+              <div class="form-msg" id="accountMsg"></div>
+            </form>
+          </section>
+          <section class="panel">
+            <h2>Change password</h2>
+            <form id="changePasswordForm">
+              <div class="field">
+                <label for="fNewPassword">New password</label>
+                <input type="password" id="fNewPassword" minlength="6" autocomplete="new-password">
+              </div>
+              <div class="field">
+                <label for="fConfirmPassword">Confirm new password</label>
+                <input type="password" id="fConfirmPassword" minlength="6" autocomplete="new-password">
+              </div>
+              <button type="submit" class="btn secondary" id="changePasswordBtn">Update password</button>
+              <div class="form-msg" id="changePasswordMsg"></div>
+            </form>
+          </section>
+        </section>
+
+      </div>
+    </div>
+  </div>
+</main>
+
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script defer src="../js/config.js"></script>
+<script defer src="../js/admin.js"></script>
+<script>
+  (function(){
+    var btn = document.getElementById('themeToggle');
+    if(!btn) return;
+    btn.addEventListener('click', function(){
+      var isLight = document.documentElement.getAttribute('data-theme') !== 'dark';
+      if(isLight){
+        document.documentElement.setAttribute('data-theme','dark');
+        try{ localStorage.setItem('gm_admin_theme','dark'); }catch(e){}
+      } else {
+        document.documentElement.setAttribute('data-theme','light');
+        try{ localStorage.setItem('gm_admin_theme','light'); }catch(e){}
+      }
+    });
+  })();
+</script>
+</body>
+</html>
