@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GS Gakoro — Lesson Plan Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@400;600;700&family=Inter:wght@400;500;600;700&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f4f6fb; --card: #ffffff; --ink: #16234a; --muted: #7c869c;
+    --green: #d8302a; --green-deep: #b0231e; --gold: #16234a; --gold-light: #eef1f9;
+    --line: #e3e7f0; --error-bg: #fbe7e4; --error-ink: #b0231e; --radius: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12151f; --card: #1a1f2e; --ink: #e7eaf4; --muted: #99a2b8;
+      --green: #ea4a43; --green-deep: #ff6b64; --gold: #c4cdea; --gold-light: #232941;
+      --line: #2b3247; --error-bg: #3a2320; --error-ink: #ff8b84;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #12151f; --card: #1a1f2e; --ink: #e7eaf4; --muted: #99a2b8;
+    --green: #ea4a43; --green-deep: #ff6b64; --gold: #c4cdea; --gold-light: #232941;
+    --line: #2b3247; --error-bg: #3a2320; --error-ink: #ff8b84;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  html, body { margin: 0; background: var(--paper); color: var(--ink); font-family: 'Inter', -apple-system, sans-serif; }
+  body { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  h1, h2, h3 { font-family: 'Zilla Slab', Georgia, serif; margin: 0; }
+
+  header { border-bottom: 1px solid var(--line); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  @media (max-width: 480px) { header { padding: 14px 16px; } }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand .mark {
+    width: 34px; height: 34px; border-radius: 8px; background: var(--green); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-family: 'Zilla Slab', Georgia, serif;
+    font-weight: 700; font-size: 1.15rem; flex-shrink: 0;
+  }
+  .brand .brand-text { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  header h1 { font-size: 1.05rem; font-weight: 700; color: var(--ink); letter-spacing: 0.01em; }
+  header .tagline { font-size: 0.72rem; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; }
+  header .brand-text .sep { color: var(--line); font-weight: 400; }
+  header .credit { font-size: 0.78rem; color: var(--muted); }
+  header .credit strong { color: var(--green); font-weight: 600; }
+  @media (max-width: 480px) { header .credit { display: none; } }
+
+  .backbar { background: var(--gold-light); border-bottom: 1px solid var(--line); }
+  .backbar a {
+    display: flex; align-items: center; gap: 6px; max-width: 1240px; margin: 0 auto;
+    padding: 9px 24px; font-size: 0.8rem; font-weight: 600; color: var(--ink);
+    text-decoration: none; white-space: nowrap;
+  }
+  .backbar a:hover { color: var(--green); }
+  .backbar svg { width: 13px; height: 13px; flex-shrink: 0; }
+  @media (max-width: 480px) { .backbar a { padding: 8px 16px; font-size: 0.76rem; gap: 5px; } }
+  @media (max-width: 340px) { .backbar a { font-size: 0.7rem; } .backbar svg { width: 11px; height: 11px; } }
+
+  .brand-link { text-decoration: none; }
+  .brand-link:hover .mark { opacity: 0.88; }
+
+  main { max-width: 1240px; margin: 0 auto; padding: 28px 20px 60px; display: grid; grid-template-columns: 360px 1fr; gap: 28px; align-items: start; }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+  @media (max-width: 480px) { main { padding: 16px 12px 40px; gap: 16px; } }
+
+  .panel { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; box-shadow: 0 1px 2px rgba(22, 35, 74, 0.04); }
+  #form-panel { position: sticky; top: 20px; }
+  @media (max-width: 900px) { #form-panel { position: static; } }
+  @media (max-width: 480px) { .panel { padding: 16px; border-radius: 10px; } }
+  .panel-title { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 20px; }
+  .panel-title .icon {
+    width: 38px; height: 38px; border-radius: 9px; background: var(--green); color: #fff;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.1rem;
+  }
+  .panel h2 { font-size: 1.1rem; color: var(--ink); margin-bottom: 4px; }
+  .panel .hint { font-size: 0.82rem; color: var(--muted); line-height: 1.4; }
+
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 5px; }
+  .field input, .field select {
+    width: 100%; padding: 10px 11px; border: 1px solid var(--line); border-radius: 8px;
+    background: var(--paper); color: var(--ink); font-size: 16px; font-family: inherit;
+  }
+  .field input:focus, .field select:focus { outline: 2px solid var(--green); outline-offset: 1px; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 420px) { .row2 { grid-template-columns: 1fr; gap: 14px; } }
+
+  .scope-note { font-size: 0.78rem; color: var(--gold); background: var(--gold-light); border-radius: 8px; padding: 8px 10px; margin-bottom: 14px; display: none; }
+  .scope-note.show { display: block; }
+
+  button#go {
+    width: 100%; background: var(--green); color: #fff; border: none; border-radius: 8px;
+    padding: 13px; font-size: 0.98rem; font-weight: 600; font-family: inherit; cursor: pointer; margin-top: 4px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  button#go:disabled { opacity: 0.55; cursor: default; }
+  button#go:not(:disabled):hover { background: var(--green-deep); }
+
+  #status { font-size: 0.85rem; color: var(--muted); margin-top: 10px; min-height: 1.1em; }
+  #error { display: none; margin-top: 10px; background: var(--error-bg); color: var(--error-ink); border-radius: 8px; padding: 10px 12px; font-size: 0.85rem; }
+
+  #result { min-height: 240px; }
+  .empty-state {
+    height: 100%; min-height: 420px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center; color: var(--muted);
+    border: 1px dashed var(--line); border-radius: var(--radius); padding: 40px 24px;
+  }
+  .empty-state .mark {
+    width: 92px; height: 92px; border-radius: 50%; background: var(--gold-light);
+    display: flex; align-items: center; justify-content: center; font-size: 2.4rem;
+    margin-bottom: 18px; color: var(--green);
+  }
+  .empty-state h3 { color: var(--ink); font-size: 1.15rem; font-weight: 700; margin-bottom: 8px; }
+  .empty-state p { font-size: 0.88rem; max-width: 360px; line-height: 1.6; }
+  @media (max-width: 480px) {
+    .empty-state { min-height: 300px; padding: 28px 16px; }
+    .empty-state .mark { width: 72px; height: 72px; font-size: 1.9rem; margin-bottom: 14px; }
+    .empty-state h3 { font-size: 1.05rem; }
+    .empty-state p { font-size: 0.85rem; }
+  }
+
+  #printBtn {
+    display: none; align-items: center; gap: 6px; background: var(--card); color: var(--green-deep);
+    border: 1px solid var(--line); border-radius: 8px; padding: 9px 14px; font-size: 0.85rem;
+    font-weight: 600; font-family: inherit; cursor: pointer; margin-bottom: 16px;
+  }
+  #printBtn.show { display: inline-flex; }
+  #printBtn:hover { border-color: var(--green); color: var(--green); }
+
+  /* ---- REB PAPER-FORM STYLE OUTPUT ---- */
+  .reb-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 4px; }
+  .reb-sheet {
+    background: #fff; color: #111; border: 1.5px solid #111; font-family: 'PT Serif', Georgia, 'Times New Roman', serif;
+    font-size: 0.82rem; line-height: 1.35; min-width: 640px;
+  }
+  @media (max-width: 480px) {
+    .reb-sheet { font-size: 0.76rem; }
+  }
+  .reb-sheet .reb-title {
+    text-align: center; font-weight: 700; letter-spacing: 0.04em; font-size: 1.05rem;
+    padding: 10px 8px 4px; text-transform: uppercase; font-family: 'Zilla Slab', Georgia, serif;
+  }
+  .reb-sheet .reb-header-line { font-size: 0.82rem; padding: 0 12px 8px; display: flex; gap: 28px; flex-wrap: wrap; }
+  .reb-sheet .reb-header-line span.k { font-weight: 700; }
+
+  .reb-table { width: 100%; border-collapse: collapse; }
+  .reb-table td, .reb-table th { border: 1px solid #111; padding: 6px 8px; vertical-align: top; }
+  .reb-table .lbl { font-weight: 700; width: 16%; background: #f4f1ea; }
+  .reb-table .val { width: auto; }
+
+  table.reb-top { width: 100%; border-collapse: collapse; margin-bottom: -1px; }
+  table.reb-top th, table.reb-top td { border: 1px solid #111; padding: 6px 8px; text-align: center; vertical-align: top; }
+  table.reb-top thead th { background: #f4f1ea; font-weight: 700; font-size: 0.78rem; }
+  table.reb-top td.date-cell { white-space: nowrap; }
+
+  .reb-section-title { font-weight: 700; }
+
+  table.reb-steps { width: 100%; border-collapse: collapse; margin-top: -1px; }
+  table.reb-steps th, table.reb-steps td { border: 1px solid #111; padding: 6px 8px; vertical-align: top; font-size: 0.8rem; }
+  table.reb-steps thead th {
+    background: #f4f1ea; text-align: center; font-weight: 700; font-size: 0.75rem;
+  }
+  table.reb-steps td.step-label { font-weight: 700; width: 11%; }
+  table.reb-steps td.teacher-act, table.reb-steps td.learner-act { width: 27%; white-space: pre-wrap; }
+  table.reb-steps td.cross-cut { width: 24%; white-space: pre-wrap; }
+
+  .reb-eval { border: 1px solid #111; border-top: none; padding: 10px 8px 26px; }
+  .reb-eval .lbl2 { font-weight: 700; margin-bottom: 8px; }
+
+  .reb-provenance {
+    border: 1px solid #111; border-top: none; padding: 6px 8px; font-size: 0.68rem;
+    color: #444; font-style: italic; text-align: center; line-height: 1.4;
+  }
+
+  .source-note { font-size: 0.78rem; color: var(--muted); margin-top: 14px; }
+
+  footer { text-align: center; font-size: 0.78rem; color: var(--muted); padding: 24px 20px 40px; }
+  footer strong { color: var(--gold); }
+
+  @media print {
+    @page { size: portrait; margin: 1.2cm; }
+    .backbar, header, #form-panel, footer, #printBtn, .empty-state, .source-note { display: none !important; }
+    html, body { background: #fff; color: #000; }
+    main { display: block; padding: 0; max-width: 100%; }
+    .panel#result { border: none; border-radius: 0; padding: 0; }
+    .reb-scroll { overflow: visible; }
+    .reb-sheet { border-color: #000; font-size: 10pt; min-width: 0; }
+    .reb-table td, .reb-table th, table.reb-steps th, table.reb-steps td, .reb-eval, .reb-provenance { border-color: #000; }
+  }
+</style>
+</head>
+<body>
+
+<div class="backbar">
+  <a href="/">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    Back to Gakoro Media TV
+  </a>
+</div>
+
+<header>
+  <a href="/" class="brand brand-link" aria-label="GS Gakoro — back to Gakoro Media TV home">
+    <span class="mark">G</span>
+    <div class="brand-text">
+      <h1>GS GAKORO</h1>
+      <span class="sep">|</span>
+      <span class="tagline">Education Tools</span>
+    </div>
+  </a>
+  <div class="credit">Designed by <strong>DoD Makuza</strong></div>
+</header>
+
+<main>
+  <section class="panel" id="form-panel">
+    <div class="panel-title">
+      <span class="icon">📄</span>
+      <div>
+        <h2>New Lesson Plan</h2>
+        <div class="hint">Generate a lesson plan based on the official REB lesson plan format.</div>
+      </div>
+    </div>
+
+    <form id="form">
+      <div class="row2">
+        <div class="field">
+          <label for="subject">Subject <span style="color:var(--error-ink)">*</span></label>
+          <select id="subject" required disabled><option value="">Loading…</option></select>
+        </div>
+        <div class="field">
+          <label for="level">Class / Level <span style="color:var(--error-ink)">*</span></label>
+          <select id="level" required disabled><option value="">Loading…</option></select>
+        </div>
+      </div>
+
+      <div class="scope-note show" id="scopeNote">Loading subjects with uploaded reference material…</div>
+      <div class="scope-note" id="loadError" style="background:var(--error-bg); color:var(--error-ink);">
+        Couldn't load the list of available subjects. <a href="#" id="retryLoad" style="color:inherit; text-decoration:underline;">Retry</a>
+      </div>
+
+      <div class="field">
+        <label for="topic">Topic <span style="color:var(--error-ink)">*</span></label>
+        <input id="topic" placeholder="e.g. Rwandan currency, fractions, number patterns" value="Rwandan currency" required>
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <label for="term">Term <span style="color:var(--error-ink)">*</span></label>
+          <select id="term" required>
+            <option value="term1">Term 1</option>
+            <option value="term2">Term 2</option>
+            <option value="term3">Term 3</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="lesson_date">Date <span style="color:var(--error-ink)">*</span> <span style="font-weight:400; color:var(--muted);">(autofilled — change if needed)</span></label>
+          <input id="lesson_date" type="date" required>
+        </div>
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <label for="unit_no">Unit N° <span style="color:var(--error-ink)">*</span></label>
+          <input id="unit_no" placeholder="e.g. 12" required>
+        </div>
+        <div class="field">
+          <label for="lesson_no">Lesson N° <span style="color:var(--error-ink)">*</span></label>
+          <input id="lesson_no" placeholder="e.g. 3 of 5" required>
+        </div>
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <label for="duration">Duration (minutes) <span style="color:var(--error-ink)">*</span></label>
+          <input id="duration" type="number" value="40" required>
+        </div>
+        <div class="field">
+          <label for="class_size">Class size <span style="color:var(--error-ink)">*</span></label>
+          <input id="class_size" type="number" placeholder="e.g. 32" required>
+        </div>
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <label for="teacher_name">Teacher name <span style="color:var(--error-ink)">*</span></label>
+          <input id="teacher_name" placeholder="e.g. John Doe" required>
+        </div>
+        <div class="field">
+          <label for="school_name">School name <span style="color:var(--error-ink)">*</span></label>
+          <input id="school_name" placeholder="e.g. GS Gakoro" required>
+        </div>
+      </div>
+
+      <button id="go" type="submit"><span aria-hidden="true">📄</span> Generate lesson plan</button>
+      <div id="status"></div>
+      <div id="error"></div>
+    </form>
+  </section>
+
+  <section class="panel" id="result">
+    <button id="printBtn" type="button">🖨️ Print / Save as PDF</button>
+    <div class="empty-state" id="emptyState">
+      <div class="mark">📝</div>
+      <h3>No plan yet</h3>
+      <p>Fill in the subject, level and topic on the left, then generate — your lesson plan will appear here, laid out exactly like the official REB paper form.</p>
+    </div>
+    <div id="planContent"></div>
+  </section>
+</main>
+
+<footer>GS GAKORO · Education Tools · Lesson Plan Generator · Designed by <strong>DoD Makuza</strong><br><a href="/" style="color: var(--green); text-decoration: none; font-weight: 600;">← Back to Gakoro Media TV</a></footer>
+
+<script>
+const SUPABASE_URL = "https://svairnqnnvxcwjasuziz.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2YWlybnFubnZ4Y3dqYXN1eml6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM3NTk2NDMsImV4cCI6MjA5OTMzNTY0M30.5qSmG8dH2MsNxOQtrBamhLlLopguPd7If4RKn-lE9L8";
+// Canonical level ordering/grouping, used only to sort and label whatever
+// levels turn out to actually have uploaded material — it does not by itself
+// make any subject/level combination selectable.
+const LEVEL_ORDER = ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'S1', 'S2', 'S3'];
+const LEVEL_GROUP = l => (l[0] === 'P' ? 'Primary' : 'O-Level');
+
+// SUBJECTS_BY_LEVEL is populated ONLY from what is actually uploaded to
+// Supabase (reb_planner_books), fetched below. It starts empty on purpose:
+// until that fetch succeeds, no subject/level pair is considered valid, so
+// the form cannot be used to request a mismatched or ungrounded plan.
+let SUBJECTS_BY_LEVEL = {};
+let subjectsLoaded = false;
+
+const form = document.getElementById('form');
+const subjectEl = document.getElementById('subject');
+const levelEl = document.getElementById('level');
+const statusEl = document.getElementById('status');
+const errorEl = document.getElementById('error');
+const resultEl = document.getElementById('planContent');
+const emptyState = document.getElementById('emptyState');
+const goBtn = document.getElementById('go');
+const scopeNote = document.getElementById('scopeNote');
+const loadErrorEl = document.getElementById('loadError');
+const printBtn = document.getElementById('printBtn');
+
+printBtn.addEventListener('click', () => window.print());
+
+// Autofill today's date so the teacher never has to type it in manually.
+// Lesson N° is intentionally left blank — that one genuinely needs a human to fill it in.
+(function autofillDate() {
+  const d = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  document.getElementById('lesson_date').value = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+})();
+
+function esc(s) {
+  if (s === null || s === undefined) return '';
+  return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+}
+function nl2br(s) { return esc(s).replace(/\n/g, '<br>'); }
+function titleCase(s) {
+  if (!s) return '';
+  return String(s).replace(/\w\S*/g, w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
+}
+
+// Rebuild the subject list to only the subjects that actually have uploaded
+// material at the selected level, preserving the current subject choice when
+// it's still valid.
+function populateSubjects(preferredSubject) {
+  const level = levelEl.value;
+  const allowed = SUBJECTS_BY_LEVEL[level] || [];
+  const keep = preferredSubject && allowed.includes(preferredSubject) ? preferredSubject : allowed[0];
+  subjectEl.innerHTML = allowed.length
+    ? allowed.map(s => `<option${s === keep ? ' selected' : ''}>${s}</option>`).join('')
+    : '<option value="">No subjects available at this level</option>';
+}
+
+// Rebuild the level dropdown to only the levels that have at least one
+// uploaded subject, grouped as Primary / O-Level, in curriculum order.
+function populateLevels(preferredLevel) {
+  const available = LEVEL_ORDER.filter(l => (SUBJECTS_BY_LEVEL[l] || []).length);
+  if (!available.length) {
+    levelEl.innerHTML = '<option value="">No levels available yet</option>';
+    return;
+  }
+  const keep = preferredLevel && available.includes(preferredLevel) ? preferredLevel : available[0];
+  const groups = {};
+  available.forEach(l => { (groups[LEVEL_GROUP(l)] = groups[LEVEL_GROUP(l)] || []).push(l); });
+  levelEl.innerHTML = Object.entries(groups).map(([label, levels]) => `
+    <optgroup label="${label}">
+      ${levels.map(l => `<option${l === keep ? ' selected' : ''}>${l}</option>`).join('')}
+    </optgroup>`).join('');
+}
+
+function updateScopeNote() {
+  if (!subjectsLoaded) return;
+  const count = Object.values(SUBJECTS_BY_LEVEL).reduce((n, arr) => n + arr.length, 0);
+  if (!count) {
+    scopeNote.textContent = 'No reference material has been uploaded yet, so no subjects are available to generate from.';
+    scopeNote.classList.add('show');
+    return;
+  }
+  const pairs = Object.entries(SUBJECTS_BY_LEVEL)
+    .flatMap(([lvl, subs]) => subs.map(s => `${lvl} ${s}`))
+    .join(', ');
+  scopeNote.textContent = `Only subjects with uploaded REB source material are listed: ${pairs}.`;
+  scopeNote.classList.add('show');
+}
+
+levelEl.addEventListener('change', () => {
+  populateSubjects(subjectEl.value);
+});
+
+// Fetch the real set of grounded subject/level pairs from Supabase. This is
+// the single source of truth for what the form will ever offer or submit —
+// nothing here falls back to a hardcoded curriculum list, so an outage or
+// empty result leaves the form disabled rather than open to mismatches.
+async function loadAvailableSubjects() {
+  loadErrorEl.classList.remove('show');
+  scopeNote.textContent = 'Loading subjects with uploaded reference material…';
+  scopeNote.classList.add('show');
+  subjectEl.disabled = true;
+  levelEl.disabled = true;
+  goBtn.disabled = true;
+  subjectsLoaded = false;
+
+  try {
+    const resp = await fetch(
+      `${SUPABASE_URL}/rest/v1/reb_planner_books?select=subject,level`,
+      { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } }
+    );
+    if (!resp.ok) throw new Error(`Request failed (${resp.status})`);
+    const rows = await resp.json();
+
+    const map = {};
+    (rows || []).forEach(r => {
+      if (!r || !r.subject || !r.level) return;
+      (map[r.level] = map[r.level] || new Set()).add(r.subject);
+    });
+    SUBJECTS_BY_LEVEL = Object.fromEntries(
+      Object.entries(map).map(([lvl, set]) => [lvl, Array.from(set).sort()])
+    );
+    subjectsLoaded = true;
+
+    populateLevels();
+    populateSubjects();
+    updateScopeNote();
+
+    const anyAvailable = Object.values(SUBJECTS_BY_LEVEL).some(arr => arr.length);
+    subjectEl.disabled = !anyAvailable;
+    levelEl.disabled = !anyAvailable;
+    goBtn.disabled = !anyAvailable;
+  } catch (err) {
+    loadErrorEl.classList.add('show');
+    scopeNote.classList.remove('show');
+    subjectEl.innerHTML = '<option value="">Unavailable</option>';
+    levelEl.innerHTML = '<option value="">Unavailable</option>';
+    subjectEl.disabled = true;
+    levelEl.disabled = true;
+    goBtn.disabled = true;
+  }
+}
+
+document.getElementById('retryLoad').addEventListener('click', (e) => {
+  e.preventDefault();
+  loadAvailableSubjects();
+});
+
+loadAvailableSubjects();
+
+function formatDate(d) {
+  if (!d) return '';
+  try {
+    const dt = new Date(d + 'T00:00:00');
+    return dt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+  } catch { return d; }
+}
+
+// Map generated steps (introduction / development / assessment) onto the
+// paper form's three rows: Introduction / Development of the lesson / Conclusion.
+function bucketSteps(steps) {
+  const buckets = { introduction: [], development: [], conclusion: [] };
+  (steps || []).forEach(s => {
+    const key = (s.step || '').toLowerCase();
+    if (key.includes('intro')) buckets.introduction.push(s);
+    else if (key.includes('conclu') || key.includes('assess') || key.includes('evaluat')) buckets.conclusion.push(s);
+    else buckets.development.push(s);
+  });
+  return buckets;
+}
+
+function stepRow(label, items) {
+  const totalMin = items.reduce((sum, s) => sum + (parseInt(s.timing_minutes, 10) || 0), 0);
+  const teacher = items.map(s => s.teacher_activity).filter(Boolean).join('\n\n');
+  const learner = items.map(s => s.learner_activity).filter(Boolean).join('\n\n');
+  const cross = items.map(s => s.generic_competences).filter(Boolean).join('\n\n');
+  return `
+    <tr>
+      <td class="step-label">${esc(label)}<br><span style="font-weight:400;">${totalMin ? esc(totalMin) + ' min' : ''}</span></td>
+      <td class="teacher-act">${nl2br(teacher)}</td>
+      <td class="learner-act">${nl2br(learner)}</td>
+      <td class="cross-cut">${nl2br(cross)}</td>
+    </tr>`;
+}
+
+function renderPlan(p) {
+  const buckets = bucketSteps(Array.isArray(p.steps) ? p.steps : []);
+  document.title = `${p.lesson_title || 'Lesson Plan'} — ${p.subject} ${p.class_level} — GS Gakoro`;
+
+  const planRef = p.id ? String(p.id).split('-')[0].toUpperCase() : '—';
+  const generatedStamp = p.created_at
+    ? new Date(p.created_at).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+    : new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+  resultEl.innerHTML = `
+    <div class="reb-scroll">
+    <div class="reb-sheet">
+      <div class="reb-title">Lesson Plan</div>
+      <div class="reb-header-line">
+        <span><span class="k">School Name:</span> ${esc(p.school_name) || '\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0'}</span>
+        <span><span class="k">Teacher's name:</span> ${esc(p.teacher_name) || '\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0'}</span>
+      </div>
+
+      <table class="reb-top">
+        <thead>
+          <tr>
+            <th>Term</th><th>Date</th><th>Subject</th><th>Class</th>
+            <th>Unit N°</th><th>Lesson N°</th><th>Duration</th><th>Class size</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>${esc((p.term || '').replace('term', 'Term '))}</td>
+            <td class="date-cell">${esc(formatDate(p.lesson_date))}</td>
+            <td>${esc(p.subject)}</td>
+            <td>${esc(p.class_level)}</td>
+            <td>${esc(p.unit_no) || '\u2014'}</td>
+            <td>${esc(p.lesson_no) || '\u2014'}</td>
+            <td>${p.duration_minutes ? esc(p.duration_minutes) + ' min' : ''}</td>
+            <td>${esc(p.class_size) || '\u2014'}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table class="reb-table">
+        <tr>
+          <td class="lbl" colspan="1">Type of Special Educational Needs to be catered for in this lesson and number of learners in each category</td>
+          <td class="val">${nl2br(p.sen_notes) || 'None identified for this class'}</td>
+        </tr>
+        <tr>
+          <td class="lbl">Unit title</td><td class="val">${esc(p.unit_title)}</td>
+        </tr>
+        <tr>
+          <td class="lbl">Key Unit Competence</td><td class="val">${nl2br(p.key_unit_competence)}</td>
+        </tr>
+        <tr>
+          <td class="lbl">Title of the lesson</td><td class="val">${esc(p.lesson_title)}</td>
+        </tr>
+        <tr>
+          <td class="lbl">Instructional Objective</td><td class="val">${nl2br(p.instructional_objective)}</td>
+        </tr>
+        <tr>
+          <td class="lbl">Plan for this Class<br><span style="font-weight:400;">(location: in / outside)</span></td>
+          <td class="val">${esc(p.class_location)}</td>
+        </tr>
+        <tr>
+          <td class="lbl">Learning Materials<br><span style="font-weight:400;">(for all learners)</span></td>
+          <td class="val">${nl2br(p.learning_materials)}</td>
+        </tr>
+        <tr>
+          <td class="lbl">References</td><td class="val">${nl2br(p.lesson_references)}</td>
+        </tr>
+      </table>
+
+      <table class="reb-steps">
+        <thead>
+          <tr>
+            <th rowspan="2">Timing for each step</th>
+            <th colspan="2">Description of teaching and learning activity</th>
+            <th rowspan="2">Generic competences and Cross cutting issues to be addressed + a short explanation</th>
+          </tr>
+          <tr>
+            <th>Teacher activities</th>
+            <th>Learner activities</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${stepRow('Introduction', buckets.introduction)}
+          ${stepRow('Development of the lesson', buckets.development)}
+          ${stepRow('Conclusion', buckets.conclusion)}
+        </tbody>
+      </table>
+
+      <div class="reb-eval">
+        <div class="lbl2">Teacher self-evaluation</div>
+      </div>
+
+      <div class="reb-provenance">
+        Original lesson plan generated by GS Gakoro Education Tools (gakoromedia.rw), grounded in REB Rwanda Education Board e-learning platform textbooks and teacher's guides.
+        Plan reference: ${esc(planRef)} · Generated ${esc(generatedStamp)}
+      </div>
+    </div>
+    </div>
+    <div class="source-note">Grounded in ${(p.source_chunk_ids && p.source_chunk_ids.length) || 0} matched section(s) of the REB source books</div>
+  `;
+}
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  errorEl.style.display = 'none';
+  errorEl.style.background = '';
+  errorEl.style.color = '';
+  goBtn.disabled = true;
+  statusEl.textContent = 'Generating… this can take 20–60 seconds.';
+
+  const topic = document.getElementById('topic').value.trim();
+  const lessonDate = document.getElementById('lesson_date').value;
+  const unitNo = document.getElementById('unit_no').value.trim();
+  const lessonNo = document.getElementById('lesson_no').value.trim();
+  const duration = document.getElementById('duration').value;
+  const classSize = document.getElementById('class_size').value;
+  const teacherName = document.getElementById('teacher_name').value.trim();
+  const schoolName = document.getElementById('school_name').value.trim();
+
+  const ALLOWED_SCHOOLS = ['GS GAKORO', 'COLLEGE INYEMERAMIHIGO DE GISENYI'];
+  const normalize = s => s.trim().toUpperCase().replace(/\s+/g, ' ');
+
+  const missing = [];
+  if (!topic) missing.push('Topic');
+  if (!lessonDate) missing.push('Date');
+  if (!unitNo) missing.push('Unit N°');
+  if (!lessonNo) missing.push('Lesson N°');
+  if (!duration) missing.push('Duration');
+  if (!classSize) missing.push('Class size');
+  if (!teacherName) missing.push('Teacher name');
+  if (!schoolName) missing.push('School name');
+
+  if (missing.length) {
+    errorEl.textContent = `Please fill in: ${missing.join(', ')}.`;
+    errorEl.style.display = 'block';
+    statusEl.textContent = '';
+    goBtn.disabled = false;
+    return;
+  }
+  if (!ALLOWED_SCHOOLS.includes(normalize(schoolName))) {
+    errorEl.textContent = 'You are not a teacher of an approved school. This tool is currently only available to staff of GS Gakoro and College Inyemeramihigo de Gisenyi.';
+    errorEl.style.display = 'block';
+    statusEl.textContent = '';
+    goBtn.disabled = false;
+    return;
+  }
+  // Hard gate: only ever submit a subject/level pair that the Supabase fetch
+  // actually confirmed has uploaded reference material. This does not fall
+  // back to any hardcoded list, so it can't be bypassed by a stale/failed load.
+  if (!subjectsLoaded || !(SUBJECTS_BY_LEVEL[levelEl.value] || []).includes(subjectEl.value)) {
+    errorEl.textContent = `${subjectEl.value || 'That subject'} is not confirmed as available at ${levelEl.value || 'that level'}. Please choose a subject/level shown in the dropdowns.`;
+    errorEl.style.display = 'block';
+    statusEl.textContent = '';
+    goBtn.disabled = false;
+    return;
+  }
+
+  const body = {
+    subject: subjectEl.value,
+    level: levelEl.value,
+    topic,
+    duration_minutes: parseInt(duration, 10) || 40,
+    term: document.getElementById('term').value,
+    lesson_date: lessonDate,
+    unit_no: unitNo,
+    lesson_no: lessonNo,
+    class_size: parseInt(classSize, 10),
+    teacher_name: teacherName,
+    school_name: schoolName,
+  };
+
+  try {
+    const resp = await fetch(`${SUPABASE_URL}/functions/v1/generate-lesson-plan`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'apikey': SUPABASE_ANON_KEY,
+      },
+      body: JSON.stringify(body),
+    });
+    const data = await resp.json();
+    if (!resp.ok) throw new Error(data.error || `Request failed (${resp.status})`);
+    if (data.coming_soon) {
+      statusEl.textContent = '';
+      errorEl.style.display = 'block';
+      errorEl.style.background = 'var(--gold-light)';
+      errorEl.style.color = 'var(--ink)';
+      errorEl.textContent = `🕒 ${data.message || 'This subject/level is coming soon.'}`;
+      return;
+    }
+    emptyState.style.display = 'none';
+    printBtn.classList.add('show');
+    renderPlan(data.lesson_plan);
+    statusEl.textContent = 'Done.';
+  } catch (err) {
+    const msg = (err && typeof err === 'object' && 'message' in err && typeof err.message === 'string')
+      ? err.message
+      : String(err);
+    errorEl.textContent = 'Error: ' + msg;
+    errorEl.style.display = 'block';
+    statusEl.textContent = '';
+  } finally {
+    goBtn.disabled = false;
+  }
+});
+</script>
+</body>
+</html>
