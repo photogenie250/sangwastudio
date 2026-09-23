@@ -2,603 +2,1238 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>GS Gakoro — Lesson Plan Generator</title>
-<link rel="preconnect" href="https://fonts.googleapis.com/">
-<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
-<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@400;600;700&family=Inter:wght@400;500;600;700&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gakoro Media TV — Inspire. Inform. Transform.</title>
+<meta name="description" content="GAKORO MEDIA TV — live channel, breaking news and latest stories from SANGWA STUDIO's in-house newsroom.">
+<link rel="canonical" href="https://gakoromedia.rw/">
+<link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+<link rel="manifest" href="/assets/favicon/site.webmanifest">
+<meta name="theme-color" content="#D3242C">
+<meta name="google-adsense-account" content="ca-pub-2056887490896774">
+
+<!-- ============================================================
+     GOOGLE NEWS / SOCIAL-SHARE METADATA
+     These are what let Google (and Facebook/Twitter/etc. when a
+     link is shared) recognize this as a real news publisher's
+     homepage rather than a generic page: a canonical URL above,
+     Open Graph + Twitter Card tags for the link preview, and the
+     NewsMediaOrganization + WebSite JSON-LD below so Google can
+     attach a publisher identity to every article that links back
+     here. Individual articles get their own per-article version
+     of these tags server-side — see cloudflare-worker/
+     article-dynamic-render.js and supabase/functions/article-render.
+     ============================================================ -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Gakoro Media TV">
+<meta property="og:title" content="Gakoro Media TV — Inspire. Inform. Transform.">
+<meta property="og:description" content="GAKORO MEDIA TV — live channel, breaking news and latest stories from SANGWA STUDIO's in-house newsroom.">
+<meta property="og:url" content="https://gakoromedia.rw/">
+<meta property="og:image" content="https://gakoromedia.rw/assets/logo-full.png">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Gakoro Media TV — Inspire. Inform. Transform.">
+<meta name="twitter:description" content="GAKORO MEDIA TV — live channel, breaking news and latest stories from SANGWA STUDIO's in-house newsroom.">
+<meta name="twitter:image" content="https://gakoromedia.rw/assets/logo-full.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsMediaOrganization",
+  "name": "Gakoro Media TV",
+  "url": "https://gakoromedia.rw/",
+  "logo": {
+    "@type": "ImageObject",
+    "url": "https://gakoromedia.rw/assets/logo-full.png"
+  },
+  "description": "GAKORO MEDIA TV is a Rwandan news outlet publishing breaking news, sports, education, business and community stories, produced by Sangwa Studio.",
+  "publishingPrinciples": "https://gakoromedia.rw/about/"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Gakoro Media TV",
+  "url": "https://gakoromedia.rw/"
+}
+</script>
+<script>
+  (function(){
+    try{
+      var t = localStorage.getItem('gm_theme');
+      if(t === 'dark'){ document.documentElement.setAttribute('data-theme','dark'); }
+    }catch(e){}
+  })();
+</script>
+<!--
+  GOOGLE ADSENSE — verification meta tag is above. The actual ad
+  script is intentionally NOT hard-coded here; it's injected by
+  js/consent.js's window.loadAds() only AFTER a visitor accepts the
+  cookie banner, so ad cookies never get set before consent. See
+  README.md "Monetization" for the full checklist.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700;900&family=Noto+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --paper: #f4f6fb; --card: #ffffff; --ink: #16234a; --muted: #7c869c;
-    --green: #d8302a; --green-deep: #b0231e; --gold: #16234a; --gold-light: #eef1f9;
-    --line: #e3e7f0; --error-bg: #fbe7e4; --error-ink: #b0231e; --radius: 12px;
+  :root{
+    --navy: #0E1C2B;
+    --crimson: #D3242C;
+    --crimson-dark: #9C1A20;
+    --paper: #ffffff;
+    --bg-alt: #F7F7F8;
+    --card: #ffffff;
+    --ink: #12202F;
+    --slate: #55606C;
+    --slate-light: #8A93A0;
+    --gold: #C69A4E;
+    --line: #E7E7E9;
   }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --paper: #12151f; --card: #1a1f2e; --ink: #e7eaf4; --muted: #99a2b8;
-      --green: #ea4a43; --green-deep: #ff6b64; --gold: #c4cdea; --gold-light: #232941;
-      --line: #2b3247; --error-bg: #3a2320; --error-ink: #ff8b84;
+  html[data-theme="dark"]{
+    --navy: #060B12;
+    --paper: #0B1524;
+    --bg-alt: #0F1E30;
+    --card: #122238;
+    --ink: #F2F0E9;
+    --slate: #A9B4C4;
+    --slate-light: #8B93A3;
+    --line: #23364F;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{ background: var(--paper); }
+  body{
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Noto Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    transition: background .2s ease, color .2s ease;
+  }
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  .wrap{ max-width:1240px; margin:0 auto; padding:0 6vw; }
+
+  /* ---------- UTILITY BAR ---------- */
+  .utility-bar{
+    background: var(--bg-alt);
+    border-bottom:1px solid var(--line);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color: var(--slate);
+  }
+  .utility-inner{
+    max-width:1240px; margin:0 auto; padding:9px 6vw;
+    display:flex; align-items:center; justify-content:space-between;
+    letter-spacing:0.02em;
+  }
+  .utility-links{ display:flex; gap:22px; }
+  .utility-links a:hover{ color: var(--crimson); }
+  .utility-right{ display:flex; align-items:center; gap:18px; }
+  .utility-social{ display:flex; align-items:center; gap:14px; }
+  .utility-social a{ display:flex; color: var(--ink); }
+  .utility-social svg{ width:14px; height:14px; }
+  .utility-social a:hover{ color: var(--crimson); }
+  .utility-search{ display:flex; align-items:center; color:var(--ink); cursor:pointer; background:none; border:none; padding:0; -webkit-tap-highlight-color:transparent; }
+  .utility-search svg{ width:15px; height:15px; }
+  #themeToggle{
+    display:flex; align-items:center; justify-content:center;
+    width:24px; height:24px; background:none; border:1px solid var(--line);
+    border-radius:50%; color: var(--ink); cursor:pointer; padding:0;
+  }
+  #themeToggle:hover{ border-color: var(--crimson); color: var(--crimson); }
+  #themeToggle svg{ width:13px; height:13px; }
+  #themeToggle .icon-moon{ display:block; }
+  #themeToggle .icon-sun{ display:none; }
+  html[data-theme="dark"] #themeToggle .icon-moon{ display:none; }
+  html[data-theme="dark"] #themeToggle .icon-sun{ display:block; }
+
+  /* ---------- MASTHEAD ---------- */
+  .masthead{ background: var(--paper); padding: 18px 0; border-bottom: 1px solid var(--line); }
+  .masthead-inner{
+    max-width:1240px; margin:0 auto; padding:0 6vw;
+    display:flex; align-items:center; justify-content:space-between; gap:20px;
+  }
+  .brand-group{ display:flex; align-items:center; gap:18px; }
+  .brand{ display:flex; align-items:center; gap:12px; }
+  .brand-mark{
+    width:46px; height:46px;
+    background: var(--crimson);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Noto Serif', serif; font-weight:900; font-size:24px; color:#fff;
+    flex-shrink:0;
+  }
+  .brand-name{ font-family:'Noto Serif', serif; font-weight:900; font-size:24px; letter-spacing:-0.01em; line-height:1.1; color: var(--ink); }
+  .brand-tagline{
+    font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:0.16em;
+    text-transform:uppercase; color: var(--crimson); margin-top:3px;
+  }
+  .sangwa-link{
+    display:flex; align-items:center; gap:10px; flex-shrink:0;
+    padding-left:18px; border-left:1px solid var(--line);
+  }
+  .sangwa-link img{ height:36px; width:36px; border-radius:50%; }
+  .sangwa-wordmark{ display:flex; flex-direction:column; align-items:flex-start; line-height:1; font-family:'Noto Serif', serif; }
+  .sangwa-wordmark .sw-main{ color:var(--ink); font-weight:600; letter-spacing:.22em; font-size:.92rem; }
+  .sangwa-wordmark .sw-sub{ display:flex; align-items:center; gap:6px; margin-top:5px; color:#f5740a; font-weight:500; letter-spacing:.24em; font-size:.5rem; }
+  .sangwa-wordmark .sw-sub i{ display:block; width:12px; height:1px; background:#f5740a; font-style:normal; }
+  .masthead-actions{ display:flex; align-items:center; gap:12px; }
+  .btn-outline{
+    display:flex; align-items:center; gap:8px;
+    border:1px solid var(--line); padding:10px 16px;
+    font-family:'IBM Plex Mono', monospace; font-size:11px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase;
+    color: var(--ink);
+  }
+  .btn-outline:hover{ border-color: var(--crimson); color: var(--crimson); }
+  .btn-outline svg{ width:11px; height:11px; }
+  .live-pill{
+    display:flex; align-items:center; gap:7px;
+    background: var(--crimson);
+    color:#fff; padding:10px 16px;
+    font-family:'IBM Plex Mono', monospace; font-size:11px; font-weight:700; letter-spacing:0.1em;
+  }
+  .live-dot{ width:6px; height:6px; border-radius:50%; background:#fff; animation: pulse 1.6s infinite; }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+  /* ---------- NAV ---------- */
+  .nav-bar{ background: var(--paper); border-bottom:1px solid var(--line); }
+  .nav-inner{
+    max-width:1240px; margin:0 auto; padding:0 6vw;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .nav-row{ display:flex; align-items:stretch; }
+  .nav-row a{
+    display:flex; align-items:center; gap:5px;
+    padding:15px 18px;
+    font-family:'IBM Plex Mono', monospace; font-size:11.5px; font-weight:600;
+    letter-spacing:0.06em; text-transform:uppercase; color: var(--ink);
+    border-bottom:3px solid transparent;
+  }
+  .nav-row a svg{ width:9px; height:9px; margin-top:1px; }
+  .nav-row a:first-child{ background: var(--crimson); color:#fff; padding-left:20px; padding-right:20px; }
+  .nav-row a:not(:first-child):hover{ color: var(--crimson); border-bottom-color: var(--crimson); }
+  .nav-search{ display:flex; align-items:center; color: var(--ink); cursor:pointer; padding:0 4px; background:none; border:none; -webkit-tap-highlight-color:transparent; }
+  .nav-search svg{ width:16px; height:16px; }
+
+  /* ---------- TICKER ---------- */
+  .ticker{ background: var(--crimson); color:#fff; display:flex; align-items:center; white-space:nowrap; }
+  .ticker-label{
+    background: var(--crimson-dark); padding: 9px 16px;
+    font-family:'IBM Plex Mono', monospace; font-size:11px; font-weight:700; letter-spacing:0.1em;
+    flex-shrink:0; position:relative; z-index:2;
+  }
+  .ticker-viewport{ flex:1 1 auto; min-width:0; overflow:hidden; }
+  .ticker-track{ display:flex; padding: 9px 0; width:max-content; animation: scroll var(--ticker-duration, 28s) linear infinite; }
+  .ticker:hover .ticker-track{ animation-play-state: paused; }
+  .ticker-track span, .ticker-track a{
+    display:inline-block; padding: 0 30px; font-size:12.5px; font-weight:500;
+    border-right: 1px solid rgba(255,255,255,0.35);
+  }
+  .ticker-track a:hover{ text-decoration: underline; }
+  @keyframes scroll{ 0%{ transform: translateX(0); } 100%{ transform: translateX(-50%); } }
+  .ticker-controls{ display:flex; align-items:center; gap:2px; padding:0 12px; flex-shrink:0; }
+  .ticker-controls button{ background:none; border:none; color:#fff; opacity:0.85; cursor:pointer; padding:4px; }
+  .ticker-controls button:hover{ opacity:1; }
+  .ticker-controls svg{ width:11px; height:11px; }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    max-width:1240px; margin:0 auto; padding: 34px 6vw 0;
+    display:grid; grid-template-columns: 1.65fr 1fr; gap:34px;
+  }
+  .hero-main{ position:relative; }
+  .feature-story{ position:relative; display:block; aspect-ratio:16/10; background:var(--navy); overflow:hidden; }
+  .feature-media{ position:absolute; inset:0; background-size:cover; background-position:center; }
+  .feature-media.g1{ background-image: linear-gradient(150deg,#3A5A78,#0E1C2B); }
+  .hero-overlay{
+    position:absolute; left:0; right:0; bottom:0; z-index:2;
+    padding: 60px 22px 20px;
+    background: linear-gradient(0deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 100%);
+    pointer-events:none;
+  }
+  .hero-overlay > *{ pointer-events:auto; }
+  .hero-eyebrow{
+    display:flex; align-items:center; gap:8px;
+    font-family:'IBM Plex Mono', monospace; font-size:11px; font-weight:700; letter-spacing:0.1em;
+    text-transform:uppercase; color:#FF5A5A; margin-bottom:10px;
+  }
+  .hero-eyebrow .live-dot{ background:#FF5A5A; }
+  .hero-headline{
+    font-family:'Noto Serif', serif; font-weight:600; font-size: 26px; line-height:1.18;
+    color:#fff; margin-bottom:12px; max-width:34ch;
+  }
+  .feature-story:hover .hero-headline{ text-decoration:underline; }
+  .hero-byline{
+    display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+    font-size:12px; color:#D8DCE2; font-family:'IBM Plex Mono', monospace;
+  }
+  .hero-byline .sep{ opacity:0.5; }
+
+  /* ---------- TOP STORIES ---------- */
+  .top-stories{ display:flex; flex-direction:column; }
+  .top-stories-head{
+    font-family:'Noto Serif', serif; font-weight:900; font-size:19px;
+    padding-bottom:12px; margin-bottom:16px; border-bottom:3px solid var(--navy);
+    display:flex; align-items:center; gap:8px;
+  }
+  .top-stories-head::before{ content:''; width:4px; height:16px; background: var(--crimson); display:inline-block; }
+  .top-story-item{
+    display:grid; grid-template-columns: 84px 1fr; gap:13px;
+    padding-bottom:16px; margin-bottom:16px; border-bottom:1px solid var(--line);
+  }
+  .top-story-item:last-child{ border-bottom:none; margin-bottom:0; padding-bottom:0; }
+  .ts-thumb{ position:relative; aspect-ratio:1/1; overflow:hidden; background:#eee; flex-shrink:0; }
+  .ts-thumb.g1{ background: linear-gradient(150deg,#3A5A78,#0E1C2B); }
+  .ts-thumb.g2{ background: linear-gradient(150deg,#6B3A5A,#1A0E2B); }
+  .ts-thumb.g3{ background: linear-gradient(150deg,#3A5A46,#0E2B1C); }
+  .ts-thumb.g4{ background: linear-gradient(150deg,#5A4A3A,#2B1E0E); }
+  .ts-cat{
+    font-family:'IBM Plex Mono', monospace; font-size:10px; font-weight:700; letter-spacing:0.06em;
+    text-transform:uppercase; color: var(--crimson); margin-bottom:4px; display:block;
+  }
+  .ts-title{ font-family:'Noto Serif', serif; font-weight:600; font-size:14.5px; line-height:1.3; color: var(--ink); margin-bottom:6px; }
+  .top-story-item:hover .ts-title{ color: var(--crimson); }
+  .ts-meta{ font-family:'IBM Plex Mono', monospace; font-size:10px; color: var(--slate-light); text-transform:uppercase; }
+
+  /* ---------- SECTION HEADER ---------- */
+  .section-head{
+    max-width:1240px; margin: 52px auto 22px; padding: 0 6vw;
+    display:flex; align-items:baseline; justify-content:space-between;
+    border-bottom: 2px solid var(--navy); padding-bottom:12px;
+  }
+  .section-title{ font-family:'Noto Serif', serif; font-weight:900; font-size:22px; letter-spacing:-0.01em; }
+  .section-title::before{ content:''; display:inline-block; width:5px; height:5px; }
+  .view-all{
+    font-family:'IBM Plex Mono', monospace; font-size:11px; font-weight:600; letter-spacing:0.06em;
+    text-transform:uppercase; color: var(--crimson); display:flex; align-items:center; gap:5px;
+  }
+  .view-all:hover{ color: var(--crimson-dark); }
+  .view-all svg{ width:11px; height:11px; }
+
+  /* ---------- GRID ---------- */
+  .grid{ max-width:1240px; margin:0 auto; padding: 0 6vw 20px; display:grid; grid-template-columns: repeat(4, 1fr); gap: 26px 24px; }
+  .card{
+    background: var(--card); cursor:pointer; display:flex; flex-direction:column;
+  }
+  .card-thumb{ position:relative; aspect-ratio:16/10; overflow:hidden; margin-bottom:14px; }
+  .card-thumb.g1{ background: linear-gradient(150deg,#3A5A78,#0E1C2B); }
+  .card-thumb.g2{ background: linear-gradient(150deg,#6B3A5A,#1A0E2B); }
+  .card-thumb.g3{ background: linear-gradient(150deg,#3A5A46,#0E2B1C); }
+  .card-thumb.g4{ background: linear-gradient(150deg,#5A4A3A,#2B1E0E); }
+  .card-thumb.g5{ background: linear-gradient(150deg,#4A3A5A,#1E0E2B); }
+  .card-thumb.g6{ background: linear-gradient(150deg,#3A4A5A,#0E1E2B); }
+  .card-thumb.g7{ background: linear-gradient(150deg,#5A3A3A,#2B0E0E); }
+  .card-thumb.g8{ background: linear-gradient(150deg,#3A5A5A,#0E2B2B); }
+  .g1{ background: linear-gradient(150deg,#3A5A78,#0E1C2B); }
+  .g2{ background: linear-gradient(150deg,#9C1A20,#0E1C2B); }
+  .g3{ background: linear-gradient(150deg,#C69A4E,#5C441E); }
+  .g4{ background: linear-gradient(150deg,#4A6B4E,#0E1C2B); }
+  .g5{ background: linear-gradient(150deg,#5C3E7A,#0E1C2B); }
+  .g6{ background: linear-gradient(150deg,#2E6B78,#0E1C2B); }
+  .g7{ background: linear-gradient(150deg,#7A3E5C,#0E1C2B); }
+  .g8{ background: linear-gradient(150deg,#6B5A2E,#0E1C2B); }
+  .card-body{ display:flex; flex-direction:column; gap:8px; flex:1; }
+  .card-cat{
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px; font-weight:700; letter-spacing:0.07em;
+    text-transform:uppercase; color: var(--crimson);
+  }
+  .card-title{ font-family:'Noto Serif', serif; font-weight:600; font-size:16.5px; line-height:1.28; color: var(--ink); }
+  .card:hover .card-title{ color: var(--crimson-dark); }
+  .card-stats{
+    display:flex; align-items:center; gap:14px; margin-top:4px;
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px; color: var(--slate-light); letter-spacing:0.02em;
+  }
+  .card-stats .stat{ display:flex; align-items:center; gap:4px; }
+  .card-stats svg{ width:13px; height:13px; fill:none; stroke:currentColor; stroke-width:2; flex-shrink:0; }
+  .stat-share{
+    display:flex; align-items:center; gap:4px; margin-left:auto;
+    background:transparent; border:none; padding:0; color: var(--slate-light);
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:0.02em; text-transform:uppercase; cursor:pointer;
+  }
+  .stat-share:hover{ color: var(--crimson); }
+  .stat-share.copied{ color: var(--crimson); }
+  .card-meta{ font-family:'IBM Plex Mono', monospace; font-size:10.5px; color: var(--slate-light); text-transform:uppercase; letter-spacing:0.02em; margin-top:2px; }
+
+  /* ---------- FOOTER ---------- */
+  footer{ background: var(--navy); color: var(--slate-light); margin-top:40px; }
+  .footer-top{
+    max-width:1240px; margin:0 auto; padding: 50px 6vw;
+    display:grid; grid-template-columns: 1.4fr 1fr 1fr 1.3fr; gap:36px;
+  }
+  .footer-brand-name{ font-family:'Noto Serif', serif; font-weight:900; font-size:19px; color:#fff; margin-bottom:14px; }
+  .footer-desc{ font-size:13px; line-height:1.7; color:#AAB4C0; margin-bottom:20px; max-width:32ch; }
+  .footer-social{ display:flex; gap:12px; }
+  .footer-social a{
+    width:32px; height:32px; border:1px solid rgba(255,255,255,0.18); display:flex; align-items:center; justify-content:center; color:#fff;
+  }
+  .footer-social a:hover{ border-color: var(--crimson); background: var(--crimson); }
+  .footer-social svg{ width:14px; height:14px; }
+  .footer-col-title{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; font-weight:700; letter-spacing:0.08em;
+    text-transform:uppercase; color:#fff; margin-bottom:18px;
+  }
+  .footer-col a{ display:block; font-size:13.5px; color:#AAB4C0; margin-bottom:12px; }
+  .footer-col a:hover{ color:#fff; }
+  .newsletter-desc{ font-size:13px; color:#AAB4C0; line-height:1.6; margin-bottom:16px; }
+  .newsletter-form{ display:flex; }
+  .newsletter-form input{
+    flex:1; min-width:0; background: rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.16);
+    color:#fff; padding:11px 12px; font-family:'Noto Sans', sans-serif; font-size:13px;
+  }
+  .newsletter-form input::placeholder{ color:#7C8794; }
+  .newsletter-form button{
+    background: var(--crimson); color:#fff; border:none; padding:0 18px;
+    font-family:'IBM Plex Mono', monospace; font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer;
+  }
+  .newsletter-form button:hover{ background: var(--crimson-dark); }
+  .footer-bottom{
+    border-top:1px solid rgba(255,255,255,0.1);
+    padding: 18px 6vw; max-width:1240px; margin:0 auto;
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;
+    font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:0.02em; color:#7C8794;
+  }
+  .footer-bottom .heart{ color: var(--crimson); }
+
+  /* ---------- MOBILE MENU (hamburger + slide-in drawer) ---------- */
+  .mobile-menu-btn{
+    display:none; align-items:center; justify-content:center;
+    width:40px; height:40px; margin:-8px 0 -8px 4px; background:none; border:none;
+    color: var(--ink); cursor:pointer; padding:0; flex-shrink:0;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .mobile-menu-btn svg{ width:22px; height:22px; }
+  .mobile-drawer-overlay{
+    position:fixed; inset:0; z-index:1300; background:rgba(6,10,16,.55);
+    opacity:0; visibility:hidden; transition:opacity .3s ease, visibility .3s ease;
+  }
+  .mobile-drawer-overlay.open{ opacity:1; visibility:visible; }
+  .mobile-drawer{
+    position:fixed; top:0; right:0; bottom:0; z-index:1400;
+    width:min(86vw,340px); background: var(--paper); color: var(--ink);
+    border-left:1px solid var(--line);
+    display:flex; flex-direction:column; padding:18px 22px 24px;
+    transform:translateX(100%); transition:transform .35s cubic-bezier(.2,.8,.2,1);
+    overflow-y:auto; -webkit-overflow-scrolling:touch;
+  }
+  .mobile-drawer.open{ transform:translateX(0); }
+  .mobile-drawer-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding-bottom:16px; margin-bottom:14px; border-bottom:1px solid var(--line);
+  }
+  .mobile-drawer-brand{ display:flex; align-items:center; gap:10px; }
+  .mobile-drawer-brand .brand-mark{ width:32px; height:32px; font-size:16px; }
+  .mobile-drawer-brand span{ font-family:'Noto Serif', serif; font-weight:900; font-size:14px; color: var(--ink); letter-spacing:-0.01em; }
+  .mobile-drawer-close{
+    width:34px; height:34px; display:flex; align-items:center; justify-content:center;
+    background:none; border:1px solid var(--line); border-radius:50%; color: var(--ink); cursor:pointer; flex-shrink:0;
+  }
+  .mobile-drawer-close svg{ width:14px; height:14px; }
+  .mobile-drawer-links{ display:flex; flex-direction:column; }
+  .mobile-drawer-links a{
+    display:flex; align-items:center;
+    font-family:'Noto Serif', serif; font-weight:600; font-size:18px; color: var(--ink);
+    padding:14px 2px; border-bottom:1px solid var(--line);
+  }
+  .mobile-drawer-links a:first-child{ color: var(--crimson); }
+  .mobile-drawer-links a:active{ color: var(--crimson); }
+  .mobile-drawer-watch{
+    margin-top:20px; display:flex; align-items:center; justify-content:center; gap:8px;
+    background: var(--crimson); color:#fff !important; padding:15px;
+    font-family:'IBM Plex Mono', monospace; font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase;
+  }
+  .mobile-drawer-watch svg{ width:12px; height:12px; }
+  .mobile-drawer-studio{
+    margin-top:12px; display:flex; align-items:center; gap:10px; padding:12px;
+    border:1px solid var(--line);
+  }
+  .mobile-drawer-studio img{ height:28px; width:28px; border-radius:50%; flex-shrink:0; }
+  .mobile-drawer-studio .sw-main{ color:var(--ink); font-weight:600; letter-spacing:.2em; font-size:.78rem; font-family:'Noto Serif', serif; }
+  .mobile-drawer-studio .sw-sub{ display:flex; align-items:center; gap:6px; margin-top:4px; color:#f5740a; font-weight:600; letter-spacing:.2em; font-size:.6rem; font-family:'Noto Serif', serif; }
+  .mobile-drawer-studio .sw-sub i{ display:block; width:10px; height:1px; background:#f5740a; font-style:normal; }
+  .mobile-drawer-foot{ margin-top:auto; padding-top:18px; border-top:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; gap:14px; }
+  .mobile-drawer-social{ display:flex; gap:10px; }
+  .mobile-drawer-social a{
+    width:36px; height:36px; border:1px solid var(--line); border-radius:50%;
+    display:flex; align-items:center; justify-content:center; color: var(--ink);
+  }
+  .mobile-drawer-social svg{ width:15px; height:15px; }
+  .mobile-drawer-date{ font-family:'IBM Plex Mono', monospace; font-size:10.5px; color: var(--slate-light); }
+  body.drawer-open{ overflow:hidden; }
+
+  /* ---------- SEARCH OVERLAY ---------- */
+  .search-overlay{
+    position:fixed; inset:0; z-index:1500; background:rgba(6,10,16,.6);
+    opacity:0; visibility:hidden; transition:opacity .25s ease, visibility .25s ease;
+    display:flex; align-items:flex-start; justify-content:center; padding:12vh 5vw 5vw;
+  }
+  .search-overlay.open{ opacity:1; visibility:visible; }
+  .search-panel{
+    width:100%; max-width:620px; background: var(--paper); border:1px solid var(--line);
+    box-shadow:0 20px 60px rgba(0,0,0,.35); max-height:70vh; display:flex; flex-direction:column;
+    transform:translateY(-14px); transition:transform .25s ease;
+  }
+  .search-overlay.open .search-panel{ transform:translateY(0); }
+  .search-panel-head{
+    display:flex; align-items:center; gap:12px; padding:16px 18px; border-bottom:1px solid var(--line); flex-shrink:0;
+  }
+  .search-panel-head > svg{ width:18px; height:18px; color: var(--slate-light); flex-shrink:0; }
+  #searchInput{
+    flex:1; min-width:0; border:none; outline:none; background:none; color: var(--ink);
+    font-family:'Noto Sans', sans-serif; font-size:16px;
+  }
+  #searchInput::placeholder{ color: var(--slate-light); }
+  #searchCloseBtn{
+    width:30px; height:30px; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+    background:none; border:1px solid var(--line); border-radius:50%; color: var(--ink); cursor:pointer;
+  }
+  #searchCloseBtn svg{ width:13px; height:13px; }
+  .search-results{ overflow-y:auto; padding:8px; }
+  .search-hint, .search-empty, .search-loading{
+    padding:26px 14px; text-align:center; color: var(--slate-light);
+    font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:0.02em;
+  }
+  .search-result-item{
+    display:flex; flex-direction:column; gap:3px; padding:12px 14px; text-decoration:none;
+    border-radius:2px;
+  }
+  .search-result-item:hover, .search-result-item:focus{ background: var(--bg-alt); }
+  .sr-cat{
+    font-family:'IBM Plex Mono', monospace; font-size:10px; font-weight:700; letter-spacing:0.06em;
+    text-transform:uppercase; color: var(--crimson);
+  }
+  .sr-title{ font-family:'Noto Serif', serif; font-weight:600; font-size:15px; color: var(--ink); line-height:1.3; }
+  .sr-meta{ font-family:'IBM Plex Mono', monospace; font-size:10px; color: var(--slate-light); text-transform:uppercase; }
+  body.search-open{ overflow:hidden; }
+
+  @media (max-width: 980px){
+    .hero{ grid-template-columns: 1fr; }
+    .grid{ grid-template-columns: repeat(2,1fr); }
+    .footer-top{ grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 880px){
+    .nav-row a:not(:first-child){ display:none; }
+    .utility-links{ display:none; }
+    .mobile-menu-btn{ display:flex; }
+    .nav-inner{ padding-top:2px; padding-bottom:2px; }
+  }
+  @media (max-width: 640px){
+    .brand-name{ font-size:19px; }
+    .brand-mark{ width:38px; height:38px; font-size:19px; }
+    .sangwa-link{ display:none; }
+    .btn-outline{ display:none; }
+    .grid{ grid-template-columns: 1fr 1fr; padding:0 5vw 12px; }
+    .hero{ padding:22px 5vw 0; }
+    .section-head{ padding:0 5vw; }
+    .footer-top{ grid-template-columns: 1fr; padding:36px 5vw; gap:30px; }
+    .footer-bottom{ flex-direction:column; text-align:center; padding:18px 5vw; }
+    .utility-inner{ padding:8px 5vw; }
+    .utility-social{ gap:12px; }
+    #themeToggle{ width:28px; height:28px; }
+    .card-title{ font-size:15.5px; }
+    .hero-headline{
+      font-size:18px; line-height:1.22;
+      display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
     }
+    .hero-overlay{ padding:34px 5vw 14px; }
+    .hero-eyebrow{ margin-bottom:6px; }
+    .hero-byline{ margin-bottom:0; font-size:11px; }
+    .masthead-inner{ padding:0 5vw; }
+    .nav-inner{ padding:0 5vw; }
   }
-  :root[data-theme="dark"] {
-    --paper: #12151f; --card: #1a1f2e; --ink: #e7eaf4; --muted: #99a2b8;
-    --green: #ea4a43; --green-deep: #ff6b64; --gold: #c4cdea; --gold-light: #232941;
-    --line: #2b3247; --error-bg: #3a2320; --error-ink: #ff8b84;
-  }
-  * { box-sizing: border-box; }
-  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
-  html, body { margin: 0; background: var(--paper); color: var(--ink); font-family: 'Inter', -apple-system, sans-serif; }
-  body { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
-  h1, h2, h3 { font-family: 'Zilla Slab', Georgia, serif; margin: 0; }
-
-  header { border-bottom: 1px solid var(--line); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-  @media (max-width: 480px) { header { padding: 14px 16px; } }
-  .brand { display: flex; align-items: center; gap: 10px; }
-  .brand .mark {
-    width: 34px; height: 34px; border-radius: 8px; background: var(--green); color: #fff;
-    display: flex; align-items: center; justify-content: center; font-family: 'Zilla Slab', Georgia, serif;
-    font-weight: 700; font-size: 1.15rem; flex-shrink: 0;
-  }
-  .brand .brand-text { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
-  header h1 { font-size: 1.05rem; font-weight: 700; color: var(--ink); letter-spacing: 0.01em; }
-  header .tagline { font-size: 0.72rem; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; }
-  header .brand-text .sep { color: var(--line); font-weight: 400; }
-  header .credit { font-size: 0.78rem; color: var(--muted); }
-  header .credit strong { color: var(--green); font-weight: 600; }
-  @media (max-width: 480px) { header .credit { display: none; } }
-
-  .backbar { background: var(--gold-light); border-bottom: 1px solid var(--line); }
-  .backbar a {
-    display: flex; align-items: center; gap: 6px; max-width: 1240px; margin: 0 auto;
-    padding: 9px 24px; font-size: 0.8rem; font-weight: 600; color: var(--ink);
-    text-decoration: none; white-space: nowrap;
-  }
-  .backbar a:hover { color: var(--green); }
-  .backbar svg { width: 13px; height: 13px; flex-shrink: 0; }
-  @media (max-width: 480px) { .backbar a { padding: 8px 16px; font-size: 0.76rem; gap: 5px; } }
-  @media (max-width: 340px) { .backbar a { font-size: 0.7rem; } .backbar svg { width: 11px; height: 11px; } }
-
-  .brand-link { text-decoration: none; }
-  .brand-link:hover .mark { opacity: 0.88; }
-
-  main { max-width: 1240px; margin: 0 auto; padding: 28px 20px 60px; display: grid; grid-template-columns: 360px 1fr; gap: 28px; align-items: start; }
-  @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
-  @media (max-width: 480px) { main { padding: 16px 12px 40px; gap: 16px; } }
-
-  .panel { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; box-shadow: 0 1px 2px rgba(22, 35, 74, 0.04); }
-  #form-panel { position: sticky; top: 20px; }
-  @media (max-width: 900px) { #form-panel { position: static; } }
-  @media (max-width: 480px) { .panel { padding: 16px; border-radius: 10px; } }
-  .panel-title { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 20px; }
-  .panel-title .icon {
-    width: 38px; height: 38px; border-radius: 9px; background: var(--green); color: #fff;
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.1rem;
-  }
-  .panel h2 { font-size: 1.1rem; color: var(--ink); margin-bottom: 4px; }
-  .panel .hint { font-size: 0.82rem; color: var(--muted); line-height: 1.4; }
-
-  .field { margin-bottom: 14px; }
-  .field label { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 5px; }
-  .field input, .field select {
-    width: 100%; padding: 10px 11px; border: 1px solid var(--line); border-radius: 8px;
-    background: var(--paper); color: var(--ink); font-size: 16px; font-family: inherit;
-  }
-  .field input:focus, .field select:focus { outline: 2px solid var(--green); outline-offset: 1px; }
-  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  @media (max-width: 420px) { .row2 { grid-template-columns: 1fr; gap: 14px; } }
-
-  .scope-note { font-size: 0.78rem; color: var(--gold); background: var(--gold-light); border-radius: 8px; padding: 8px 10px; margin-bottom: 14px; display: none; }
-  .scope-note.show { display: block; }
-
-  button#go {
-    width: 100%; background: var(--green); color: #fff; border: none; border-radius: 8px;
-    padding: 13px; font-size: 0.98rem; font-weight: 600; font-family: inherit; cursor: pointer; margin-top: 4px;
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-  }
-  button#go:disabled { opacity: 0.55; cursor: default; }
-  button#go:not(:disabled):hover { background: var(--green-deep); }
-
-  #status { font-size: 0.85rem; color: var(--muted); margin-top: 10px; min-height: 1.1em; }
-  #error { display: none; margin-top: 10px; background: var(--error-bg); color: var(--error-ink); border-radius: 8px; padding: 10px 12px; font-size: 0.85rem; }
-
-  #result { min-height: 240px; }
-  .empty-state {
-    height: 100%; min-height: 420px; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; text-align: center; color: var(--muted);
-    border: 1px dashed var(--line); border-radius: var(--radius); padding: 40px 24px;
-  }
-  .empty-state .mark {
-    width: 92px; height: 92px; border-radius: 50%; background: var(--gold-light);
-    display: flex; align-items: center; justify-content: center; font-size: 2.4rem;
-    margin-bottom: 18px; color: var(--green);
-  }
-  .empty-state h3 { color: var(--ink); font-size: 1.15rem; font-weight: 700; margin-bottom: 8px; }
-  .empty-state p { font-size: 0.88rem; max-width: 360px; line-height: 1.6; }
-  @media (max-width: 480px) {
-    .empty-state { min-height: 300px; padding: 28px 16px; }
-    .empty-state .mark { width: 72px; height: 72px; font-size: 1.9rem; margin-bottom: 14px; }
-    .empty-state h3 { font-size: 1.05rem; }
-    .empty-state p { font-size: 0.85rem; }
+  @media (max-width: 460px){
+    .grid{ grid-template-columns: 1fr; }
+    .top-story-item{ grid-template-columns: 72px 1fr; gap:11px; }
   }
 
-  #printBtn {
-    display: none; align-items: center; gap: 6px; background: var(--card); color: var(--green-deep);
-    border: 1px solid var(--line); border-radius: 8px; padding: 9px 14px; font-size: 0.85rem;
-    font-weight: 600; font-family: inherit; cursor: pointer; margin-bottom: 16px;
-  }
-  #printBtn.show { display: inline-flex; }
-  #printBtn:hover { border-color: var(--green); color: var(--green); }
-
-  /* ---- REB PAPER-FORM STYLE OUTPUT ---- */
-  .reb-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 4px; }
-  .reb-sheet {
-    background: #fff; color: #111; border: 1.5px solid #111; font-family: 'PT Serif', Georgia, 'Times New Roman', serif;
-    font-size: 0.82rem; line-height: 1.35; min-width: 640px;
-  }
-  @media (max-width: 480px) {
-    .reb-sheet { font-size: 0.76rem; }
-  }
-  .reb-sheet .reb-title {
-    text-align: center; font-weight: 700; letter-spacing: 0.04em; font-size: 1.05rem;
-    padding: 10px 8px 4px; text-transform: uppercase; font-family: 'Zilla Slab', Georgia, serif;
-  }
-  .reb-sheet .reb-header-line { font-size: 0.82rem; padding: 0 12px 8px; display: flex; gap: 28px; flex-wrap: wrap; }
-  .reb-sheet .reb-header-line span.k { font-weight: 700; }
-
-  .reb-table { width: 100%; border-collapse: collapse; }
-  .reb-table td, .reb-table th { border: 1px solid #111; padding: 6px 8px; vertical-align: top; }
-  .reb-table .lbl { font-weight: 700; width: 16%; background: #f4f1ea; }
-  .reb-table .val { width: auto; }
-
-  table.reb-top { width: 100%; border-collapse: collapse; margin-bottom: -1px; }
-  table.reb-top th, table.reb-top td { border: 1px solid #111; padding: 6px 8px; text-align: center; vertical-align: top; }
-  table.reb-top thead th { background: #f4f1ea; font-weight: 700; font-size: 0.78rem; }
-  table.reb-top td.date-cell { white-space: nowrap; }
-
-  .reb-section-title { font-weight: 700; }
-
-  table.reb-steps { width: 100%; border-collapse: collapse; margin-top: -1px; }
-  table.reb-steps th, table.reb-steps td { border: 1px solid #111; padding: 6px 8px; vertical-align: top; font-size: 0.8rem; }
-  table.reb-steps thead th {
-    background: #f4f1ea; text-align: center; font-weight: 700; font-size: 0.75rem;
-  }
-  table.reb-steps td.step-label { font-weight: 700; width: 11%; }
-  table.reb-steps td.teacher-act, table.reb-steps td.learner-act { width: 27%; white-space: pre-wrap; }
-  table.reb-steps td.cross-cut { width: 24%; white-space: pre-wrap; }
-
-  .reb-eval { border: 1px solid #111; border-top: none; padding: 10px 8px 26px; }
-  .reb-eval .lbl2 { font-weight: 700; margin-bottom: 8px; }
-
-  .reb-provenance {
-    border: 1px solid #111; border-top: none; padding: 6px 8px; font-size: 0.68rem;
-    color: #444; font-style: italic; text-align: center; line-height: 1.4;
-  }
-
-  .source-note { font-size: 0.78rem; color: var(--muted); margin-top: 14px; }
-
-  footer { text-align: center; font-size: 0.78rem; color: var(--muted); padding: 24px 20px 40px; }
-  footer strong { color: var(--gold); }
-
-  @media print {
-    @page { size: portrait; margin: 1.2cm; }
-    .backbar, header, #form-panel, footer, #printBtn, .empty-state, .source-note { display: none !important; }
-    html, body { background: #fff; color: #000; }
-    main { display: block; padding: 0; max-width: 100%; }
-    .panel#result { border: none; border-radius: 0; padding: 0; }
-    .reb-scroll { overflow: visible; }
-    .reb-sheet { border-color: #000; font-size: 10pt; min-width: 0; }
-    .reb-table td, .reb-table th, table.reb-steps th, table.reb-steps td, .reb-eval, .reb-provenance { border-color: #000; }
-  }
+  /* ---- Freeze everything above TOP STORIES (desktop + mobile) ----
+     Each bar sticks in turn, stacked using offsets computed in JS
+     (see the "freeze header" script near the end of <body>), so they
+     pile up correctly instead of overlapping. Top Stories and
+     everything after it scrolls normally underneath. */
+  .utility-bar{ position:sticky; top:0; z-index:96; background:var(--bg-alt); }
+  .masthead{ position:sticky; top:var(--freeze-off-masthead,0px); z-index:95; background:var(--paper); }
+  .nav-bar{ position:sticky; top:var(--freeze-off-navbar,0px); z-index:94; background:var(--paper); }
+  .ticker{ position:sticky; top:var(--freeze-off-ticker,0px); z-index:93; background:var(--crimson); }
+  .hero-main{ position:sticky; top:var(--freeze-off-hero,0px); z-index:5; }
 </style>
 </head>
-<body>
+<body data-site-root="">
 
-<div class="backbar">
-  <a href="/">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-    Back to Gakoro Media TV
-  </a>
+<div class="utility-bar">
+  <div class="utility-inner">
+    <span id="topDate"></span>
+    <div class="utility-links">
+      <a href="about/">About Us</a>
+      <a href="contact/">Contact</a>
+      <a href="advertise/">Advertise</a>
+      <a href="studio/">Sangwa Studio</a>
+    </div>
+    <div class="utility-right">
+      <div class="utility-social">
+        <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12Z"/></svg></a>
+        <a href="#" aria-label="Twitter"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 5.9c-.7.3-1.5.6-2.3.7.8-.5 1.5-1.3 1.8-2.3-.8.5-1.7.8-2.6 1a4.1 4.1 0 0 0-7 3.7A11.6 11.6 0 0 1 3.4 4.6a4.1 4.1 0 0 0 1.3 5.5c-.7 0-1.3-.2-1.9-.5v.1c0 2 1.4 3.6 3.3 4a4.1 4.1 0 0 1-1.9.1 4.1 4.1 0 0 0 3.9 2.9A8.3 8.3 0 0 1 2 18.4a11.6 11.6 0 0 0 6.3 1.9c7.5 0 11.7-6.3 11.7-11.7v-.5c.8-.6 1.5-1.3 2-2.2Z"/></svg></a>
+        <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.5-.4-5.2c-.3-1-1-1.7-2-2C18.9 4.3 12 4.3 12 4.3s-6.9 0-8.6.5c-1 .3-1.7 1-2 2C1 8.5 1 12 1 12s0 3.5.4 5.2c.3 1 1 1.7 2 2 1.7.5 8.6.5 8.6.5s6.9 0 8.6-.5c1-.3 1.7-1 2-2 .4-1.7.4-5.2.4-5.2ZM9.8 15.3V8.7l6 3.3-6 3.3Z"/></svg></a>
+        <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c2.7 0 3.1 0 4.1.1 1.1 0 1.8.2 2.5.5.7.3 1.2.6 1.7 1.1.5.5.9 1 1.1 1.7.3.7.4 1.4.5 2.5 0 1 .1 1.4.1 4.1s0 3.1-.1 4.1c0 1.1-.2 1.8-.5 2.5-.3.7-.6 1.2-1.1 1.7-.5.5-1 .9-1.7 1.1-.7.3-1.4.4-2.5.5-1 0-1.4.1-4.1.1s-3.1 0-4.1-.1c-1.1 0-1.8-.2-2.5-.5-.7-.3-1.2-.6-1.7-1.1-.5-.5-.9-1-1.1-1.7-.3-.7-.4-1.4-.5-2.5C2 15.1 2 14.7 2 12s0-3.1.1-4.1c0-1.1.2-1.8.5-2.5.3-.7.6-1.2 1.1-1.7.5-.5 1-.9 1.7-1.1.7-.3 1.4-.4 2.5-.5C8.9 2 9.3 2 12 2Zm0 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10Zm0 8.2a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4Zm5.2-8.4a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0Z"/></svg></a>
+      </div>
+      <button type="button" class="utility-search" id="utilitySearchBtn" aria-label="Search articles"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+      <button type="button" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8l1.8-1.8M18 6l1.8-1.8"/></svg>
+      </button>
+    </div>
+  </div>
 </div>
 
-<header>
-  <a href="/" class="brand brand-link" aria-label="GS Gakoro — back to Gakoro Media TV home">
-    <span class="mark">G</span>
-    <div class="brand-text">
-      <h1>GS GAKORO</h1>
-      <span class="sep">|</span>
-      <span class="tagline">Education Tools</span>
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="brand-group">
+      <a href="/" class="brand" aria-label="GAKORO MEDIA TV — Home">
+        <div class="brand-mark">G</div>
+        <div>
+          <div class="brand-name">GAKORO MEDIA TV</div>
+          <div class="brand-tagline">INSPIRE &middot; INFORM &middot; TRANSFORM</div>
+        </div>
+      </a>
+      <a href="studio/" class="sangwa-link" aria-label="SANGWA STUDIO — Home">
+        <img src="assets/logo-small.png" alt="SANGWA STUDIO logo">
+        <span class="sangwa-wordmark"><span class="sw-main">SANGWA</span><span class="sw-sub"><i></i>STUDIO</span></span>
+      </a>
     </div>
-  </a>
-  <div class="credit">Designed by <strong>DoD Makuza</strong></div>
+    <div class="masthead-actions">
+      <a href="live/" class="btn-outline"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> WATCH LIVE</a>
+      <a href="live/" class="live-pill"><span class="live-dot"></span> LIVE</a>
+    </div>
+  </div>
 </header>
 
-<main>
-  <section class="panel" id="form-panel">
-    <div class="panel-title">
-      <span class="icon">📄</span>
+<div class="nav-bar">
+  <div class="nav-inner">
+    <nav class="nav-row" id="navRow">
+      <a href="/">Home</a>
+      <a href="#latest-articles">News <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg></a>
+      <a href="category/?cat=Education">Education</a>
+      <a href="category/?cat=Sports">Sports <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg></a>
+      <a href="category/?cat=Community">Community</a>
+      <a href="category/?cat=Interviews">Interviews</a>
+      <a href="category/?cat=Business">Business</a>
+      <a href="category/?cat=Opinion">Opinion</a>
+    </nav>
+    <button type="button" class="nav-search" id="navSearchBtn" aria-label="Search articles"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+    <button type="button" class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileDrawer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</div>
+
+<div class="mobile-drawer-overlay" id="mobileDrawerOverlay"></div>
+<nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobile navigation" aria-hidden="true">
+  <div class="mobile-drawer-head">
+    <div class="mobile-drawer-brand">
+      <div class="brand-mark">G</div>
+      <span>GAKORO MEDIA TV</span>
+    </div>
+    <button type="button" class="mobile-drawer-close" id="mobileDrawerClose" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="4" x2="20" y2="20"/><line x1="20" y1="4" x2="4" y2="20"/></svg>
+    </button>
+  </div>
+  <div class="mobile-drawer-links">
+    <a href="/">Home</a>
+    <a href="#latest-articles">News</a>
+    <a href="category/?cat=Education">Education</a>
+    <a href="category/?cat=Sports">Sports</a>
+    <a href="category/?cat=Community">Community</a>
+    <a href="category/?cat=Interviews">Interviews</a>
+    <a href="category/?cat=Business">Business</a>
+    <a href="category/?cat=Opinion">Opinion</a>
+    <a href="about/">About Us</a>
+    <a href="contact/">Contact</a>
+    <a href="advertise/">Advertise</a>
+  </div>
+  <a href="live/" class="mobile-drawer-watch"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> WATCH LIVE</a>
+  <a href="studio/" class="mobile-drawer-studio" aria-label="SANGWA STUDIO — Home">
+    <img src="assets/logo-small.png" alt="SANGWA STUDIO logo">
+    <span><span class="sw-main">SANGWA</span><span class="sw-sub"><i></i>STUDIO</span></span>
+  </a>
+  <div class="mobile-drawer-foot">
+    <span class="mobile-drawer-date" id="drawerDate"></span>
+    <div class="mobile-drawer-social">
+      <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12Z"/></svg></a>
+      <a href="#" aria-label="Twitter"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 5.9c-.7.3-1.5.6-2.3.7.8-.5 1.5-1.3 1.8-2.3-.8.5-1.7.8-2.6 1a4.1 4.1 0 0 0-7 3.7A11.6 11.6 0 0 1 3.4 4.6a4.1 4.1 0 0 0 1.3 5.5c-.7 0-1.3-.2-1.9-.5v.1c0 2 1.4 3.6 3.3 4a4.1 4.1 0 0 1-1.9.1 4.1 4.1 0 0 0 3.9 2.9A8.3 8.3 0 0 1 2 18.4a11.6 11.6 0 0 0 6.3 1.9c7.5 0 11.7-6.3 11.7-11.7v-.5c.8-.6 1.5-1.3 2-2.2Z"/></svg></a>
+      <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.5-.4-5.2c-.3-1-1-1.7-2-2C18.9 4.3 12 4.3 12 4.3s-6.9 0-8.6.5c-1 .3-1.7 1-2 2C1 8.5 1 12 1 12s0 3.5.4 5.2c.3 1 1 1.7 2 2 1.7.5 8.6.5 8.6.5s6.9 0 8.6-.5c1-.3 1.7-1 2-2 .4-1.7.4-5.2.4-5.2ZM9.8 15.3V8.7l6 3.3-6 3.3Z"/></svg></a>
+      <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c2.7 0 3.1 0 4.1.1 1.1 0 1.8.2 2.5.5.7.3 1.2.6 1.7 1.1.5.5.9 1 1.1 1.7.3.7.4 1.4.5 2.5 0 1 .1 1.4.1 4.1s0 3.1-.1 4.1c0 1.1-.2 1.8-.5 2.5-.3.7-.6 1.2-1.1 1.7-.5.5-1 .9-1.7 1.1-.7.3-1.4.4-2.5.5-1 0-1.4.1-4.1.1s-3.1 0-4.1-.1c-1.1 0-1.8-.2-2.5-.5-.7-.3-1.2-.6-1.7-1.1-.5-.5-.9-1-1.1-1.7-.3-.7-.4-1.4-.5-2.5C2 15.1 2 14.7 2 12s0-3.1.1-4.1c0-1.1.2-1.8.5-2.5.3-.7.6-1.2 1.1-1.7.5-.5 1-.9 1.7-1.1.7-.3 1.4-.4 2.5-.5C8.9 2 9.3 2 12 2Zm0 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10Zm0 8.2a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4Zm5.2-8.4a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0Z"/></svg></a>
+    </div>
+  </div>
+</nav>
+
+<div class="search-overlay" id="searchOverlay" aria-hidden="true">
+  <div class="search-panel">
+    <div class="search-panel-head">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="searchInput" placeholder="Search articles…" autocomplete="off" aria-label="Search articles">
+      <button type="button" id="searchCloseBtn" aria-label="Close search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="4" x2="20" y2="20"/><line x1="20" y1="4" x2="4" y2="20"/></svg>
+      </button>
+    </div>
+    <div class="search-results" id="searchResults">
+      <div class="search-hint">Start typing to search Gakoro Media TV articles.</div>
+    </div>
+  </div>
+</div>
+
+<div class="ticker" id="tickerBar" style="display:none;">
+  <div class="ticker-label">BREAKING NEWS</div>
+  <div class="ticker-viewport">
+    <div class="ticker-track"></div>
+  </div>
+  <div class="ticker-controls">
+    <button type="button" aria-label="Previous" id="tickerPrev"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15 6l-6 6 6 6"/></svg></button>
+    <button type="button" aria-label="Pause" id="tickerPause"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg></button>
+    <button type="button" aria-label="Next" id="tickerNext"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 6l6 6-6 6"/></svg></button>
+  </div>
+</div>
+
+<section class="hero" id="heroSection">
+  <div class="hero-main">
+    <a class="feature-story" id="featureStory" href="article/" style="display:none;">
+      <div class="feature-media"></div>
+      <div class="hero-overlay">
+        <div class="hero-eyebrow"><span class="live-dot"></span> <span id="featureCat">Featured</span></div>
+        <div class="hero-headline" id="featureHeadline"></div>
+        <div class="hero-byline" id="featureByline"></div>
+      </div>
+    </a>
+  </div>
+
+  <aside class="top-stories" id="topStories" style="display:none;">
+    <div class="top-stories-head">TOP STORIES</div>
+    <a class="top-story-item" href="article/" style="display:none;">
+      <div class="ts-thumb g1"></div>
       <div>
-        <h2>New Lesson Plan</h2>
-        <div class="hint">Generate a lesson plan based on the official REB lesson plan format.</div>
+        <span class="ts-cat"></span>
+        <div class="ts-title"></div>
+        <div class="ts-meta"></div>
+      </div>
+    </a>
+    <a class="top-story-item" href="article/" style="display:none;">
+      <div class="ts-thumb g2"></div>
+      <div>
+        <span class="ts-cat"></span>
+        <div class="ts-title"></div>
+        <div class="ts-meta"></div>
+      </div>
+    </a>
+    <a class="top-story-item" href="article/" style="display:none;">
+      <div class="ts-thumb g3"></div>
+      <div>
+        <span class="ts-cat"></span>
+        <div class="ts-title"></div>
+        <div class="ts-meta"></div>
+      </div>
+    </a>
+    <a class="top-story-item" href="article/" style="display:none;">
+      <div class="ts-thumb g4"></div>
+      <div>
+        <span class="ts-cat"></span>
+        <div class="ts-title"></div>
+        <div class="ts-meta"></div>
+      </div>
+    </a>
+  </aside>
+</section>
+
+<div class="section-head" id="latest-articles">
+  <div class="section-title">Latest Articles</div>
+  <a href="category/" class="view-all">VIEW ALL <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 6l6 6-6 6"/></svg></a>
+</div>
+
+<section class="grid" id="articleGrid" style="display:none;">
+  <a class="card" href="article/" style="display:none;">
+    <div class="card-thumb g1"></div>
+    <div class="card-body">
+      <div class="card-cat"></div>
+      <div class="card-title"></div>
+      <div class="card-stats">
+        <span class="stat stat-views">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span class="stat-views-num"></span>
+        </span>
+        <span class="stat stat-likes">
+          <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10.2-9.3C.2 8.8 1.6 5 5.3 4.2c2-.4 3.9.4 5.1 2.1l1.6 2.2 1.6-2.2c1.2-1.7 3.1-2.5 5.1-2.1 3.7.8 5.1 4.6 3.5 7.5C19.5 16.4 12 21 12 21z"/></svg>
+          <span class="stat-likes-num"></span>
+        </span>
+        <button type="button" class="stat-share" aria-label="Share this article">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>
+        </button>
+      </div>
+      <div class="card-meta"></div>
+    </div>
+  </a>
+  <a class="card" href="article/" style="display:none;">
+    <div class="card-thumb g2"></div>
+    <div class="card-body">
+      <div class="card-cat"></div>
+      <div class="card-title"></div>
+      <div class="card-stats">
+        <span class="stat stat-views">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span class="stat-views-num"></span>
+        </span>
+        <span class="stat stat-likes">
+          <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10.2-9.3C.2 8.8 1.6 5 5.3 4.2c2-.4 3.9.4 5.1 2.1l1.6 2.2 1.6-2.2c1.2-1.7 3.1-2.5 5.1-2.1 3.7.8 5.1 4.6 3.5 7.5C19.5 16.4 12 21 12 21z"/></svg>
+          <span class="stat-likes-num"></span>
+        </span>
+        <button type="button" class="stat-share" aria-label="Share this article">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>
+        </button>
+      </div>
+      <div class="card-meta"></div>
+    </div>
+  </a>
+  <a class="card" href="article/" style="display:none;">
+    <div class="card-thumb g3"></div>
+    <div class="card-body">
+      <div class="card-cat"></div>
+      <div class="card-title"></div>
+      <div class="card-stats">
+        <span class="stat stat-views">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span class="stat-views-num"></span>
+        </span>
+        <span class="stat stat-likes">
+          <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10.2-9.3C.2 8.8 1.6 5 5.3 4.2c2-.4 3.9.4 5.1 2.1l1.6 2.2 1.6-2.2c1.2-1.7 3.1-2.5 5.1-2.1 3.7.8 5.1 4.6 3.5 7.5C19.5 16.4 12 21 12 21z"/></svg>
+          <span class="stat-likes-num"></span>
+        </span>
+        <button type="button" class="stat-share" aria-label="Share this article">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>
+        </button>
+      </div>
+      <div class="card-meta"></div>
+    </div>
+  </a>
+  <a class="card" href="article/" style="display:none;">
+    <div class="card-thumb g4"></div>
+    <div class="card-body">
+      <div class="card-cat"></div>
+      <div class="card-title"></div>
+      <div class="card-stats">
+        <span class="stat stat-views">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span class="stat-views-num"></span>
+        </span>
+        <span class="stat stat-likes">
+          <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10.2-9.3C.2 8.8 1.6 5 5.3 4.2c2-.4 3.9.4 5.1 2.1l1.6 2.2 1.6-2.2c1.2-1.7 3.1-2.5 5.1-2.1 3.7.8 5.1 4.6 3.5 7.5C19.5 16.4 12 21 12 21z"/></svg>
+          <span class="stat-likes-num"></span>
+        </span>
+        <button type="button" class="stat-share" aria-label="Share this article">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>
+        </button>
+      </div>
+      <div class="card-meta"></div>
+    </div>
+  </a>
+</section>
+
+<div class="section-head">
+  <div class="section-title">More Stories</div>
+  <a href="category/" class="view-all">VIEW ALL <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 6l6 6-6 6"/></svg></a>
+</div>
+
+<section class="grid" id="moreStoriesGrid" style="display:none;">
+  <a class="card" href="article/" style="display:none;">
+    <div class="card-thumb g5"></div>
+    <div class="card-body">
+      <div class="card-cat"></div>
+      <div class="card-title"></div>
+      <div class="card-stats">
+        <span class="stat stat-views">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span class="stat-views-num"></span>
+        </span>
+        <span class="stat stat-likes">
+          <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10.2-9.3C.2 8.8 1.6 5 5.3 4.2c2-.4 3.9.4 5.1 2.1l1.6 2.2 1.6-2.2c1.2-1.7 3.1-2.5 5.1-2.1 3.7.8 5.1 4.6 3.5 7.5C19.5 16.4 12 21 12 21z"/></svg>
+          <span class="stat-likes-num"></span>
+        </span>
+        <button type="button" class="stat-share" aria-label="Share this article">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>
+        </button>
+      </div>
+      <div class="card-meta"></div>
+    </div>
+  </a>
+  <a class="card" href="article/" style="display:none;">
+    <div class="card-thumb g6"></div>
+    <div class="card-body">
+      <div class="card-cat"></div>
+      <div class="card-title"></div>
+      <div class="card-stats">
+        <span class="stat stat-views">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span class="stat-views-num"></span>
+        </span>
+        <span class="stat stat-likes">
+          <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10.2-9.3C.2 8.8 1.6 5 5.3 4.2c2-.4 3.9.4 5.1 2.1l1.6 2.2 1.6-2.2c1.2-1.7 3.1-2.5 5.1-2.1 3.7.8 5.1 4.6 3.5 7.5C19.5 16.4 12 21 12 21z"/></svg>
+          <span class="stat-likes-num"></span>
+        </span>
+        <button type="button" class="stat-share" aria-label="Share this article">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>
+        </button>
+      </div>
+      <div class="card-meta"></div>
+    </div>
+  </a>
+  <a class="card" href="article/" style="display:none;">
+    <div class="card-thumb g7"></div>
+    <div class="card-body">
+      <div class="card-cat"></div>
+      <div class="card-title"></div>
+      <div class="card-stats">
+        <span class="stat stat-views">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span class="stat-views-num"></span>
+        </span>
+        <span class="stat stat-likes">
+          <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10.2-9.3C.2 8.8 1.6 5 5.3 4.2c2-.4 3.9.4 5.1 2.1l1.6 2.2 1.6-2.2c1.2-1.7 3.1-2.5 5.1-2.1 3.7.8 5.1 4.6 3.5 7.5C19.5 16.4 12 21 12 21z"/></svg>
+          <span class="stat-likes-num"></span>
+        </span>
+        <button type="button" class="stat-share" aria-label="Share this article">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>
+        </button>
+      </div>
+      <div class="card-meta"></div>
+    </div>
+  </a>
+  <a class="card" href="article/" style="display:none;">
+    <div class="card-thumb g8"></div>
+    <div class="card-body">
+      <div class="card-cat"></div>
+      <div class="card-title"></div>
+      <div class="card-stats">
+        <span class="stat stat-views">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span class="stat-views-num"></span>
+        </span>
+        <span class="stat stat-likes">
+          <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10.2-9.3C.2 8.8 1.6 5 5.3 4.2c2-.4 3.9.4 5.1 2.1l1.6 2.2 1.6-2.2c1.2-1.7 3.1-2.5 5.1-2.1 3.7.8 5.1 4.6 3.5 7.5C19.5 16.4 12 21 12 21z"/></svg>
+          <span class="stat-likes-num"></span>
+        </span>
+        <button type="button" class="stat-share" aria-label="Share this article">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>
+        </button>
+      </div>
+      <div class="card-meta"></div>
+    </div>
+  </a>
+</section>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-col">
+      <div class="footer-brand-name">GAKORO MEDIA TV</div>
+      <p class="footer-desc">Gakoro Media TV is your trusted source for credible news, inspiring stories and information that transforms lives. Proudly produced by <a href="studio/" style="color:var(--gold); text-decoration:underline;">Sangwa Studio</a>, Musanze's home for photo, video &amp; music production.</p>
+      <div class="footer-social">
+        <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12Z"/></svg></a>
+        <a href="#" aria-label="Twitter"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 5.9c-.7.3-1.5.6-2.3.7.8-.5 1.5-1.3 1.8-2.3-.8.5-1.7.8-2.6 1a4.1 4.1 0 0 0-7 3.7A11.6 11.6 0 0 1 3.4 4.6a4.1 4.1 0 0 0 1.3 5.5c-.7 0-1.3-.2-1.9-.5v.1c0 2 1.4 3.6 3.3 4a4.1 4.1 0 0 1-1.9.1 4.1 4.1 0 0 0 3.9 2.9A8.3 8.3 0 0 1 2 18.4a11.6 11.6 0 0 0 6.3 1.9c7.5 0 11.7-6.3 11.7-11.7v-.5c.8-.6 1.5-1.3 2-2.2Z"/></svg></a>
+        <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.5-.4-5.2c-.3-1-1-1.7-2-2C18.9 4.3 12 4.3 12 4.3s-6.9 0-8.6.5c-1 .3-1.7 1-2 2C1 8.5 1 12 1 12s0 3.5.4 5.2c.3 1 1 1.7 2 2 1.7.5 8.6.5 8.6.5s6.9 0 8.6-.5c1-.3 1.7-1 2-2 .4-1.7.4-5.2.4-5.2ZM9.8 15.3V8.7l6 3.3-6 3.3Z"/></svg></a>
+        <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c2.7 0 3.1 0 4.1.1 1.1 0 1.8.2 2.5.5.7.3 1.2.6 1.7 1.1.5.5.9 1 1.1 1.7.3.7.4 1.4.5 2.5 0 1 .1 1.4.1 4.1s0 3.1-.1 4.1c0 1.1-.2 1.8-.5 2.5-.3.7-.6 1.2-1.1 1.7-.5.5-1 .9-1.7 1.1-.7.3-1.4.4-2.5.5-1 0-1.4.1-4.1.1s-3.1 0-4.1-.1c-1.1 0-1.8-.2-2.5-.5-.7-.3-1.2-.6-1.7-1.1-.5-.5-.9-1-1.1-1.7-.3-.7-.4-1.4-.5-2.5C2 15.1 2 14.7 2 12s0-3.1.1-4.1c0-1.1.2-1.8.5-2.5.3-.7.6-1.2 1.1-1.7.5-.5 1-.9 1.7-1.1.7-.3 1.4-.4 2.5-.5C8.9 2 9.3 2 12 2Zm0 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10Zm0 8.2a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4Zm5.2-8.4a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0Z"/></svg></a>
       </div>
     </div>
-
-    <form id="form">
-      <div class="row2">
-        <div class="field">
-          <label for="subject">Subject <span style="color:var(--error-ink)">*</span></label>
-          <select id="subject" required>
-            <option>Mathematics</option>
-            <option>English</option>
-            <option>Kinyarwanda</option>
-            <option>Science &amp; Elementary Technology</option>
-            <option>Social &amp; Religious Studies</option>
-            <option>Physics</option>
-            <option>Chemistry</option>
-            <option>Biology</option>
-            <option>Geography</option>
-            <option>History</option>
-            <option>Entrepreneurship</option>
-            <option>ICT</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="level">Class / Level <span style="color:var(--error-ink)">*</span></label>
-          <select id="level" required>
-            <optgroup label="Primary">
-              <option>P1</option><option>P2</option><option>P3</option>
-              <option>P4</option><option>P5</option><option>P6</option>
-            </optgroup>
-            <optgroup label="O-Level">
-              <option>S1</option><option>S2</option><option>S3</option>
-            </optgroup>
-          </select>
-        </div>
-      </div>
-
-      <div class="scope-note" id="scopeNote">
-        Reference material is currently loaded for <strong>P1 Mathematics</strong> and <strong>S1 Physics</strong>. Other subjects/levels will still generate a plan, using general REB methodology rather than matched textbook content — treat those as a rougher draft.
-      </div>
-
-      <div class="field">
-        <label for="topic">Topic <span style="color:var(--error-ink)">*</span></label>
-        <input id="topic" placeholder="e.g. Rwandan currency, fractions, number patterns" value="Rwandan currency" required>
-      </div>
-
-      <div class="row2">
-        <div class="field">
-          <label for="term">Term <span style="color:var(--error-ink)">*</span></label>
-          <select id="term" required>
-            <option value="term1">Term 1</option>
-            <option value="term2">Term 2</option>
-            <option value="term3">Term 3</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="lesson_date">Date <span style="color:var(--error-ink)">*</span> <span style="font-weight:400; color:var(--muted);">(autofilled — change if needed)</span></label>
-          <input id="lesson_date" type="date" required>
-        </div>
-      </div>
-
-      <div class="row2">
-        <div class="field">
-          <label for="unit_no">Unit N° <span style="color:var(--error-ink)">*</span></label>
-          <input id="unit_no" placeholder="e.g. 12" required>
-        </div>
-        <div class="field">
-          <label for="lesson_no">Lesson N° <span style="color:var(--error-ink)">*</span></label>
-          <input id="lesson_no" placeholder="e.g. 3 of 5" required>
-        </div>
-      </div>
-
-      <div class="row2">
-        <div class="field">
-          <label for="duration">Duration (minutes) <span style="color:var(--error-ink)">*</span></label>
-          <input id="duration" type="number" value="40" required>
-        </div>
-        <div class="field">
-          <label for="class_size">Class size <span style="color:var(--error-ink)">*</span></label>
-          <input id="class_size" type="number" placeholder="e.g. 32" required>
-        </div>
-      </div>
-
-      <div class="row2">
-        <div class="field">
-          <label for="teacher_name">Teacher name <span style="color:var(--error-ink)">*</span></label>
-          <input id="teacher_name" placeholder="e.g. John Doe" required>
-        </div>
-        <div class="field">
-          <label for="school_name">School name <span style="color:var(--error-ink)">*</span></label>
-          <input id="school_name" placeholder="e.g. GS Gakoro" required>
-        </div>
-      </div>
-
-      <button id="go" type="submit"><span aria-hidden="true">📄</span> Generate lesson plan</button>
-      <div id="status"></div>
-      <div id="error"></div>
-    </form>
-  </section>
-
-  <section class="panel" id="result">
-    <button id="printBtn" type="button">🖨️ Print / Save as PDF</button>
-    <div class="empty-state" id="emptyState">
-      <div class="mark">📝</div>
-      <h3>No plan yet</h3>
-      <p>Fill in the subject, level and topic on the left, then generate — your lesson plan will appear here, laid out exactly like the official REB paper form.</p>
+    <div class="footer-col">
+      <div class="footer-col-title">Quick Links</div>
+      <a href="about/">About Us</a>
+      <a href="contact/">Contact Us</a>
+      <a href="advertise/">Advertise</a>
+      <a href="studio/">Sangwa Studio</a>
+      <a href="lesson-maker/">Lesson Maker</a>
+      <a href="ndera-system-login/">Ndera</a>
+      <a href="/privacy/">Privacy Policy</a>
+      <a href="/terms/">Terms of Use</a>
     </div>
-    <div id="planContent"></div>
-  </section>
-</main>
-
-<footer>GS GAKORO · Education Tools · Lesson Plan Generator · Designed by <strong>DoD Makuza</strong><br><a href="/" style="color: var(--green); text-decoration: none; font-weight: 600;">← Back to Gakoro Media TV</a></footer>
+    <div class="footer-col" id="footerCategories">
+      <div class="footer-col-title">Categories</div>
+      <a href="#latest-articles">News</a>
+      <a href="category/?cat=Education">Education</a>
+      <a href="category/?cat=Sports">Sports</a>
+      <a href="category/?cat=Community">Community</a>
+      <a href="category/?cat=Interviews">Interviews</a>
+      <a href="category/?cat=Business">Business</a>
+      <a href="category/?cat=Opinion">Opinion</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Newsletter</div>
+      <p class="newsletter-desc">Subscribe to our newsletter and get the latest news updates.</p>
+      <form class="newsletter-form" id="newsletterForm">
+        <input type="email" placeholder="Enter your email" required aria-label="Email address">
+        <button type="submit">SUBSCRIBE</button>
+      </form>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; <span id="yearNow2"></span> GAKORO MEDIA TV. All Rights Reserved.</span>
+    <span>Made with <span class="heart">&hearts;</span> by <a href="studio/" style="color:#AAB4C0; text-decoration:underline;">Sangwa Studio</a> in Rwanda</span>
+  </div>
+</footer>
 
 <script>
-const SUPABASE_URL = "https://svairnqnnvxcwjasuziz.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2YWlybnFubnZ4Y3dqYXN1eml6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM3NTk2NDMsImV4cCI6MjA5OTMzNTY0M30.5qSmG8dH2MsNxOQtrBamhLlLopguPd7If4RKn-lE9L8";
-const GROUNDED = [
-  { subject: "Mathematics", level: "P1" },
-  { subject: "Physics", level: "S1" },
-];
+document.getElementById('yearNow2').textContent = new Date().getFullYear();
+document.getElementById('topDate').textContent = new Date().toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric', year:'numeric' });
+var drawerDateEl = document.getElementById('drawerDate');
+if (drawerDateEl) drawerDateEl.textContent = new Date().toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+(function(){
+  var form = document.getElementById('newsletterForm');
+  var input = form.querySelector('input[type="email"]');
+  var btn = form.querySelector('button');
+  var btnDefaultText = btn.textContent;
+  var msg = document.createElement('div');
+  msg.style.cssText = 'width:100%;font-family:"IBM Plex Mono",monospace;font-size:11.5px;margin-top:8px;';
+  form.after(msg);
 
-const form = document.getElementById('form');
-const subjectEl = document.getElementById('subject');
-const levelEl = document.getElementById('level');
-const statusEl = document.getElementById('status');
-const errorEl = document.getElementById('error');
-const resultEl = document.getElementById('planContent');
-const emptyState = document.getElementById('emptyState');
-const goBtn = document.getElementById('go');
-const scopeNote = document.getElementById('scopeNote');
-const printBtn = document.getElementById('printBtn');
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    var email = input.value.trim();
+    if (!email) return;
+    btn.disabled = true;
+    btn.textContent = '...';
 
-printBtn.addEventListener('click', () => window.print());
+    if (window.sbClient){
+      try{
+        var res = await window.sbClient.from('newsletter_subscribers').insert([{ email: email }]);
+        if (res.error){
+          console.error(res.error);
+          msg.style.color = '#FF8A8A';
+          msg.textContent = "Couldn't subscribe right now — email us at hello@gakoromedia.rw instead.";
+        } else {
+          msg.style.color = '#8FD19E';
+          msg.textContent = "Subscribed! Thanks for joining.";
+          form.reset();
+        }
+      } catch(err){
+        console.error(err);
+        msg.style.color = '#FF8A8A';
+        msg.textContent = "Couldn't subscribe right now — email us at hello@gakoromedia.rw instead.";
+      }
+    } else {
+      msg.style.color = '#8FD19E';
+      msg.textContent = "Opening your email app to subscribe…";
+      window.location.href = 'mailto:hello@gakoromedia.rw?subject=' + encodeURIComponent('Newsletter signup') + '&body=' + encodeURIComponent('Please add me to the newsletter: ' + email);
+    }
 
-// Autofill today's date so the teacher never has to type it in manually.
-// Lesson N° is intentionally left blank — that one genuinely needs a human to fill it in.
-(function autofillDate() {
-  const d = new Date();
-  const pad = n => String(n).padStart(2, '0');
-  document.getElementById('lesson_date').value = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+    btn.disabled = false;
+    btn.textContent = btnDefaultText;
+  });
+})();
+(function(){
+  var btn = document.getElementById('mobileMenuBtn');
+  var drawer = document.getElementById('mobileDrawer');
+  var overlay = document.getElementById('mobileDrawerOverlay');
+  var closeBtn = document.getElementById('mobileDrawerClose');
+  if (!btn || !drawer || !overlay) return;
+
+  function openDrawer(){
+    drawer.classList.add('open');
+    overlay.classList.add('open');
+    drawer.setAttribute('aria-hidden','false');
+    btn.setAttribute('aria-expanded','true');
+    document.body.classList.add('drawer-open');
+  }
+  function closeDrawer(){
+    drawer.classList.remove('open');
+    overlay.classList.remove('open');
+    drawer.setAttribute('aria-hidden','true');
+    btn.setAttribute('aria-expanded','false');
+    document.body.classList.remove('drawer-open');
+  }
+
+  btn.addEventListener('click', function(){
+    drawer.classList.contains('open') ? closeDrawer() : openDrawer();
+  });
+  if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+  overlay.addEventListener('click', closeDrawer);
+  drawer.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', closeDrawer);
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') closeDrawer();
+  });
 })();
 
-function esc(s) {
-  if (s === null || s === undefined) return '';
-  return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-}
-function nl2br(s) { return esc(s).replace(/\n/g, '<br>'); }
-function titleCase(s) {
-  if (!s) return '';
-  return String(s).replace(/\w\S*/g, w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
-}
+/* ---------- Site search (live query against Supabase news_articles) ---------- */
+(function(){
+  var triggers = [document.getElementById('navSearchBtn'), document.getElementById('utilitySearchBtn')].filter(Boolean);
+  var overlay = document.getElementById('searchOverlay');
+  var panel = overlay ? overlay.querySelector('.search-panel') : null;
+  var input = document.getElementById('searchInput');
+  var closeBtn = document.getElementById('searchCloseBtn');
+  var results = document.getElementById('searchResults');
+  if (!overlay || !input || !results) return;
 
-function updateScopeNote() {
-  const grounded = GROUNDED.some(g => g.subject === subjectEl.value && g.level === levelEl.value);
-  scopeNote.classList.toggle('show', !grounded);
-}
-subjectEl.addEventListener('change', updateScopeNote);
-levelEl.addEventListener('change', updateScopeNote);
-updateScopeNote();
+  var debounceTimer = null;
+  var latestQuery = '';
 
-function formatDate(d) {
-  if (!d) return '';
-  try {
-    const dt = new Date(d + 'T00:00:00');
-    return dt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-  } catch { return d; }
-}
+  function escapeHtml(str){
+    var div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
 
-// Map generated steps (introduction / development / assessment) onto the
-// paper form's three rows: Introduction / Development of the lesson / Conclusion.
-function bucketSteps(steps) {
-  const buckets = { introduction: [], development: [], conclusion: [] };
-  (steps || []).forEach(s => {
-    const key = (s.step || '').toLowerCase();
-    if (key.includes('intro')) buckets.introduction.push(s);
-    else if (key.includes('conclu') || key.includes('assess') || key.includes('evaluat')) buckets.conclusion.push(s);
-    else buckets.development.push(s);
+  function openSearch(){
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('search-open');
+    setTimeout(function(){ input.focus(); }, 50);
+  }
+  function closeSearch(){
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('search-open');
+  }
+
+  triggers.forEach(function(t){ t.addEventListener('click', openSearch); });
+  if (closeBtn) closeBtn.addEventListener('click', closeSearch);
+  overlay.addEventListener('click', function(e){ if (e.target === overlay) closeSearch(); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeSearch(); });
+  if (panel) panel.addEventListener('click', function(e){ e.stopPropagation(); });
+
+  function renderResults(rows){
+    if (!rows || !rows.length){
+      results.innerHTML = '<div class="search-empty">No articles found.</div>';
+      return;
+    }
+    results.innerHTML = rows.map(function(r){
+      var cat = escapeHtml(r.category || '');
+      var title = escapeHtml(r.headline || '');
+      var date = r.published_at ? new Date(r.published_at).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) : '';
+      return '<a class="search-result-item" href="article/?slug=' + encodeURIComponent(r.slug) + '">' +
+        '<span class="sr-cat">' + cat + '</span>' +
+        '<span class="sr-title">' + title + '</span>' +
+        '<span class="sr-meta">' + escapeHtml(date) + '</span>' +
+        '</a>';
+    }).join('');
+  }
+
+  input.addEventListener('input', function(){
+    var q = input.value.trim();
+    clearTimeout(debounceTimer);
+
+    if (q.length < 2){
+      results.innerHTML = '<div class="search-hint">Start typing to search Gakoro Media TV articles.</div>';
+      return;
+    }
+
+    debounceTimer = setTimeout(async function(){
+      latestQuery = q;
+      results.innerHTML = '<div class="search-loading">Searching…</div>';
+
+      if (!window.sbClient){
+        results.innerHTML = '<div class="search-empty">Search isn\'t available right now.</div>';
+        return;
+      }
+
+      try{
+        var res = await window.sbClient
+          .from('news_articles')
+          .select('headline, slug, category, published_at')
+          .eq('status', 'published')
+          .ilike('headline', '%' + q + '%')
+          .order('published_at', { ascending: false })
+          .limit(8);
+
+        if (q !== latestQuery) return; // a newer keystroke already superseded this
+
+        if (res.error){
+          console.error(res.error);
+          results.innerHTML = '<div class="search-empty">Something went wrong — try again.</div>';
+          return;
+        }
+        renderResults(res.data);
+      } catch(err){
+        console.error(err);
+        if (q !== latestQuery) return;
+        results.innerHTML = '<div class="search-empty">Something went wrong — try again.</div>';
+      }
+    }, 320);
   });
-  return buckets;
-}
-
-function stepRow(label, items) {
-  const totalMin = items.reduce((sum, s) => sum + (parseInt(s.timing_minutes, 10) || 0), 0);
-  const teacher = items.map(s => s.teacher_activity).filter(Boolean).join('\n\n');
-  const learner = items.map(s => s.learner_activity).filter(Boolean).join('\n\n');
-  const cross = items.map(s => s.generic_competences).filter(Boolean).join('\n\n');
-  return `
-    <tr>
-      <td class="step-label">${esc(label)}<br><span style="font-weight:400;">${totalMin ? esc(totalMin) + ' min' : ''}</span></td>
-      <td class="teacher-act">${nl2br(teacher)}</td>
-      <td class="learner-act">${nl2br(learner)}</td>
-      <td class="cross-cut">${nl2br(cross)}</td>
-    </tr>`;
-}
-
-function renderPlan(p) {
-  const buckets = bucketSteps(Array.isArray(p.steps) ? p.steps : []);
-  document.title = `${p.lesson_title || 'Lesson Plan'} — ${p.subject} ${p.class_level} — GS Gakoro`;
-
-  const planRef = p.id ? String(p.id).split('-')[0].toUpperCase() : '—';
-  const generatedStamp = p.created_at
-    ? new Date(p.created_at).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
-    : new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-
-  resultEl.innerHTML = `
-    <div class="reb-scroll">
-    <div class="reb-sheet">
-      <div class="reb-title">Lesson Plan</div>
-      <div class="reb-header-line">
-        <span><span class="k">School Name:</span> ${esc(p.school_name) || '\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0'}</span>
-        <span><span class="k">Teacher's name:</span> ${esc(p.teacher_name) || '\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0'}</span>
-      </div>
-
-      <table class="reb-top">
-        <thead>
-          <tr>
-            <th>Term</th><th>Date</th><th>Subject</th><th>Class</th>
-            <th>Unit N°</th><th>Lesson N°</th><th>Duration</th><th>Class size</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>${esc((p.term || '').replace('term', 'Term '))}</td>
-            <td class="date-cell">${esc(formatDate(p.lesson_date))}</td>
-            <td>${esc(p.subject)}</td>
-            <td>${esc(p.class_level)}</td>
-            <td>${esc(p.unit_no) || '\u2014'}</td>
-            <td>${esc(p.lesson_no) || '\u2014'}</td>
-            <td>${p.duration_minutes ? esc(p.duration_minutes) + ' min' : ''}</td>
-            <td>${esc(p.class_size) || '\u2014'}</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table class="reb-table">
-        <tr>
-          <td class="lbl" colspan="1">Type of Special Educational Needs to be catered for in this lesson and number of learners in each category</td>
-          <td class="val">${nl2br(p.sen_notes) || 'None identified for this class'}</td>
-        </tr>
-        <tr>
-          <td class="lbl">Unit title</td><td class="val">${esc(p.unit_title)}</td>
-        </tr>
-        <tr>
-          <td class="lbl">Key Unit Competence</td><td class="val">${nl2br(p.key_unit_competence)}</td>
-        </tr>
-        <tr>
-          <td class="lbl">Title of the lesson</td><td class="val">${esc(p.lesson_title)}</td>
-        </tr>
-        <tr>
-          <td class="lbl">Instructional Objective</td><td class="val">${nl2br(p.instructional_objective)}</td>
-        </tr>
-        <tr>
-          <td class="lbl">Plan for this Class<br><span style="font-weight:400;">(location: in / outside)</span></td>
-          <td class="val">${esc(p.class_location)}</td>
-        </tr>
-        <tr>
-          <td class="lbl">Learning Materials<br><span style="font-weight:400;">(for all learners)</span></td>
-          <td class="val">${nl2br(p.learning_materials)}</td>
-        </tr>
-        <tr>
-          <td class="lbl">References</td><td class="val">${nl2br(p.lesson_references)}</td>
-        </tr>
-      </table>
-
-      <table class="reb-steps">
-        <thead>
-          <tr>
-            <th rowspan="2">Timing for each step</th>
-            <th colspan="2">Description of teaching and learning activity</th>
-            <th rowspan="2">Generic competences and Cross cutting issues to be addressed + a short explanation</th>
-          </tr>
-          <tr>
-            <th>Teacher activities</th>
-            <th>Learner activities</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${stepRow('Introduction', buckets.introduction)}
-          ${stepRow('Development of the lesson', buckets.development)}
-          ${stepRow('Conclusion', buckets.conclusion)}
-        </tbody>
-      </table>
-
-      <div class="reb-eval">
-        <div class="lbl2">Teacher self-evaluation</div>
-      </div>
-
-      <div class="reb-provenance">
-        Original lesson plan generated by GS Gakoro Education Tools (gakoromedia.rw), grounded in REB Rwanda Education Board e-learning platform textbooks and teacher's guides.
-        Plan reference: ${esc(planRef)} · Generated ${esc(generatedStamp)}
-      </div>
-    </div>
-    </div>
-    <div class="source-note">Grounded in ${(p.source_chunk_ids && p.source_chunk_ids.length) || 0} matched section(s) of the REB source books</div>
-  `;
-}
-
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  errorEl.style.display = 'none';
-  goBtn.disabled = true;
-  statusEl.textContent = 'Generating… this can take 20–60 seconds.';
-
-  const topic = document.getElementById('topic').value.trim();
-  const lessonDate = document.getElementById('lesson_date').value;
-  const unitNo = document.getElementById('unit_no').value.trim();
-  const lessonNo = document.getElementById('lesson_no').value.trim();
-  const duration = document.getElementById('duration').value;
-  const classSize = document.getElementById('class_size').value;
-  const teacherName = document.getElementById('teacher_name').value.trim();
-  const schoolName = document.getElementById('school_name').value.trim();
-
-  const ALLOWED_SCHOOLS = ['GS GAKORO', 'COLLEGE INYEMERAMIHIGO DE GISENYI'];
-  const normalize = s => s.trim().toUpperCase().replace(/\s+/g, ' ');
-
-  const missing = [];
-  if (!topic) missing.push('Topic');
-  if (!lessonDate) missing.push('Date');
-  if (!unitNo) missing.push('Unit N°');
-  if (!lessonNo) missing.push('Lesson N°');
-  if (!duration) missing.push('Duration');
-  if (!classSize) missing.push('Class size');
-  if (!teacherName) missing.push('Teacher name');
-  if (!schoolName) missing.push('School name');
-
-  if (missing.length) {
-    errorEl.textContent = `Please fill in: ${missing.join(', ')}.`;
-    errorEl.style.display = 'block';
-    statusEl.textContent = '';
-    goBtn.disabled = false;
-    return;
-  }
-  if (!ALLOWED_SCHOOLS.includes(normalize(schoolName))) {
-    errorEl.textContent = 'You are not a teacher of an approved school. This tool is currently only available to staff of GS Gakoro and College Inyemeramihigo de Gisenyi.';
-    errorEl.style.display = 'block';
-    statusEl.textContent = '';
-    goBtn.disabled = false;
-    return;
-  }
-
-  const body = {
-    subject: subjectEl.value,
-    level: levelEl.value,
-    topic,
-    duration_minutes: parseInt(duration, 10) || 40,
-    term: document.getElementById('term').value,
-    lesson_date: lessonDate,
-    unit_no: unitNo,
-    lesson_no: lessonNo,
-    class_size: parseInt(classSize, 10),
-    teacher_name: teacherName,
-    school_name: schoolName,
-  };
-
-  try {
-    const resp = await fetch(`${SUPABASE_URL}/functions/v1/generate-lesson-plan`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'apikey': SUPABASE_ANON_KEY,
-      },
-      body: JSON.stringify(body),
+})();
+(function(){
+  var track = document.querySelector('.ticker-track');
+  var pauseBtn = document.getElementById('tickerPause');
+  if (pauseBtn && track){
+    pauseBtn.addEventListener('click', function(){
+      var paused = track.style.animationPlayState === 'paused';
+      track.style.animationPlayState = paused ? 'running' : 'paused';
     });
-    const data = await resp.json();
-    if (!resp.ok) throw new Error(data.error || `Request failed (${resp.status})`);
-    emptyState.style.display = 'none';
-    printBtn.classList.add('show');
-    renderPlan(data.lesson_plan);
-    statusEl.textContent = 'Done.';
-  } catch (err) {
-    const msg = (err && typeof err === 'object' && 'message' in err && typeof err.message === 'string')
-      ? err.message
-      : String(err);
-    errorEl.textContent = 'Error: ' + msg;
-    errorEl.style.display = 'block';
-    statusEl.textContent = '';
-  } finally {
-    goBtn.disabled = false;
   }
-});
+})();
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script defer src="js/config.js"></script>
+<script defer src="js/latest-articles.js"></script>
+<script defer src="js/top-stories.js"></script>
+<script defer src="js/news.js"></script>
+<script defer src="js/nav-categories.js"></script>
+<script defer src="js/consent.js"></script>
+<script>
+  (function(){
+    var btn = document.getElementById('themeToggle');
+    if(!btn) return;
+    btn.addEventListener('click', function(){
+      var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      if(isDark){
+        document.documentElement.removeAttribute('data-theme');
+        try{ localStorage.setItem('gm_theme','light'); }catch(e){}
+      } else {
+        document.documentElement.setAttribute('data-theme','dark');
+        try{ localStorage.setItem('gm_theme','dark'); }catch(e){}
+      }
+    });
+  })();
+</script>
+<script>
+  /* Recompute stacked sticky offsets for the "freeze everything above
+     Top Stories" header (utility bar → masthead → nav bar → ticker →
+     hero video), at every viewport width. Heights vary (theme, font
+     size, responsive layout, whether the breaking-news ticker is
+     showing), so we measure live rather than hardcoding pixel values. */
+  (function(){
+    function updateFreezeOffsets(){
+      var utilityBar = document.querySelector('.utility-bar');
+      var masthead = document.querySelector('.masthead');
+      var navBar = document.querySelector('.nav-bar');
+      var ticker = document.getElementById('tickerBar');
+      var root = document.documentElement;
+      var offset = 0;
+
+      if (utilityBar) offset += utilityBar.offsetHeight;
+      root.style.setProperty('--freeze-off-masthead', offset + 'px');
+
+      if (masthead) offset += masthead.offsetHeight;
+      root.style.setProperty('--freeze-off-navbar', offset + 'px');
+
+      if (navBar) offset += navBar.offsetHeight;
+      root.style.setProperty('--freeze-off-ticker', offset + 'px');
+
+      if (ticker && getComputedStyle(ticker).display !== 'none') offset += ticker.offsetHeight;
+      root.style.setProperty('--freeze-off-hero', offset + 'px');
+    }
+
+    updateFreezeOffsets();
+    window.addEventListener('load', updateFreezeOffsets);
+
+    var resizeTimer;
+    window.addEventListener('resize', function(){
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(updateFreezeOffsets, 150);
+    });
+
+    // The breaking-news ticker starts hidden and is only revealed later
+    // by js/news.js once real headlines load — watch for that so the
+    // offsets stay correct instead of freezing with a gap where the
+    // ticker will appear.
+    var tickerEl = document.getElementById('tickerBar');
+    if (tickerEl && window.MutationObserver){
+      new MutationObserver(updateFreezeOffsets)
+        .observe(tickerEl, { attributes:true, attributeFilter:['style'] });
+    }
+  })();
 </script>
 </body>
 </html>
