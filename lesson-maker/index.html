@@ -316,14 +316,17 @@ const SUPABASE_URL = "https://svairnqnnvxcwjasuziz.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2YWlybnFubnZ4Y3dqYXN1eml6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM3NTk2NDMsImV4cCI6MjA5OTMzNTY0M30.5qSmG8dH2MsNxOQtrBamhLlLopguPd7If4RKn-lE9L8";
 // Canonical level ordering/grouping, used only to sort and label whatever
 // levels turn out to actually have uploaded material — it does not by itself
-// make any subject/level combination selectable.
-const LEVEL_ORDER = ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'S1', 'S2', 'S3'];
-const LEVEL_GROUP = l => (l[0] === 'P' ? 'Primary' : 'O-Level');
+// make any subject/level combination selectable. Covers Primary (P1-P6),
+// O-Level (S1-S3) and A-Level (S4-S6) since uploads can land in any of them.
+const LEVEL_ORDER = ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'S1', 'S2', 'S3', 'S4', 'S5', 'S6'];
+const LEVEL_GROUP = l => (l[0] === 'P' ? 'Primary' : (Number(l[1]) <= 3 ? 'O-Level' : 'A-Level'));
 
-// SUBJECTS_BY_LEVEL is populated ONLY from what is actually uploaded to
-// Supabase (reb_planner_books), fetched below. It starts empty on purpose:
-// until that fetch succeeds, no subject/level pair is considered valid, so
-// the form cannot be used to request a mismatched or ungrounded plan.
+// SUBJECTS_BY_LEVEL is populated ONLY from what is actually uploaded AND
+// chunked in Supabase (reb_planner_books + reb_planner_book_chunks), fetched
+// below. It starts empty on purpose: until that fetch succeeds, no subject/
+// level pair is considered valid, so the form cannot be used to request a
+// mismatched or ungrounded plan. A book row with zero processed chunks
+// (uploaded but not yet extracted) is deliberately excluded.
 let SUBJECTS_BY_LEVEL = {};
 let subjectsLoaded = false;
 
@@ -359,9 +362,9 @@ function titleCase(s) {
   return String(s).replace(/\w\S*/g, w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
 }
 
-// Rebuild the subject list to only the subjects that actually have uploaded
-// material at the selected level, preserving the current subject choice when
-// it's still valid.
+// Rebuild the subject list to only the subjects that actually have uploaded,
+// chunked material at the selected level, preserving the current subject
+// choice when it's still valid.
 function populateSubjects(preferredSubject) {
   const level = levelEl.value;
   const allowed = SUBJECTS_BY_LEVEL[level] || [];
@@ -372,7 +375,7 @@ function populateSubjects(preferredSubject) {
 }
 
 // Rebuild the level dropdown to only the levels that have at least one
-// uploaded subject, grouped as Primary / O-Level, in curriculum order.
+// uploaded+chunked subject, grouped as Primary / O-Level / A-Level, in order.
 function populateLevels(preferredLevel) {
   const available = LEVEL_ORDER.filter(l => (SUBJECTS_BY_LEVEL[l] || []).length);
   if (!available.length) {
@@ -392,14 +395,14 @@ function updateScopeNote() {
   if (!subjectsLoaded) return;
   const count = Object.values(SUBJECTS_BY_LEVEL).reduce((n, arr) => n + arr.length, 0);
   if (!count) {
-    scopeNote.textContent = 'No reference material has been uploaded yet, so no subjects are available to generate from.';
+    scopeNote.textContent = 'No reference material has finished processing yet, so no subjects are available to generate from.';
     scopeNote.classList.add('show');
     return;
   }
   const pairs = Object.entries(SUBJECTS_BY_LEVEL)
     .flatMap(([lvl, subs]) => subs.map(s => `${lvl} ${s}`))
     .join(', ');
-  scopeNote.textContent = `Only subjects with uploaded REB source material are listed: ${pairs}.`;
+  scopeNote.textContent = `Only subjects with uploaded, processed REB source material are listed: ${pairs}.`;
   scopeNote.classList.add('show');
 }
 
@@ -411,6 +414,9 @@ levelEl.addEventListener('change', () => {
 // the single source of truth for what the form will ever offer or submit —
 // nothing here falls back to a hardcoded curriculum list, so an outage or
 // empty result leaves the form disabled rather than open to mismatches.
+// Embeds reb_planner_book_chunks so a book row with zero processed chunks
+// (uploaded but not yet extracted, e.g. mid-ingestion) is excluded — "available"
+// means a teacher can actually get a grounded plan, not just that a PDF exists.
 async function loadAvailableSubjects() {
   loadErrorEl.classList.remove('show');
   scopeNote.textContent = 'Loading subjects with uploaded reference material…';
@@ -422,7 +428,7 @@ async function loadAvailableSubjects() {
 
   try {
     const resp = await fetch(
-      `${SUPABASE_URL}/rest/v1/reb_planner_books?select=subject,level`,
+      `${SUPABASE_URL}/rest/v1/reb_planner_books?select=subject,level,reb_planner_book_chunks(id)`,
       { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } }
     );
     if (!resp.ok) throw new Error(`Request failed (${resp.status})`);
@@ -431,6 +437,8 @@ async function loadAvailableSubjects() {
     const map = {};
     (rows || []).forEach(r => {
       if (!r || !r.subject || !r.level) return;
+      const hasChunks = Array.isArray(r.reb_planner_book_chunks) && r.reb_planner_book_chunks.length > 0;
+      if (!hasChunks) return; // book uploaded but not yet processed — not actually usable
       (map[r.level] = map[r.level] || new Set()).add(r.subject);
     });
     SUBJECTS_BY_LEVEL = Object.fromEntries(
@@ -646,8 +654,9 @@ form.addEventListener('submit', async (e) => {
     return;
   }
   // Hard gate: only ever submit a subject/level pair that the Supabase fetch
-  // actually confirmed has uploaded reference material. This does not fall
-  // back to any hardcoded list, so it can't be bypassed by a stale/failed load.
+  // actually confirmed has uploaded, processed reference material. This does
+  // not fall back to any hardcoded list, so it can't be bypassed by a stale
+  // or failed load.
   if (!subjectsLoaded || !(SUBJECTS_BY_LEVEL[levelEl.value] || []).includes(subjectEl.value)) {
     errorEl.textContent = `${subjectEl.value || 'That subject'} is not confirmed as available at ${levelEl.value || 'that level'}. Please choose a subject/level shown in the dropdowns.`;
     errorEl.style.display = 'block';
