@@ -369,7 +369,7 @@ function renderStudentRows(students) {
       <td>
         <div class="row-actions">
           ${isAdmin ? '<button class="row-action-btn" data-action="edit-student">Edit</button>' : ''}
-          ${isAdmin && s.status === 'active' ? '<button class="row-action-btn" data-action="move-student">Move class</button>' : ''}
+          ${isAdmin && moveClassDialog && s.status === 'active' ? '<button class="row-action-btn" data-action="move-student">Move class</button>' : ''}
           <span class="view-link">View →</span>
         </div>
       </td>
@@ -1254,6 +1254,10 @@ const moveClassAcceptBtn = document.getElementById('move-class-accept-btn');
 let movingStudentId = null;
 
 function openMoveClassDialog(studentId) {
+  if (!moveClassDialog) {
+    alert('Move class needs the updated students/index.html — please upload it, then refresh.');
+    return;
+  }
   const student = studentsCache.find((s) => s.id === studentId);
   if (!student) return;
 
@@ -1279,47 +1283,51 @@ function closeMoveClassDialog() {
   movingStudentId = null;
 }
 
-moveClassCancelBtn.addEventListener('click', closeMoveClassDialog);
-moveClassDialog.addEventListener('click', (e) => {
-  if (e.target === moveClassDialog) closeMoveClassDialog();
-});
-
-moveClassAcceptBtn.addEventListener('click', async () => {
-  if (!movingStudentId) return;
-  moveClassError.hidden = true;
-
-  const newClassId = moveClassSelect.value;
-  if (!newClassId) {
-    moveClassError.textContent = 'Choose the class to move this student to.';
-    moveClassError.hidden = false;
-    return;
-  }
-
-  moveClassAcceptBtn.disabled = true;
-  moveClassAcceptBtn.textContent = 'Moving…';
-
-  const { data, error } = await supabase.rpc('move_student_class', {
-    p_student_id: movingStudentId,
-    p_new_class_id: newClassId,
-    p_reason: moveClassReason.value.trim() || null,
+// Only wire the dialog if the page markup includes it (guards against a
+// new students.js being deployed with an old students/index.html).
+if (moveClassDialog) {
+  moveClassCancelBtn.addEventListener('click', closeMoveClassDialog);
+  moveClassDialog.addEventListener('click', (e) => {
+    if (e.target === moveClassDialog) closeMoveClassDialog();
   });
 
-  if (error) {
-    moveClassError.textContent = error.message || 'Could not move this student.';
-    moveClassError.hidden = false;
-    moveClassAcceptBtn.disabled = false;
-    moveClassAcceptBtn.textContent = 'Move student';
-    return;
-  }
+  moveClassAcceptBtn.addEventListener('click', async () => {
+    if (!movingStudentId) return;
+    moveClassError.hidden = true;
 
-  closeMoveClassDialog();
-  await loadStudents();
-  alert(`Moved to ${data?.to_class_name ?? 'the new class'} — all records moved with the student.`);
-});
+    const newClassId = moveClassSelect.value;
+    if (!newClassId) {
+      moveClassError.textContent = 'Choose the class to move this student to.';
+      moveClassError.hidden = false;
+      return;
+    }
 
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && !moveClassDialog.hidden) closeMoveClassDialog();
-});
+    moveClassAcceptBtn.disabled = true;
+    moveClassAcceptBtn.textContent = 'Moving…';
+
+    const { data, error } = await supabase.rpc('move_student_class', {
+      p_student_id: movingStudentId,
+      p_new_class_id: newClassId,
+      p_reason: moveClassReason.value.trim() || null,
+    });
+
+    if (error) {
+      moveClassError.textContent = error.message || 'Could not move this student.';
+      moveClassError.hidden = false;
+      moveClassAcceptBtn.disabled = false;
+      moveClassAcceptBtn.textContent = 'Move student';
+      return;
+    }
+
+    closeMoveClassDialog();
+    await loadStudents();
+    alert(`Moved to ${data?.to_class_name ?? 'the new class'} — all records moved with the student.`);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !moveClassDialog.hidden) closeMoveClassDialog();
+  });
+}
 
 // ------------------------------------------------------------
 // Excel import — template download
