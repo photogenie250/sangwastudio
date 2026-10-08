@@ -328,6 +328,27 @@
   </main>
 </div>
 
+<!-- Move student to another class (administrator / head teacher) -->
+<div class="confirm-overlay" id="move-class-dialog" hidden>
+  <div class="confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="move-class-title">
+    <p class="confirm-dialog__eyebrow">Move to another class</p>
+    <div class="confirm-dialog__subject">
+      <h2 class="confirm-dialog__name" id="move-class-title">—</h2>
+      <p class="confirm-dialog__meta" id="move-class-meta">—</p>
+    </div>
+    <p class="form-panel__hint">Marks, incidents, likes, counseling history and the parent login all stay with the student — only the class changes.</p>
+    <div id="move-class-error" class="inline-banner inline-banner--error" hidden></div>
+    <label class="confirm-dialog__label" for="move-class-select">Move to</label>
+    <select class="field__input" id="move-class-select"></select>
+    <label class="confirm-dialog__label" for="move-class-reason" style="margin-top: 12px;">Reason (optional)</label>
+    <input class="field__input" type="text" id="move-class-reason" maxlength="200" autocomplete="off" placeholder="e.g. Class rebalancing">
+    <div class="confirm-dialog__actions">
+      <button class="crud-form__cancel" type="button" id="move-class-cancel-btn">Cancel</button>
+      <button class="submit-btn" type="button" id="move-class-accept-btn">Move student</button>
+    </div>
+  </div>
+</div>
+
 <!-- ============================================================
      Marks-removal confirmation
      ============================================================
