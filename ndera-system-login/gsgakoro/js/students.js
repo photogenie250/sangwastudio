@@ -369,6 +369,7 @@ function renderStudentRows(students) {
       <td>
         <div class="row-actions">
           ${isAdmin ? '<button class="row-action-btn" data-action="edit-student">Edit</button>' : ''}
+          ${isAdmin && s.status === 'active' ? '<button class="row-action-btn" data-action="move-student">Move class</button>' : ''}
           <span class="view-link">View →</span>
         </div>
       </td>
@@ -384,6 +385,12 @@ function renderStudentRows(students) {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
         startEditStudent(e.target.closest('tr').dataset.id);
+      });
+    });
+    studentsBody.querySelectorAll('[data-action="move-student"]').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openMoveClassDialog(e.target.closest('tr').dataset.id);
       });
     });
   }
@@ -1193,6 +1200,26 @@ studentForm.addEventListener('submit', async (e) => {
     payload.status = studentStatusSelect.value;
   }
 
+  // Changing an existing student's class goes through the audited
+  // move_student_class function (same as the "Move class" button),
+  // so every class change is logged. The rest of the edit is a normal update.
+  if (id) {
+    const existing = studentsCache.find((s) => s.id === id);
+    if (existing && existing.class_id !== classId) {
+      const { error: moveError } = await supabase.rpc('move_student_class', {
+        p_student_id: id,
+        p_new_class_id: classId,
+        p_reason: null,
+      });
+      if (moveError) {
+        studentFormError.textContent = moveError.message || 'Could not move this student.';
+        studentFormError.hidden = false;
+        return;
+      }
+    }
+    delete payload.class_id;
+  }
+
   const { error } = id
     ? await supabase.from('students').update(payload).eq('id', id)
     : await supabase.from('students').insert(payload);
@@ -1207,6 +1234,91 @@ studentForm.addEventListener('submit', async (e) => {
 
   closeStudentForm();
   await loadStudents();
+});
+
+
+// ------------------------------------------------------------
+// Move a student to another class (administrator / head teacher)
+// All of the student's records are keyed on student id, so they
+// follow automatically — the database function only changes the
+// class and writes an audit row. See migration 0021.
+// ------------------------------------------------------------
+const moveClassDialog = document.getElementById('move-class-dialog');
+const moveClassTitle = document.getElementById('move-class-title');
+const moveClassMeta = document.getElementById('move-class-meta');
+const moveClassSelect = document.getElementById('move-class-select');
+const moveClassReason = document.getElementById('move-class-reason');
+const moveClassError = document.getElementById('move-class-error');
+const moveClassCancelBtn = document.getElementById('move-class-cancel-btn');
+const moveClassAcceptBtn = document.getElementById('move-class-accept-btn');
+let movingStudentId = null;
+
+function openMoveClassDialog(studentId) {
+  const student = studentsCache.find((s) => s.id === studentId);
+  if (!student) return;
+
+  movingStudentId = studentId;
+  moveClassTitle.textContent = `${student.first_name} ${student.last_name}`;
+  moveClassMeta.textContent = `${student.student_number} · Currently in ${student.classes?.class_name ?? 'Unassigned'} · ${student.current_marks} marks`;
+
+  moveClassSelect.innerHTML = '<option value="">Select a class…</option>' +
+    classesCacheForForm
+      .filter((c) => c.id !== student.class_id)
+      .map((c) => `<option value="${c.id}" ${c.teacher_id ? '' : 'disabled'}>${escapeHtml(c.class_name)}${c.teacher_id ? '' : ' (no teacher assigned)'}</option>`)
+      .join('');
+  moveClassReason.value = '';
+  moveClassError.hidden = true;
+  moveClassAcceptBtn.disabled = false;
+  moveClassAcceptBtn.textContent = 'Move student';
+  moveClassDialog.hidden = false;
+  moveClassSelect.focus();
+}
+
+function closeMoveClassDialog() {
+  moveClassDialog.hidden = true;
+  movingStudentId = null;
+}
+
+moveClassCancelBtn.addEventListener('click', closeMoveClassDialog);
+moveClassDialog.addEventListener('click', (e) => {
+  if (e.target === moveClassDialog) closeMoveClassDialog();
+});
+
+moveClassAcceptBtn.addEventListener('click', async () => {
+  if (!movingStudentId) return;
+  moveClassError.hidden = true;
+
+  const newClassId = moveClassSelect.value;
+  if (!newClassId) {
+    moveClassError.textContent = 'Choose the class to move this student to.';
+    moveClassError.hidden = false;
+    return;
+  }
+
+  moveClassAcceptBtn.disabled = true;
+  moveClassAcceptBtn.textContent = 'Moving…';
+
+  const { data, error } = await supabase.rpc('move_student_class', {
+    p_student_id: movingStudentId,
+    p_new_class_id: newClassId,
+    p_reason: moveClassReason.value.trim() || null,
+  });
+
+  if (error) {
+    moveClassError.textContent = error.message || 'Could not move this student.';
+    moveClassError.hidden = false;
+    moveClassAcceptBtn.disabled = false;
+    moveClassAcceptBtn.textContent = 'Move student';
+    return;
+  }
+
+  closeMoveClassDialog();
+  await loadStudents();
+  alert(`Moved to ${data?.to_class_name ?? 'the new class'} — all records moved with the student.`);
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && !moveClassDialog.hidden) closeMoveClassDialog();
 });
 
 // ------------------------------------------------------------
