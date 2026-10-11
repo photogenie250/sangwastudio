@@ -1,0 +1,80 @@
+/* Portal look: dense, headline-first layout. Loaded after the page styles
+   so it only overrides. Delete the <link> to revert. */
+body{ font-family:'Noto Sans', sans-serif; }
+
+/* ---------- Top bars ---------- */
+.utility-inner{ padding-top:6px; padding-bottom:6px; }
+.masthead-inner{ padding-top:12px; padding-bottom:12px; }
+.brand-name{ font-family:'Noto Sans', sans-serif; font-weight:900; letter-spacing:-0.01em; }
+
+.nav-bar{ border-top:3px solid var(--crimson); }
+.nav-row a{
+  font-family:'Noto Sans', sans-serif; font-size:12.5px; font-weight:700;
+  letter-spacing:0.03em; padding:13px 14px;
+}
+@media (min-width:900px){
+  .nav-bar{ position:sticky; top:0; z-index:40; }
+}
+
+/* ---------- Hero ---------- */
+.hero{ gap:22px; padding-top:20px; }
+.feature-story{ aspect-ratio:16/9; }
+.hero-headline{ font-family:'Noto Sans', sans-serif; font-weight:800; line-height:1.18; }
+.top-stories{ border-top:3px solid var(--crimson); }
+.top-stories-head{ font-family:'Noto Sans', sans-serif; font-weight:800; letter-spacing:0.08em; }
+.ts-title{ font-family:'Noto Sans', sans-serif; font-weight:700; line-height:1.3; }
+.ts-cat, .ts-meta{ font-family:'Noto Sans', sans-serif; font-weight:700; }
+
+/* ---------- Section headings: red tab on a red rule ---------- */
+.section-head{
+  margin:30px auto 16px; padding-bottom:0; align-items:flex-end;
+  border-bottom:2px solid var(--crimson);
+}
+.section-title{
+  background:var(--crimson); color:#fff;
+  font-family:'Noto Sans', sans-serif; font-weight:800; font-size:13.5px;
+  letter-spacing:0.07em; text-transform:uppercase; padding:8px 14px;
+}
+.section-title::before{ display:none; }
+.view-all{ font-family:'Noto Sans', sans-serif; font-weight:700; padding-bottom:8px; }
+
+/* ---------- Cards: text-first ---------- */
+.grid{ gap:22px 18px; }
+.card-thumb{ margin-bottom:10px; }
+.card-body{ gap:5px; }
+.card-cat{ font-family:'Noto Sans', sans-serif; font-weight:800; font-size:10.5px; }
+.card-title{ font-family:'Noto Sans', sans-serif; font-weight:700; font-size:15.5px; line-height:1.3; }
+.card-dek{ display:none !important; }
+.card-meta{ font-family:'Noto Sans', sans-serif; font-weight:600; }
+.card-stats{ font-family:'Noto Sans', sans-serif; }
+
+/* ---------- "More stories" becomes a latest-news list with times ---------- */
+#moreStoriesGrid{ grid-template-columns:repeat(2, 1fr); gap:0 36px; }
+#moreStoriesGrid .card{
+  flex-direction:row; gap:14px; padding:14px 0; border-bottom:1px solid var(--line);
+}
+#moreStoriesGrid .card-thumb{ flex:0 0 132px; aspect-ratio:4/3; margin:0; }
+#moreStoriesGrid .card-body{ min-width:0; gap:4px; }
+#moreStoriesGrid .card-meta{ order:-1; color:var(--crimson); font-weight:800; margin:0; }
+#moreStoriesGrid .card-stats{ display:none; }
+
+/* ---------- Tablet ---------- */
+@media (max-width:900px){
+  .grid{ grid-template-columns:repeat(2, 1fr); }
+  #moreStoriesGrid{ grid-template-columns:1fr; }
+  .hero{ grid-template-columns:1fr; }
+}
+
+/* ---------- Phone: every list becomes compact rows ---------- */
+@media (max-width:560px){
+  .grid{ grid-template-columns:1fr; gap:0; }
+  .grid .card{
+    flex-direction:row; gap:12px; padding:12px 0; border-bottom:1px solid var(--line);
+  }
+  .grid .card-thumb{ flex:0 0 112px; aspect-ratio:4/3; margin:0; }
+  .grid .card-body{ min-width:0; gap:3px; }
+  .grid .card-title{ font-size:14.5px; }
+  .grid .card-stats{ display:none; }
+  #moreStoriesGrid .card-thumb{ flex-basis:112px; }
+  .section-title{ font-size:12.5px; padding:7px 12px; }
+}
