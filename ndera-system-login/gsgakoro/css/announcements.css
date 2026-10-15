@@ -1,0 +1,85 @@
+/* ============================================================
+   Announcements page
+   ============================================================ */
+
+.announcement-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 4px;
+  border-bottom: 1px solid var(--line);
+}
+.row-list > .announcement-row:last-child { border-bottom: none; }
+
+.announcement-row__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.announcement-row__title-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.announcement-row__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--ink-navy);
+  margin: 0;
+}
+
+.announcement-row__text {
+  font-size: 13.5px;
+  color: var(--charcoal);
+  line-height: 1.5;
+  margin: 0 0 8px;
+  white-space: pre-wrap;
+}
+
+.announcement-row__meta {
+  font-size: 12px;
+  color: var(--charcoal-soft);
+  margin: 0;
+}
+
+.announcement-row__meta--expired { color: var(--clay); }
+
+.announcement-row__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.audience-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(20, 51, 107, 0.1);
+  color: var(--ink-navy);
+  white-space: nowrap;
+}
+
+.audience-badge--class {
+  background: rgba(124, 58, 237, 0.1);
+  color: #6B46C1;
+}
+
+.audience-badge--student {
+  background: rgba(226, 113, 29, 0.12);
+  color: var(--brass);
+}
+
+.audience-badge--inactive {
+  background: rgba(107, 114, 128, 0.12);
+  color: var(--charcoal-soft);
+}
