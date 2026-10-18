@@ -1,0 +1,44 @@
+/* Student discipline file — printable A4 (head teacher / administrator only) */
+.print-file-btn{margin:0 0 14px;padding:10px 18px;min-height:44px;border:0;border-radius:var(--radius,10px);background:var(--ink-navy,#14336B);color:#fff;font:600 14px var(--font-body,Inter,sans-serif);cursor:pointer}
+.print-file-btn:hover{background:var(--ink-navy-deep,#0A1F4D)}
+#student-file-print{display:none}
+.sf-page{break-after:page;width:210mm;min-height:297mm;box-sizing:border-box;padding:12mm 13mm;background:#fff;color:#1F2430;font:400 11pt Inter,sans-serif;display:flex;flex-direction:column;gap:5mm}
+.sf-page small{display:block;font:600 8.5pt Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#5B6272}
+.sf-v{border-bottom:1px solid #aab6cc;min-height:7mm;padding-top:1mm;margin-top:1mm;font-size:11pt}
+.sf-head{display:flex;align-items:center;gap:5mm;border-bottom:3px solid #14336B;padding-bottom:4mm}
+.sf-logo{width:24mm;text-align:center;border:2px solid #14336B;border-radius:3mm;padding:2mm 0;line-height:1}
+.sf-logo b{display:block;font:800 15pt Arial,sans-serif;letter-spacing:2px;color:#14336B}
+.sf-logo i{display:block;font:700 6.5pt Arial,sans-serif;letter-spacing:3px;color:#4C9A3D;margin-top:1mm;font-style:normal}
+.sf-title{flex:1}.sf-title h1{margin:0;font:800 20pt Inter,sans-serif;color:#14336B}.sf-title p{margin:0}
+.sf-status{width:32mm;text-transform:capitalize}
+.sf-id{display:flex;gap:6mm}
+.sf-photo{width:32mm;height:40mm;border:1.5px dashed #8a97b0;display:flex;align-items:center;justify-content:center;overflow:hidden;font:800 20pt Inter,sans-serif;color:#8a97b0}
+.sf-photo img{width:100%;height:100%;object-fit:cover}
+.sf-fields{flex:1;display:grid;gap:4mm;align-content:start}
+.sf-row{display:flex;gap:4mm}.sf-row>div{flex:1;min-width:0;overflow-wrap:anywhere}
+.sf-stats{display:flex;gap:3mm}
+.sf-box{flex:1;border:1px solid #aab6cc;border-radius:3mm;padding:2.5mm 3.5mm}
+.sf-box--main{flex:1.3;border:2px solid #14336B}
+.sf-box strong{display:block;font:800 20pt Inter,sans-serif;line-height:1.3}.sf-box--main strong{color:#14336B}
+.sf-box em{font:600 11pt Inter,sans-serif;color:#5B6272;font-style:normal}.sf-red{color:#C1392B}
+.sf-box span{display:block;font:600 11pt Inter,sans-serif;line-height:2.4}
+.sf-h{margin:0 0 2mm;font:800 10.5pt Inter,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#14336B}
+.sf-h:before{content:"";display:inline-block;width:2.5mm;height:2.5mm;background:#E2711D;margin-right:2mm}
+.sf-table{width:100%;border-collapse:collapse;font-size:10pt}
+.sf-table th{background:#14336B;color:#fff;font:600 8.5pt Inter,sans-serif;letter-spacing:.05em;text-transform:uppercase;padding:1.5mm;text-align:left}
+.sf-table td{border:1px solid #aab6cc;height:8mm;padding:0 1.5mm;font-size:9pt}
+.sf-table thead{display:table-header-group}.sf-table tr{break-inside:avoid}
+.sf-keep{break-inside:avoid}
+.print-file-btn:disabled{background:#8a97b0;cursor:not-allowed}
+.sf-more{margin:1.5mm 0 0;font-size:9pt;color:#5B6272}
+.sf-rem{border:2px solid #14336B;border-radius:3mm;min-height:15mm;padding:2mm 4mm;margin-top:1mm;font:800 16pt Inter,sans-serif;display:flex;align-items:center}
+.sf-rem--excellent{color:#2f7a22}.sf-rem--good{color:#B85A12}.sf-rem--improve{color:#C1392B}
+.sf-sign{display:flex;gap:8mm;margin-top:auto}.sf-sign>div{flex:1}.sf-sign i{display:block;border-bottom:1px solid #1F2430;height:10mm;margin-bottom:1mm}
+@media print{
+  @page{size:A4;margin:0}
+  body.printing-file{background:#fff!important}
+  body.printing-file > *:not(#student-file-print){display:none!important}
+  body.printing-file #student-file-print{display:block}
+  .sf-page{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .sf-page:last-child{break-after:auto}
+}
