@@ -1,0 +1,733 @@
+/* ==========================================================
+   SANGWA STUDIO — booking page styles
+   Palette: white page, deep navy text/footer, orange-red accent.
+   Sections, in order:
+     1. Colours and fonts (light + dark)
+     2. Page basics
+     3. Header and navigation
+     4. Mobile menu
+     5. Page heading
+     6. Booking form
+     7. Footer and floating Telegram button
+     8. Cookie banner
+     9. Tablet and phone layouts
+   ========================================================== */
+
+
+/* ---------- 1. Colours and fonts ---------- */
+
+:root {
+  /* surfaces */
+  --page:             #FFFFFF;   /* page background */
+  --surface:          #F5F6FA;   /* cards, drawer */
+  --surface-selected: #FFF1EC;   /* the chosen division card */
+  --field:            #FFFFFF;   /* input boxes */
+  --navy:             #1E2740;   /* footer band */
+
+  /* text */
+  --text:       #1E2740;
+  --text-muted: #59627A;
+  --text-faint: #9AA2B5;
+
+  /* borders */
+  --border:        rgba(30, 39, 64, .12);
+  --border-strong: rgba(30, 39, 64, .26);
+
+  /* accent (orange-red): buttons, highlights, links on hover */
+  --accent:      #EE4B20;
+  --accent-text: #D43D12;        /* slightly darker so small text stays readable */
+  --accent-rgb:  238, 75, 32;    /* same colour as numbers, for see-through tints */
+  --on-accent:   #FFFFFF;        /* text that sits on top of the accent */
+
+  /* fonts */
+  --font-heading: 'Montserrat', sans-serif;
+  --font-body:    'Montserrat', sans-serif;
+  --font-label:   'Space Mono', monospace;
+
+  color-scheme: light;
+}
+
+/* Dark mode: same palette, switched on by data-theme="dark" on <html> */
+[data-theme="dark"] {
+  --page:             #141A2E;
+  --surface:          #1E2740;
+  --surface-selected: #2A2F4A;
+  --field:            #141A2E;
+  --navy:             #0F1424;
+
+  --text:       #F4F6FB;
+  --text-muted: #B9C0D2;
+  --text-faint: #6F7891;
+
+  --border:        rgba(244, 246, 251, .12);
+  --border-strong: rgba(244, 246, 251, .26);
+
+  --accent:      #FF6B3D;
+  --accent-text: #FF8D66;
+  --accent-rgb:  255, 107, 61;
+  --on-accent:   #141A2E;
+
+  color-scheme: dark;
+}
+
+
+/* ---------- 2. Page basics ---------- */
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+/* people who ask their device for less motion get none */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition: none !important; }
+}
+
+/* the sticky header is 72px tall, so leave room when jumping to #contact */
+#contact { scroll-margin-top: 72px; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--page);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+a { color: inherit; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+main { flex: 1; }
+
+/* centres content and keeps it from stretching on very wide screens */
+.container {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 64px;
+}
+
+
+/* ---------- 3. Header and navigation ---------- */
+
+#siteHeader {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--page);
+  border-bottom: 1px solid var(--border);
+}
+
+#siteHeader nav {
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.brand img {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+.brand-name {
+  font: 700 18px var(--font-heading);
+  letter-spacing: .06em;
+  line-height: 1;
+}
+
+.brand-name small {
+  display: block;
+  margin-top: 5px;
+  font: 700 10px var(--font-label);
+  letter-spacing: .3em;
+  color: var(--accent-text);
+}
+
+.nav-links {
+  display: flex;
+  gap: 36px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  font-size: 15px;
+  color: var(--text-muted);
+}
+
+.nav-links a:hover { color: var(--accent-text); }
+
+/* theme toggle + Book Now + menu button, grouped on the right */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* the main orange call-to-action button */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 22px;
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font: 700 15px var(--font-body);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.button:hover {
+  background: var(--accent-text);
+  border-color: var(--accent-text);
+}
+
+/* the small square buttons: theme toggle, menu, close */
+.theme-toggle,
+.mobile-menu-button,
+.mobile-menu-close {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: none;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.theme-toggle svg { width: 18px; height: 18px; }
+
+/* show the moon in light mode, the sun in dark mode */
+.icon-sun { display: none; }
+[data-theme="dark"] .icon-sun  { display: block; }
+[data-theme="dark"] .icon-moon { display: none; }
+
+/* the menu button only appears on phones (see section 9) */
+.mobile-menu-button { display: none; }
+
+.mobile-menu-button svg,
+.mobile-menu-close svg {
+  width: 20px;
+  height: 20px;
+}
+
+
+/* ---------- 4. Mobile menu ---------- */
+/* Behaviour lives in studio.js; this is only how it looks and slides. */
+
+/* dark layer behind the open menu */
+.mobile-menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1300;
+  background: rgba(0, 0, 0, .5);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .3s, visibility .3s;
+}
+
+.mobile-menu-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* the panel that slides in from the right */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1400;
+  width: min(86vw, 340px);
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-y: auto;
+  background: var(--surface);
+  border-left: 1px solid var(--border-strong);
+  transform: translateX(100%);
+  transition: transform .35s cubic-bezier(.2, .8, .2, 1);
+}
+
+.mobile-menu.open { transform: none; }
+
+/* while closed, hide it from keyboard users too (after it slides away) */
+.mobile-menu:not(.open) {
+  visibility: hidden;
+  transition: transform .35s cubic-bezier(.2, .8, .2, 1), visibility 0s .35s;
+}
+
+.mobile-menu-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 14px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.mobile-menu-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  font: 700 14px var(--font-heading);
+  letter-spacing: .08em;
+}
+
+.mobile-menu-brand img {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+}
+
+.mobile-menu-links a {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  border-bottom: 1px solid var(--border);
+  text-decoration: none;
+  font: 600 18px var(--font-heading);
+}
+
+.mobile-menu .book-link { margin-top: 16px; }
+
+/* pushes the theme toggle to the bottom of the panel */
+.mobile-menu-bottom {
+  margin-top: auto;
+  padding-top: 16px;
+}
+
+/* stop the page behind the menu from scrolling */
+body.menu-open { overflow: hidden; }
+
+
+/* ---------- 5. Page heading ---------- */
+
+.page-heading {
+  padding-top: 40px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+/* small orange label above a heading, e.g. "STEP 1" */
+.eyebrow {
+  font: 700 13px var(--font-label);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+h1 {
+  margin: 8px 0 0;
+  font: 700 44px/1.1 var(--font-heading);
+  letter-spacing: -.01em;
+}
+
+.page-heading p {
+  max-width: 560px;
+  margin: 10px 0 0;
+  font-size: 17px;
+  color: var(--text-muted);
+}
+
+/* "1 Service — 2 Date & budget — 3 Your details" */
+.progress-steps {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 15px;
+  color: var(--text-muted);
+}
+
+.progress-steps b { color: var(--text); }
+.progress-steps b:first-child { color: var(--accent-text); }
+
+.progress-steps i {
+  width: 36px;
+  height: 1px;
+  background: var(--border-strong);
+}
+
+
+/* ---------- 6. Booking form ---------- */
+
+/* three columns: service | date & budget | your details */
+#orderForm {
+  display: grid;
+  grid-template-columns: 420px 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+  padding-top: 32px;
+  padding-bottom: 48px;
+}
+
+.form-step > .eyebrow { display: block; }
+
+.form-step h2 {
+  margin: 6px 0 16px;
+  font: 600 22px var(--font-heading);
+}
+
+/* -- the three big Photo / Video / Music cards -- */
+
+.division-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.division-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  min-height: 92px;
+  padding: 18px 20px;
+  text-align: left;
+  background: var(--surface);
+  color: var(--text);
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  font-family: var(--font-body);
+  cursor: pointer;
+}
+
+.division-card:hover { border-color: var(--border-strong); }
+
+/* the chosen card gets an orange outline and a light tint */
+.division-card.active {
+  border-color: var(--accent);
+  background: var(--surface-selected);
+}
+
+.card-icon {
+  display: flex;
+  flex-shrink: 0;
+  color: var(--accent-text);
+}
+
+.card-icon svg { width: 28px; height: 28px; }
+
+.card-text { flex: 1; }
+
+.card-title {
+  display: block;
+  font: 600 19px var(--font-heading);
+}
+
+.card-description {
+  display: block;
+  margin-top: 3px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.card-price {
+  display: block;
+  margin-top: 6px;
+  font: 700 13px var(--font-label);
+  color: var(--accent-text);
+}
+
+/* the round "radio" circle on the right of each card */
+.division-card::after {
+  content: "";
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--text-faint);
+  border-radius: 50%;
+}
+
+.division-card.active::after {
+  border-color: var(--accent);
+  background: radial-gradient(circle, var(--accent) 0 45%, transparent 50%);
+}
+
+/* -- form fields -- */
+
+.field { margin-bottom: 14px; }
+
+.field label {
+  display: block;
+  margin-bottom: 6px;
+  font: 700 12px var(--font-label);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.field input,
+.field select,
+.field textarea {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  padding: 0 14px;
+  background: var(--field);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  font: 400 16px var(--font-body);
+}
+
+.field textarea {
+  min-height: 120px;
+  padding: 12px 14px;
+  resize: vertical;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+/* -- "Studio features" box -- */
+
+.info-card {
+  padding: 20px 22px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.info-card h3 {
+  margin: 0 0 14px;
+  font: 700 12px var(--font-label);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.feature-list {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.feature-list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.feature-list svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--accent-text);
+}
+
+/* -- submit button, note and result message -- */
+
+.submit-button {
+  width: 100%;
+  min-height: 54px;
+  margin-top: 6px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font: 700 17px var(--font-body);
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  box-shadow: 0 14px 30px -12px rgba(var(--accent-rgb), .5);
+}
+
+/* while the booking is being sent */
+.submit-button:disabled {
+  opacity: .6;
+  cursor: wait;
+  box-shadow: none;
+}
+
+.form-note {
+  margin: 10px 0 0;
+  font-size: 13px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+/* success / error message under the form (shown by studio.js) */
+.message {
+  display: none;
+  margin-top: 12px;
+  padding: 12px 14px;
+  border: 1px solid;
+  border-radius: 10px;
+  font-size: 15px;
+}
+
+.message.show { display: block; }
+
+.message.success {
+  border-color: var(--accent);
+  background: rgba(var(--accent-rgb), .12);
+  color: var(--accent-text);
+}
+
+.message.error {
+  border-color: #C1392B;
+  background: rgba(193, 57, 43, .1);
+  color: #C1392B;
+}
+
+
+/* ---------- 7. Footer and floating Telegram button ---------- */
+
+footer {
+  background: var(--navy);
+  color: #C9D0E0;
+  font-size: 14px;
+}
+
+/* a thin line between the footer's two rows */
+footer .container + .container {
+  border-top: 1px solid rgba(255, 255, 255, .14);
+}
+
+.footer-row {
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.footer-row a { text-decoration: none; }
+.footer-row a:hover { color: #FF8D66; }
+
+/* the "·" between footer items */
+.footer-row .dot { margin: 0 8px; }
+
+.telegram-button {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 40;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow: 0 8px 24px -8px rgba(0, 0, 0, .4);
+}
+
+.telegram-button svg { width: 26px; height: 26px; }
+
+
+/* ---------- 8. Cookie banner ---------- */
+/* consent.js creates this banner with its own styles, so these rules
+   start with "html" to win over them. */
+
+html #cookieConsentBar {
+  background: #fff;
+  color: var(--navy);
+  border-top: 1px solid rgba(30, 39, 64, .12);
+  box-shadow: 0 -8px 28px rgba(30, 39, 64, .14);
+  font-family: var(--font-body);
+}
+
+html #cookieConsentBar a { color: #D43D12; }
+
+html #cookieConsentBar button {
+  background: #fff;
+  color: #D43D12;
+  border: 1px solid #EE4B20;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+html #cookieConsentBar #ccbAccept {
+  background: #EE4B20;
+  border-color: #EE4B20;
+  color: #fff;
+}
+
+
+/* ---------- 9. Tablet and phone layouts ---------- */
+
+/* tablet: two columns, with the service cards across the top */
+@media (max-width: 1180px) {
+  .container { padding: 0 32px; }
+
+  #orderForm { grid-template-columns: 1fr 1fr; }
+  #orderForm .form-step:first-child { grid-column: 1 / -1; }
+
+  .division-list { flex-direction: row; }
+
+  .division-card {
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: 0;
+  }
+}
+
+/* phone: one column, menu button instead of the links */
+@media (max-width: 720px) {
+  .container { padding: 0 20px; }
+
+  .nav-links,
+  .nav-actions .button { display: none; }
+
+  .mobile-menu-button { display: inline-flex; }
+
+  h1 { font-size: 32px; }
+  .progress-steps { display: none; }
+
+  #orderForm {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .division-list { flex-direction: column; }
+
+  .division-card {
+    flex-direction: row;
+    align-items: center;
+  }
+}

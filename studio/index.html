@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SANGWA STUDIO | Photo · Video · Music — Musanze, Rwanda</title>
+<meta name="description" content="SANGWA STUDIO — Musanze's home for photography, film and music production. Book SANGWA PHOTO, SANGWA VIDEO or SANGWA MUSIC.">
+<link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+<link rel="manifest" href="/assets/favicon/site.webmanifest">
+<meta name="theme-color" content="#FFFFFF">
+<script>
+  // Light is the default look; a visitor's saved choice of dark is restored before first paint.
+  (function(){
+    try{ if(localStorage.getItem('sangwa_theme') === 'dark'){ document.documentElement.setAttribute('data-theme','dark'); } }catch(e){}
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="studio.css">
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header id="siteHeader">
+  <div class="container">
+    <nav>
+      <a href="/studio/" class="brand">
+        <img src="../assets/logo-small.png" alt="SANGWA STUDIO logo">
+        <span class="brand-name">SANGWA<small>STUDIO</small></span>
+      </a>
+      <div class="nav-links">
+        <a href="/">Gakoro Media TV</a>
+        <a href="../ndera-system-login/">Ndera</a>
+      </div>
+      <div class="nav-actions">
+        <button type="button" id="themeToggle" class="theme-toggle" aria-label="Switch between light and dark mode" title="Light / dark">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8l1.8-1.8M18 6l1.8-1.8"/></svg>
+        </button>
+        <a href="#contact" class="button">Book Now</a>
+        <button type="button" class="mobile-menu-button" id="mobileMenuButton" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+<nav class="mobile-menu" id="mobileMenu" aria-label="Mobile navigation" aria-hidden="true">
+  <div class="mobile-menu-top">
+    <a href="/studio/" class="mobile-menu-brand"><img src="../assets/logo-small.png" alt="SANGWA STUDIO logo"><span>SANGWA STUDIO</span></a>
+    <button type="button" class="mobile-menu-close" id="mobileMenuClose" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="4" x2="20" y2="20"/><line x1="20" y1="4" x2="4" y2="20"/></svg>
+    </button>
+  </div>
+  <div class="mobile-menu-links">
+    <a href="/studio/">Home</a>
+    <a href="/">Gakoro Media TV</a>
+    <a href="../ndera-system-login/">Ndera</a>
+  </div>
+  <a href="#contact" class="button book-link">Book Now</a>
+  <div class="mobile-menu-bottom">
+    <button type="button" id="themeToggleMobile" class="theme-toggle" aria-label="Switch between light and dark mode" title="Light / dark">
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8l1.8-1.8M18 6l1.8-1.8"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ============ BOOKING ============ -->
+<main id="contact">
+  <div class="container">
+    <div class="page-heading">
+      <div>
+        <div class="eyebrow">Musanze&rsquo;s one &amp; only studio · Book a session</div>
+        <h1>Reserve your studio time</h1>
+        <p>Photography, videography and music recording, all in one place.</p>
+      </div>
+      <div class="progress-steps" aria-hidden="true"><b>1 Service</b><i></i><b>2 Date &amp; budget</b><i></i><b>3 Your details</b></div>
+    </div>
+
+    <form id="orderForm">
+      <!-- Step 1 -->
+      <div class="form-step">
+        <span class="eyebrow">Step 1</span><h2>Choose a service</h2>
+        <div class="division-list" role="group" aria-label="Choose a studio division">
+          <button type="button" class="division-card active" data-division="photo" aria-pressed="true"><span class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></span><span class="card-text"><span class="card-title">Sangwa Photo</span><span class="card-description">Portraits, weddings, events and product shoots</span><span class="card-price">From 35,000 RWF</span></span></button>
+          <button type="button" class="division-card" data-division="video" aria-pressed="false"><span class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3z"/></svg></span><span class="card-text"><span class="card-title">Sangwa Video</span><span class="card-description">Wedding films, events, live streaming and editing</span><span class="card-price">100,000 &ndash; 150,000 RWF</span></span></button>
+          <button type="button" class="division-card" data-division="music" aria-pressed="false"><span class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg></span><span class="card-text"><span class="card-title">Sangwa Music</span><span class="card-description">Recording, mixing, beats and podcasts</span><span class="card-price">60,000 &ndash; 100,000 RWF</span></span></button>
+        </div>
+        <div class="field">
+          <label for="ofService">Service type</label>
+          <select id="ofService" name="serviceType" required></select>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="form-step">
+        <span class="eyebrow">Step 2</span><h2>Pick a date and budget</h2>
+        <div class="field"><label for="ofDate">Preferred date</label><input id="ofDate" name="eventDate" type="date"></div>
+        <div class="field">
+          <label for="ofBudget">Budget range</label>
+          <select id="ofBudget" name="budget" required></select>
+        </div>
+        <div class="info-card" style="margin-top:22px">
+          <h3>Studio features</h3>
+          <ul class="feature-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.2"/></svg>High-Quality Equipment</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>Lighting Setup</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6.5" cy="18" r="2.4"/><circle cx="17.5" cy="16" r="2.4"/></svg>Sound-Treated Room</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8.5a15 15 0 0 1 20 0M5.5 12a10 10 0 0 1 13 0M9 15.5a5 5 0 0 1 6 0"/><circle cx="12" cy="19" r="1"/></svg>Wi-Fi Available</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 21s7-6.4 7-12a7 7 0 1 0-14 0c0 5.6 7 12 7 12z"/><circle cx="12" cy="9" r="2.4"/></svg>Central Musanze Location</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="form-step">
+        <span class="eyebrow">Step 3</span><h2>Your details</h2>
+        <div class="field"><label for="ofName">Full name</label><input id="ofName" name="fullName" type="text" required autocomplete="name"></div>
+        <div class="field"><label for="ofPhone">Phone number</label><input id="ofPhone" name="phone" type="tel" required autocomplete="tel"></div>
+        <div class="field"><label for="ofEmail">Email (optional)</label><input id="ofEmail" name="email" type="email" autocomplete="email"></div>
+        <div class="field">
+          <label for="ofDetails">Tell us about your project</label>
+          <textarea id="ofDetails" name="details" placeholder="Event date, location, guest count, style references..."></textarea>
+        </div>
+        <input type="hidden" id="ofDivision" name="division" value="photo">
+        <button type="submit" class="submit-button">Confirm Booking</button>
+        <p class="form-note">Your request goes straight to our booking system — we&rsquo;ll call you to confirm shortly.</p>
+        <div class="message" id="formToast" role="status"></div>
+      </div>
+    </form>
+  </div>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="container footer-row">
+    <span>Open 24/7 by appointment</span>
+    <span>Musanze-Cyanika Road, Musanze, Rwanda<span class="dot">·</span><a href="tel:+250787692411">+250 787 692 411</a><span class="dot">·</span><a href="mailto:hello@gakoromedia.rw">hello@gakoromedia.rw</a></span>
+  </div>
+  <div class="container footer-row">
+    <span>© <span id="yearNow"></span> SANGWA STUDIO. All rights reserved.</span>
+    <span>
+      <a href="https://instagram.com/sangwa_studio" target="_blank" rel="noopener">Instagram</a><span class="dot">·</span><a href="https://youtube.com/@gakoromediatv?si=-rZk4Zqpi8zyEhKZ" target="_blank" rel="noopener">YouTube</a><span class="dot">·</span><a href="#" id="tgFooterLink" target="_blank" rel="noopener">Telegram</a><span class="dot">·</span><a href="/privacy/">Privacy Policy</a><span class="dot">·</span><a href="/terms/">Terms of Use</a>
+    </span>
+  </div>
+</footer>
+
+<a class="telegram-button" id="tgFloat" href="#" target="_blank" rel="noopener" aria-label="Chat on Telegram">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M6.7 12.1l10.4-4c.5-.2 1 .2.8.8l-1.8 8.6c-.1.6-.7.8-1.2.5l-3-2.2-1.6 1.5c-.2.2-.4.3-.7.2l.2-2.8 5.3-4.8c.2-.2 0-.3-.2-.2l-6.6 4.1-2.8-.9c-.6-.2-.6-.6.1-.8z" fill="currentColor" stroke="none"/></svg>
+</a>
+
+<script defer src="../js/config.js"></script>
+<script defer src="studio.js"></script>
+<script defer src="../js/consent.js"></script>
+</body>
+</html>
