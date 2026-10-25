@@ -726,6 +726,303 @@
   </aside>
 </section>
 
+<!-- ===== LESSON MAKER AD (paste after the hero section) ===== -->
+<style>
+  .lpad{ max-width:1240px; margin:30px auto 0; padding:0 6vw; }
+  .lpad-card{
+    position:relative; overflow:hidden; display:grid; grid-template-columns:1.3fr 1fr; gap:36px; align-items:center;
+    padding:38px 44px; color:#fff; border-top:4px solid var(--crimson,#D3242C);
+    background:
+      radial-gradient(circle at 92% 8%, rgba(198,154,78,.22), transparent 42%),
+      linear-gradient(120deg, var(--navy,#0E1C2B) 0%, #17324d 100%);
+  }
+  .lpad-eyebrow{ display:inline-flex; align-items:center; gap:8px; font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#F2C879; margin-bottom:14px; }
+  .lpad-eyebrow i{ width:7px; height:7px; border-radius:50%; background:#FF5A5A; display:inline-block; }
+  .lpad-title{ font-family:'Noto Serif',serif; font-weight:900; font-size:clamp(26px,3.2vw,40px); line-height:1.12; letter-spacing:-.01em; margin:0 0 14px; max-width:20ch; }
+  .lpad-title em{ font-style:normal; color:#F2C879; }
+  .lpad-sub{ font-size:15.5px; line-height:1.55; color:#D5DCE6; max-width:52ch; margin:0 0 20px; }
+  .lpad-points{ list-style:none; margin:0 0 26px; padding:0; display:flex; flex-wrap:wrap; gap:8px 18px; font-size:13px; color:#E8ECF2; }
+  .lpad-points li{ display:flex; align-items:center; gap:7px; }
+  .lpad-points svg{ width:15px; height:15px; flex:none; color:#F2C879; }
+  .lpad-cta{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
+  .lpad-btn{
+    display:inline-flex; align-items:center; gap:10px; background:var(--crimson,#D3242C); color:#fff; text-decoration:none;
+    font-family:'IBM Plex Mono',monospace; font-size:12.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+    padding:15px 24px; min-height:48px; transition:background .15s, transform .15s;
+  }
+  .lpad-btn:hover{ background:var(--crimson-dark,#9C1A20); transform:translateY(-1px); }
+  .lpad-btn:focus-visible{ outline:3px solid #F2C879; outline-offset:3px; }
+  .lpad-btn svg{ width:16px; height:16px; }
+  .lpad-pay{ font-size:12.5px; color:#C3CCD8; line-height:1.4; }
+  .lpad-pay b{ color:#fff; }
+  .lpad-visual{ position:relative; display:flex; justify-content:center; padding:10px 0; }
+  .lpad-sheet{ width:min(320px,100%); background:#fff; color:#12202F; padding:18px 20px 20px; transform:rotate(2deg); box-shadow:0 22px 50px rgba(0,0,0,.45); }
+  .lpad-sheet-top{ display:flex; justify-content:space-between; align-items:baseline; border-bottom:2px solid #12202F; padding-bottom:8px; margin-bottom:12px; }
+  .lpad-sheet-top strong{ font-family:'Noto Serif',serif; font-size:14px; }
+  .lpad-sheet-top span{ font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:.08em; color:#8A93A0; text-transform:uppercase; }
+  .lpad-meta{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:#55606C; margin-bottom:12px; }
+  .lpad-step{ display:grid; grid-template-columns:1fr auto; gap:5px 8px; margin-bottom:12px; }
+  .lpad-step b{ font-family:'Noto Serif',serif; font-size:12.5px; }
+  .lpad-step em{ font-style:normal; font-family:'IBM Plex Mono',monospace; font-size:10px; font-weight:700; color:#D3242C; }
+  .lpad-line{ grid-column:1 / -1; height:6px; background:#E7E7E9; }
+  .lpad-line.s{ width:70%; }
+  .lpad-badge{
+    position:absolute; right:-6px; bottom:-8px; width:104px; height:104px; border-radius:50%; background:#F2C879; color:#0E1C2B;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; transform:rotate(-8deg);
+    box-shadow:0 10px 28px rgba(0,0,0,.4);
+  }
+  .lpad-badge strong{ font-family:'Noto Serif',serif; font-weight:900; font-size:34px; line-height:1; }
+  .lpad-badge span{ font-family:'IBM Plex Mono',monospace; font-size:9px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; line-height:1.3; margin-top:3px; }
+  .lpad-tag{ position:absolute; top:10px; left:14px; font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:.1em; color:#9FB0C4; text-transform:uppercase; }
+  @media (max-width:860px){
+    .lpad-card{ grid-template-columns:1fr; padding:28px 22px 34px; gap:26px; }
+    .lpad-title{ max-width:none; }
+    .lpad-visual{ padding-bottom:18px; }
+    .lpad-btn{ width:100%; justify-content:center; }
+  }
+  @media (prefers-reduced-motion:reduce){ .lpad-btn{ transition:none; } .lpad-btn:hover{ transform:none; } }
+
+  /* ================= ANIMATION ================= */
+  .lpad-card::before{ /* soft drifting gold glow */
+    content:""; position:absolute; width:420px; height:420px; right:-120px; top:-160px; border-radius:50%;
+    background:radial-gradient(circle, rgba(242,200,121,.20), transparent 65%); pointer-events:none;
+    animation:lpad-drift 9s ease-in-out infinite alternate;
+  }
+  .lpad-card > *{ position:relative; z-index:1; }
+  .lpad-eyebrow i{ animation:lpad-dot 1.6s ease-in-out infinite; }
+
+  /* hidden start state, only when JS is running and motion is allowed */
+  .lpad.is-anim:not(.in) .lpad-eyebrow,
+  .lpad.is-anim:not(.in) .lpad-title,
+  .lpad.is-anim:not(.in) .lpad-sub,
+  .lpad.is-anim:not(.in) .lpad-points li,
+  .lpad.is-anim:not(.in) .lpad-cta,
+  .lpad.is-anim:not(.in) .lpad-sheet,
+  .lpad.is-anim:not(.in) .lpad-badge,
+  .lpad.is-anim:not(.in) .lpad-tag{ opacity:0; }
+
+  /* entrance, staggered */
+  .lpad.in .lpad-eyebrow{ animation:lpad-up .6s cubic-bezier(.2,.7,.2,1) .05s both; }
+  .lpad.in .lpad-title { animation:lpad-up .7s cubic-bezier(.2,.7,.2,1) .15s both; }
+  .lpad.in .lpad-sub   { animation:lpad-up .7s cubic-bezier(.2,.7,.2,1) .30s both; }
+  .lpad.in .lpad-points li{ animation:lpad-up .5s cubic-bezier(.2,.7,.2,1) both; }
+  .lpad.in .lpad-points li:nth-child(1){ animation-delay:.45s; }
+  .lpad.in .lpad-points li:nth-child(2){ animation-delay:.55s; }
+  .lpad.in .lpad-points li:nth-child(3){ animation-delay:.65s; }
+  .lpad.in .lpad-cta   { animation:lpad-up .7s cubic-bezier(.2,.7,.2,1) .75s both; }
+  .lpad.in .lpad-tag   { animation:lpad-fade .6s ease .5s both; }
+
+  /* headline highlight: gold underline draws itself */
+  .lpad-title em{ position:relative; white-space:nowrap; }
+  .lpad-title em::after{
+    content:""; position:absolute; left:0; right:0; bottom:-2px; height:3px; background:#F2C879;
+    transform-origin:left; transform:scaleX(0);
+  }
+  .lpad.in .lpad-title em::after{ animation:lpad-underline .8s cubic-bezier(.6,0,.2,1) 1s forwards; }
+  .lpad:not(.is-anim) .lpad-title em::after{ transform:scaleX(1); }
+
+  /* check marks pop */
+  .lpad.in .lpad-points svg{ animation:lpad-pop .5s cubic-bezier(.3,1.6,.5,1) both; }
+  .lpad.in .lpad-points li:nth-child(1) svg{ animation-delay:.75s; }
+  .lpad.in .lpad-points li:nth-child(2) svg{ animation-delay:.9s; }
+  .lpad.in .lpad-points li:nth-child(3) svg{ animation-delay:1.05s; }
+
+  /* lesson sheet: slides in, then floats gently */
+  .lpad.in .lpad-sheet{ animation:lpad-sheet-in 1s cubic-bezier(.2,.8,.2,1) .35s both; }
+  .lpad-float{ width:min(320px,100%); animation:lpad-float 6s ease-in-out infinite alternate; }
+  .lpad-float .lpad-sheet{ width:100%; position:relative; overflow:hidden; }
+  .lpad-sheet::after{ /* light sweep across the sheet */
+    content:""; position:absolute; top:0; bottom:0; left:-60%; width:40%;
+    background:linear-gradient(100deg, transparent, rgba(242,200,121,.35), transparent);
+    transform:skewX(-18deg); pointer-events:none;
+  }
+  .lpad.in .lpad-sheet::after{ animation:lpad-sweep 4.5s ease-in-out 2.4s infinite; }
+
+  /* placeholder lines "write" themselves in order, then the loop repeats */
+  .lpad-line{ transform-origin:left; }
+  .lpad.in .lpad-line{ animation:lpad-write 7s cubic-bezier(.4,0,.2,1) infinite; animation-delay:calc(1s + var(--i,0) * .28s); background:#D9DEE5; }
+  .lpad.in .lpad-step em{ animation:lpad-tick 7s ease infinite; animation-delay:calc(1s + var(--s,0) * .9s); }
+
+  /* price badge: pops in, number counts up, ring pulses */
+  .lpad.in .lpad-badge{ animation:lpad-badge-in .8s cubic-bezier(.3,1.5,.5,1) 1.1s both; }
+  .lpad-badge::before{
+    content:""; position:absolute; inset:0; border-radius:50%; border:2px solid #F2C879; opacity:0; pointer-events:none;
+  }
+  .lpad.in .lpad-badge::before{ animation:lpad-ring 2.6s ease-out 2.2s infinite; }
+  .lpad.in .lpad-badge strong{ animation:lpad-beat 2.6s ease-in-out 2.2s infinite; }
+
+  /* button: shine sweep + arrow nudge */
+  .lpad-btn{ position:relative; overflow:hidden; }
+  .lpad-btn::after{
+    content:""; position:absolute; top:0; bottom:0; left:-40%; width:30%;
+    background:linear-gradient(100deg, transparent, rgba(255,255,255,.35), transparent); transform:skewX(-20deg);
+  }
+  .lpad.in .lpad-btn::after{ animation:lpad-shine 3.8s ease-in-out 2s infinite; }
+  .lpad.in .lpad-btn svg{ animation:lpad-nudge 1.8s ease-in-out 2s infinite; }
+  .lpad-btn:hover svg{ animation-duration:.8s; }
+
+  /* pause everything while the ad is off screen */
+  .lpad:not(.vis) .lpad-card::before,
+  .lpad:not(.vis) .lpad-card *,
+  .lpad:not(.vis) .lpad-card *::before,
+  .lpad:not(.vis) .lpad-card *::after{ animation-play-state:paused !important; }
+
+  @keyframes lpad-up{ from{opacity:0; transform:translateY(22px);} to{opacity:1; transform:none;} }
+  @keyframes lpad-fade{ from{opacity:0;} to{opacity:1;} }
+  @keyframes lpad-underline{ to{ transform:scaleX(1); } }
+  @keyframes lpad-pop{ 0%{transform:scale(0) rotate(-40deg);} 100%{transform:none;} }
+  @keyframes lpad-sheet-in{
+    from{ opacity:0; transform:translate(60px,30px) rotate(10deg) scale(.9); }
+    to{ opacity:1; transform:rotate(2deg); }
+  }
+  @keyframes lpad-float{ from{ transform:translateY(0) rotate(0deg); } to{ transform:translateY(-10px) rotate(-1.2deg); } }
+  @keyframes lpad-sweep{ 0%{left:-60%;} 45%,100%{left:140%;} }
+  @keyframes lpad-write{
+    0%{ transform:scaleX(0); opacity:1; }
+    9%,78%{ transform:scaleX(1); opacity:1; }
+    90%,100%{ transform:scaleX(1); opacity:0; }
+  }
+  @keyframes lpad-tick{ 0%,6%{ opacity:.25; } 12%,78%{ opacity:1; } 90%,100%{ opacity:.25; } }
+  @keyframes lpad-badge-in{
+    from{ opacity:0; transform:rotate(-40deg) scale(.2); }
+    to{ opacity:1; transform:rotate(-8deg) scale(1); }
+  }
+  @keyframes lpad-ring{ 0%{ transform:scale(1); opacity:.9; } 70%,100%{ transform:scale(1.55); opacity:0; } }
+  @keyframes lpad-beat{ 0%,100%{ transform:scale(1); } 12%{ transform:scale(1.14); } 24%{ transform:scale(1); } }
+  @keyframes lpad-shine{ 0%{ left:-40%; } 35%,100%{ left:140%; } }
+  @keyframes lpad-nudge{ 0%,100%{ transform:translateX(0); } 50%{ transform:translateX(5px); } }
+  @keyframes lpad-dot{ 0%,100%{ box-shadow:0 0 0 0 rgba(255,90,90,.7); } 70%{ box-shadow:0 0 0 8px rgba(255,90,90,0); } }
+  @keyframes lpad-drift{ from{ transform:translate(0,0) scale(1); } to{ transform:translate(-50px,40px) scale(1.2); } }
+
+
+  /* ---- looping: whole card hides between showings (space is kept, no layout jump) ---- */
+  .lpad.is-anim:not(.in) .lpad-card{ opacity:0; }
+  .lpad.in .lpad-card{ animation:lpad-card-in .5s ease both; }
+  .lpad.out .lpad-card{ animation:lpad-card-out .7s cubic-bezier(.5,0,.8,.4) forwards; }
+  @keyframes lpad-card-in{ from{ opacity:0; transform:translateY(24px) scale(.98); } to{ opacity:1; transform:none; } }
+  @keyframes lpad-card-out{ from{ opacity:1; transform:none; } to{ opacity:0; transform:translateY(-18px) scale(.98); } }
+
+
+  /* ---- collapse to nothing while hidden (no blank gap), expand when it comes back ---- */
+  .lpad.is-anim{ display:grid; grid-template-rows:0fr; margin-top:0; transition:grid-template-rows .6s cubic-bezier(.4,0,.2,1), margin-top .6s cubic-bezier(.4,0,.2,1); }
+  .lpad.is-anim.open{ grid-template-rows:1fr; margin-top:30px; }
+  .lpad-clip{ min-height:0; overflow:hidden; }
+
+  /* ---- compact on phones: no tall mock sheet, price badge sits top-right ---- */
+  @media (max-width:860px){
+    .lpad-card{ padding:24px 20px 26px; gap:0; }
+    .lpad-card > .lpad-visual{ position:static; padding:0; }
+    .lpad-float, .lpad-tag{ display:none; }
+    .lpad-badge{ top:16px; right:16px; bottom:auto; width:78px; height:78px; z-index:2; }
+    .lpad-badge strong{ font-size:26px; }
+    .lpad-badge span{ font-size:7.5px; }
+    .lpad-title{ padding-right:88px; margin-bottom:12px; }
+    .lpad-sub{ margin-bottom:16px; }
+    .lpad-points{ margin-bottom:20px; }
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .lpad *, .lpad *::before, .lpad *::after{ animation:none !important; }
+    .lpad.is-anim:not(.in) .lpad-eyebrow, .lpad.is-anim:not(.in) .lpad-title, .lpad.is-anim:not(.in) .lpad-sub,
+    .lpad.is-anim:not(.in) .lpad-points li, .lpad.is-anim:not(.in) .lpad-cta, .lpad.is-anim:not(.in) .lpad-sheet,
+    .lpad.is-anim:not(.in) .lpad-badge, .lpad.is-anim:not(.in) .lpad-tag{ opacity:1; }
+    .lpad-title em::after{ transform:scaleX(1); }
+  }
+</style>
+
+<aside class="lpad" id="lpad" aria-label="Lesson Maker for teachers">
+  <div class="lpad-clip"><div class="lpad-card">
+    <div>
+      <div class="lpad-eyebrow"><i></i> For Rwandan teachers</div>
+      <h2 class="lpad-title">Your REB lesson plan, <em>ready to print.</em></h2>
+      <p class="lpad-sub">Choose your class, subject and topic. Lesson Maker writes a complete Competence-Based Curriculum plan with objectives, teacher and learner activities, materials and assessment, using the official REB textbooks.</p>
+      <ul class="lpad-points">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Built from REB textbooks</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Print-ready CBC format</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>More subjects being added</li>
+      </ul>
+      <div class="lpad-cta">
+        <a class="lpad-btn" href="/lesson-maker/">Create a lesson plan
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <div class="lpad-pay"><b>Pay only for what you use</b><br>Send MTN MoMo, no card or sign-up fee.</div>
+      </div>
+    </div>
+    <div class="lpad-visual" aria-hidden="true">
+      <span class="lpad-tag">Sample layout</span>
+      <div class="lpad-float"><div class="lpad-sheet">
+        <div class="lpad-sheet-top"><strong>Lesson Plan</strong><span>REB · CBC</span></div>
+        <div class="lpad-meta">Subject · Class · 40 min</div>
+        <div class="lpad-step"><b>Introduction</b><em style="--s:0">5 min</em><div style="--i:0" class="lpad-line"></div><div style="--i:1" class="lpad-line s"></div></div>
+        <div class="lpad-step"><b>Development</b><em style="--s:1">30 min</em><div style="--i:2" class="lpad-line"></div><div style="--i:3" class="lpad-line"></div><div style="--i:4" class="lpad-line s"></div></div>
+        <div class="lpad-step" style="margin-bottom:0"><b>Assessment</b><em style="--s:2">5 min</em><div style="--i:5" class="lpad-line"></div><div style="--i:6" class="lpad-line s"></div></div>
+      </div></div>
+      <div class="lpad-badge"><strong data-count="50">50</strong><span>RWF per<br>lesson plan</span></div>
+    </div>
+  </div></div>
+</aside>
+
+<script>
+(function(){
+  var ad = document.getElementById('lpad');
+  if(!ad) return;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce || !('IntersectionObserver' in window)) return; // static ad, fully visible
+  ad.classList.add('is-anim');
+
+  var num = ad.querySelector('[data-count]');
+  function countUp(){
+    if(!num) return;
+    var to = parseInt(num.getAttribute('data-count'),10), t0 = null, dur = 1100;
+    num.textContent = '0';
+    setTimeout(function(){
+      requestAnimationFrame(function step(ts){
+        if(!t0) t0 = ts;
+        var p = Math.min((ts - t0) / dur, 1);
+        num.textContent = Math.round(to * (1 - Math.pow(1 - p, 3)));
+        if(p < 1) requestAnimationFrame(step);
+      });
+    }, 1100);
+  }
+
+  var HOLD = 5000;   // ms the finished ad stays on screen
+  var GAP  = 3000;   // ms collapsed before it comes back
+  var ENTER = 2200, EXIT = 700, COLLAPSE = 650;
+  var vis = false, waiting = true, exitPending = false;
+
+  function exitNow(){
+    if(ad.matches(':hover') || ad.contains(document.activeElement)){ setTimeout(exitNow, 500); return; } // never vanish under the cursor
+    if(!vis){ exitPending = true; return; }   // don't collapse while scrolled away (avoids page jumps)
+    ad.classList.add('out');
+    setTimeout(function(){
+      ad.classList.remove('in','out','open');   // card is invisible now; height collapses smoothly
+      setTimeout(next, COLLAPSE + GAP);
+    }, EXIT);
+  }
+  function play(){
+    ad.classList.remove('out');
+    ad.classList.add('open');                 // expand first...
+    setTimeout(function(){
+      void ad.offsetWidth;                    // ...then restart every animation
+      ad.classList.add('in');
+      countUp();
+      setTimeout(exitNow, ENTER + HOLD);
+    }, 450);
+  }
+  function next(){ if(vis){ play(); } else { waiting = true; } }
+
+  new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      vis = e.isIntersecting;
+      ad.classList.toggle('vis', vis);
+      if(vis && waiting){ waiting = false; play(); }
+      else if(vis && exitPending){ exitPending = false; setTimeout(exitNow, 2500); }
+    });
+  }, { threshold: 0, rootMargin: '0px 0px -20% 0px' }).observe(ad);
+})();
+</script>
+<!-- ===== END LESSON MAKER AD ===== -->
+
 <div class="section-head" id="latest-articles">
   <div class="section-title">Latest Articles</div>
   <a href="category/" class="view-all">VIEW ALL <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 6l6 6-6 6"/></svg></a>
