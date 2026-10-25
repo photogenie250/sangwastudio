@@ -328,11 +328,11 @@
       </div>
       <div class="field">
         <label for="school_name">School <span class="req">*</span></label>
-        <select id="school_name" required>
-          <option value="">Select your school…</option>
-          <option>GS GAKORO</option>
-          <option>COLLEGE INYEMERAMIHIGO DE GISENYI</option>
-        </select>
+        <input id="school_name" list="schoolList" maxlength="120" placeholder="Type your school name" autocomplete="organization" required>
+        <datalist id="schoolList">
+          <option value="GS GAKORO"></option>
+          <option value="COLLEGE INYEMERAMIHIGO DE GISENYI"></option>
+        </datalist>
         <small>Your name and school are remembered on this device.</small>
       </div>
 
@@ -365,7 +365,8 @@
   </div>
   <div id="payStep2" style="margin-top:14px" hidden>
     <p class="pay-instr">Send <strong id="pay_amt"></strong> RWF by MTN MoMo to <strong>0787692411</strong> from <strong id="pay_from"></strong>.</p>
-    <div class="hint" style="margin-bottom:12px">After you receive the MoMo confirmation, tap the button below.</div>
+    <a id="dialBtn" class="pay-primary" href="tel:*182%23" style="display:block;text-align:center;text-decoration:none;margin-bottom:10px">Open MoMo to pay</a>
+    <div class="hint" style="margin-bottom:12px">Press the green call button, check the number and amount, then enter your MoMo PIN. When the payment goes through, this page unlocks by itself.</div>
     <button type="button" id="refreshBtn" class="pay-primary">I have paid, refresh access</button>
   </div>
   <div id="payMsg" class="hint" role="status"></div>
@@ -687,6 +688,7 @@ function renderPlan(p) {
 }
 
 const PAY_URL = `${SUPABASE_URL}/functions/v1/lp-pay`, PRICE = 50;
+const dialFor = amount => `tel:*182*1*1*0787692411*${amount}%23`; // *182*1*1*NUMBER*AMOUNT# (user still presses call, then enters the PIN)
 const $ = id => document.getElementById(id);
 const getToken = () => store.get('token');
 async function payCall(payload) {
@@ -698,13 +700,24 @@ function updTotal() { const n = Math.max(0, Math.floor(Number($('pay_plans').val
 function openPay() { $('payStep1').hidden = false; $('payStep2').hidden = true; $('payMsg').textContent = ''; $('pay_phone').value = store.get('paynum'); updTotal(); $('payModal').hidden = false; }
 $('pay_plans').addEventListener('input', updTotal);
 $('payClose').onclick = () => { $('payModal').hidden = true; };
+let pollT = null;
+function stopPoll() { if (pollT) { clearInterval(pollT); pollT = null; } }
+function startPoll() {
+  stopPoll(); const t0 = Date.now();
+  pollT = setInterval(async () => {
+    if ($('payModal').hidden || Date.now() - t0 > 6e5) { stopPoll(); return; }
+    if (await hasBalance()) { stopPoll(); $('payModal').hidden = true; form.requestSubmit(); }
+  }, 4000);
+}
 $('payBtn').onclick = async () => {
   const phone = $('pay_phone').value; $('payMsg').textContent = 'Please wait…';
   try {
     const d = await payCall({ action: 'create', phone, plans: $('pay_plans').value });
     store.set('token', d.token); store.set('paynum', phone);
     $('pay_amt').textContent = d.amount; $('pay_from').textContent = phone;
-    $('payStep1').hidden = true; $('payStep2').hidden = false; $('payMsg').textContent = '';
+    $('payStep1').hidden = true; $('payStep2').hidden = false; $('payMsg').textContent = 'Waiting for your payment. This page updates automatically.'; startPoll();
+    const dial = dialFor(d.amount); document.getElementById('dialBtn').href = dial;
+    if (/Android|iPhone|iPad/i.test(navigator.userAgent)) location.href = dial;
   } catch (e) { $('payMsg').textContent = e.message; }
 };
 $('refreshBtn').onclick = async () => {
@@ -731,9 +744,6 @@ form.addEventListener('submit', async (e) => {
   const teacherName = document.getElementById('teacher_name').value.trim();
   const schoolName = document.getElementById('school_name').value.trim();
 
-  const ALLOWED_SCHOOLS = ['GS GAKORO', 'COLLEGE INYEMERAMIHIGO DE GISENYI'];
-  const normalize = s => s.trim().toUpperCase().replace(/\s+/g, ' ');
-
   const missing = [];
   if (!levelEl.value) missing.push('Class');
   if (!subjectEl.value) missing.push('Subject');
@@ -744,19 +754,12 @@ form.addEventListener('submit', async (e) => {
   if (!duration) missing.push('Duration');
   if (!classSize) missing.push('Class size');
   if (!teacherName) missing.push('Teacher name');
-  if (!schoolName) missing.push('School name');
+  if (schoolName.length < 3) missing.push('School name (at least 3 letters)');
 
   if (missing.length) {
     errorEl.textContent = `Please fill in: ${missing.join(', ')}.`;
     errorEl.style.display = 'block';
     errorEl.scrollIntoView({ block: 'center', behavior: 'smooth' });
-    statusEl.textContent = '';
-    goBtn.disabled = false;
-    return;
-  }
-  if (!ALLOWED_SCHOOLS.includes(normalize(schoolName))) {
-    errorEl.textContent = 'You are not a teacher of an approved school. This tool is currently only available to staff of GS Gakoro and College Inyemeramihigo de Gisenyi.';
-    errorEl.style.display = 'block';
     statusEl.textContent = '';
     goBtn.disabled = false;
     return;
@@ -775,7 +778,17 @@ form.addEventListener('submit', async (e) => {
 
   store.set('teacher', teacherName);
   store.set('school', schoolName);
-  if (!(await hasBalance())) { openPay(); statusEl.textContent = ''; goBtn.disabled = false; goBtn.classList.remove('loading'); return; }
+  if (!(await hasBalance())) {
+    statusEl.textContent = 'Checking that this lesson is available…';
+    let avail = null;
+    try { avail = (await payCall({ action: 'available', subject: subjectEl.value, level: levelEl.value })).available; } catch (e) { avail = null; }
+    statusEl.textContent = '';
+    goBtn.disabled = false; goBtn.classList.remove('loading');
+    if (avail === null) { errorEl.textContent = 'Could not check availability. Please check your internet and try again.'; errorEl.style.display = 'block'; return; }
+    if (!avail) { errorEl.textContent = `${subjectEl.value} for ${levelEl.value} is not available yet, so no payment is needed. Please choose another subject or class.`; errorEl.style.display = 'block'; return; }
+    openPay();
+    return;
+  }
 
   const body = {
     subject: subjectEl.value,
