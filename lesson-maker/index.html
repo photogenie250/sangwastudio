@@ -209,6 +209,13 @@
     #status:empty { display: none; }
   }
 
+  .pay-overlay{position:fixed;inset:0;background:rgba(10,15,30,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
+  .pay-overlay[hidden],[hidden]{display:none!important}
+  .pay-box{background:var(--card);border-radius:var(--radius);padding:22px;max-width:400px;width:100%;border:1px solid var(--line)}
+  .pay-box h3{margin-bottom:4px}.pay-total{font-weight:700;margin:4px 0 12px}.pay-instr{line-height:1.6}
+  .pay-primary{width:100%;background:var(--green);color:#fff;border:none;border-radius:8px;padding:13px;font-size:.98rem;font-weight:600;cursor:pointer}
+  .pay-link{background:none;border:none;color:var(--muted);margin-top:10px;cursor:pointer;font-size:.85rem}
+  #payMsg{margin-top:10px;min-height:1em}
   @media print {
     @page { size: portrait; margin: 1.2cm; }
     .backbar, header, #form-panel, footer, #printBtn, .empty-state, .source-note { display: none !important; }
@@ -347,6 +354,23 @@
     <div id="planContent"></div>
   </section>
 </main>
+
+<div id="payModal" class="pay-overlay" hidden><div class="pay-box">
+  <h3>Pay to generate</h3><div class="hint">Each lesson plan costs 50 RWF.</div>
+  <div id="payStep1" style="margin-top:14px">
+    <div class="field"><label for="pay_phone">Phone number you will pay from</label><input id="pay_phone" inputmode="tel" placeholder="078XXXXXXX"></div>
+    <div class="field"><label for="pay_plans">Number of lesson plans</label><input id="pay_plans" type="number" min="1" max="200" value="1"></div>
+    <div class="pay-total" id="pay_total"></div>
+    <button type="button" id="payBtn" class="pay-primary">Pay</button>
+  </div>
+  <div id="payStep2" style="margin-top:14px" hidden>
+    <p class="pay-instr">Send <strong id="pay_amt"></strong> RWF by MTN MoMo to <strong>0787692411</strong> from <strong id="pay_from"></strong>.</p>
+    <div class="hint" style="margin-bottom:12px">After you receive the MoMo confirmation, tap the button below.</div>
+    <button type="button" id="refreshBtn" class="pay-primary">I have paid, refresh access</button>
+  </div>
+  <div id="payMsg" class="hint" role="status"></div>
+  <button type="button" id="payClose" class="pay-link">Close</button>
+</div></div>
 
 <footer>GS GAKORO · Education Tools · Lesson Plan Generator · Designed by <strong>DoD Makuza</strong><br><a href="/" style="color: var(--green); text-decoration: none; font-weight: 600;">← Back to Gakoro Media TV</a><br><a href="/about/" style="color: var(--muted);">About</a> · <a href="/contact/" style="color: var(--muted);">Contact</a> · <a href="/privacy/" style="color: var(--muted);">Privacy Policy</a> · <a href="/terms/" style="color: var(--muted);">Terms of Use</a></footer>
 
@@ -662,6 +686,33 @@ function renderPlan(p) {
   `;
 }
 
+const PAY_URL = `${SUPABASE_URL}/functions/v1/lp-pay`, PRICE = 50;
+const $ = id => document.getElementById(id);
+const getToken = () => store.get('token');
+async function payCall(payload) {
+  const r = await fetch(PAY_URL, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'apikey': SUPABASE_ANON_KEY }, body: JSON.stringify({ token: getToken(), ...payload }) });
+  const d = await r.json(); if (!r.ok) throw new Error(d.error || 'Request failed'); return d;
+}
+async function hasBalance() { if (!getToken()) return false; try { return (await payCall({ action: 'status' })).balance >= PRICE; } catch { return false; } }
+function updTotal() { const n = Math.max(0, Math.floor(Number($('pay_plans').value) || 0)); $('pay_total').textContent = n ? `Total: ${n * PRICE} RWF` : ''; }
+function openPay() { $('payStep1').hidden = false; $('payStep2').hidden = true; $('payMsg').textContent = ''; $('pay_phone').value = store.get('paynum'); updTotal(); $('payModal').hidden = false; }
+$('pay_plans').addEventListener('input', updTotal);
+$('payClose').onclick = () => { $('payModal').hidden = true; };
+$('payBtn').onclick = async () => {
+  const phone = $('pay_phone').value; $('payMsg').textContent = 'Please wait…';
+  try {
+    const d = await payCall({ action: 'create', phone, plans: $('pay_plans').value });
+    store.set('token', d.token); store.set('paynum', phone);
+    $('pay_amt').textContent = d.amount; $('pay_from').textContent = phone;
+    $('payStep1').hidden = true; $('payStep2').hidden = false; $('payMsg').textContent = '';
+  } catch (e) { $('payMsg').textContent = e.message; }
+};
+$('refreshBtn').onclick = async () => {
+  $('payMsg').textContent = 'Checking…';
+  if (await hasBalance()) { $('payModal').hidden = true; form.requestSubmit(); }
+  else $('payMsg').textContent = 'Payment not received yet. Wait a minute after paying, then tap again.';
+};
+
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   errorEl.style.display = 'none';
@@ -724,6 +775,7 @@ form.addEventListener('submit', async (e) => {
 
   store.set('teacher', teacherName);
   store.set('school', schoolName);
+  if (!(await hasBalance())) { openPay(); statusEl.textContent = ''; goBtn.disabled = false; goBtn.classList.remove('loading'); return; }
 
   const body = {
     subject: subjectEl.value,
@@ -737,6 +789,7 @@ form.addEventListener('submit', async (e) => {
     class_size: parseInt(classSize, 10),
     teacher_name: teacherName,
     school_name: schoolName,
+    token: getToken(),
   };
 
   try {
@@ -750,6 +803,7 @@ form.addEventListener('submit', async (e) => {
       body: JSON.stringify(body),
     });
     const data = await resp.json();
+    if (resp.status === 402) { openPay(); statusEl.textContent = ''; return; }
     if (!resp.ok) throw new Error(data.error || `Request failed (${resp.status})`);
     if (data.coming_soon) {
       statusEl.textContent = '';
@@ -762,7 +816,7 @@ form.addEventListener('submit', async (e) => {
     emptyState.style.display = 'none';
     printBtn.classList.add('show');
     renderPlan(data.lesson_plan);
-    statusEl.textContent = 'Done.';
+    statusEl.textContent = 'Done.' + (data.balance != null ? ` Balance: ${data.balance} RWF (${Math.floor(data.balance / PRICE)} plans left)` : '');
     if (window.matchMedia('(max-width: 900px)').matches) {
       document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
